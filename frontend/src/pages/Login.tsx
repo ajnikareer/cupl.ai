@@ -1,0 +1,78 @@
+import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { auth, google } from "../lib/firebase";
+import { useAuth } from "../auth/AuthProvider";
+import { ErrorBox, Logo } from "../components/ui";
+
+export default function Login() {
+  const { user } = useAuth();
+  const nav = useNavigate();
+  const [mode, setMode] = useState<"in" | "up">("in");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [pw, setPw] = useState("");
+  const [err, setErr] = useState<any>(null);
+  const [info, setInfo] = useState("");
+  const [busy, setBusy] = useState(false);
+  useEffect(() => { if (user) nav("/app", { replace: true }); }, [user]);
+  const go = async (fn: () => Promise<any>) => {
+    setErr(null); setInfo(""); setBusy(true);
+    try { await fn(); } catch (e: any) { setErr((e.message || "").replace("Firebase: ", "").replace(/\(auth\/.*\)\.?/, "").trim() || "Sign-in failed"); } finally { setBusy(false); }
+  };
+  const emailAuth = (e: any) => {
+    e.preventDefault();
+    go(async () => {
+      if (mode === "up") {
+        const c = await createUserWithEmailAndPassword(auth, email, pw);
+        if (name) { await updateProfile(c.user, { displayName: name }); await c.user.getIdToken(true); }
+      } else await signInWithEmailAndPassword(auth, email, pw);
+    });
+  };
+  return (
+    <div className="grid min-h-screen md:grid-cols-2">
+      <div className="relative hidden md:block">
+        <img src="/img/prewedding.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand/70 to-transparent" />
+        <p className="h-script absolute bottom-10 left-10 right-10 text-5xl text-white">Not just events — a lifetime of beautiful memories.</p>
+      </div>
+      <div className="grid place-items-center bg-gradient-to-br from-[#fff5f2] via-blush to-[#ecc9d3] p-4">
+        <div className="card w-full max-w-sm p-7">
+          <div className="mb-6 flex justify-center"><Logo /></div>
+          <button type="button" disabled={busy} onClick={() => go(() => signInWithPopup(auth, google))} className="btn-ghost w-full py-3">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="" className="h-4 w-4" /> Continue with Google
+          </button>
+          
+          <div className="mt-3 flex gap-2">
+            <button 
+              type="button" 
+              onClick={() => { localStorage.setItem("ww_dev_token", "dev-narayan"); window.location.href = "/app"; }} 
+              className="flex-1 rounded-xl border border-brand/20 bg-brand/5 py-2 text-xs font-medium text-brand hover:bg-brand/10"
+            >
+              🤵 Narayan (Groom)
+            </button>
+            <button 
+              type="button" 
+              onClick={() => { localStorage.setItem("ww_dev_token", "dev-amruta"); window.location.href = "/app"; }} 
+              className="flex-1 rounded-xl border border-brand/20 bg-brand/5 py-2 text-xs font-medium text-brand hover:bg-brand/10"
+            >
+              👰 Amruta (Bride)
+            </button>
+          </div>
+          <div className="my-4 text-center text-xs text-mut">or</div>
+          <form onSubmit={emailAuth} className="space-y-3">
+            {mode === "up" && <input className="input" placeholder="Your first name" value={name} onChange={(e) => setName(e.target.value)} required />}
+            <input className="input" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input className="input" type="password" placeholder="Password (min 6)" minLength={6} value={pw} onChange={(e) => setPw(e.target.value)} required />
+            <button disabled={busy} className="btn-primary w-full py-3">{mode === "up" ? "Create account" : "Sign in"}</button>
+          </form>
+          <div className="mt-3"><ErrorBox error={err} />{info && <div className="text-sm text-green-700">{info}</div>}</div>
+          <div className="mt-4 flex justify-between text-sm">
+            <button type="button" className="text-brand" onClick={() => setMode(mode === "in" ? "up" : "in")}>{mode === "in" ? "Create an account" : "I have an account"}</button>
+            {mode === "in" && <button type="button" className="text-mut" onClick={() => email ? go(async () => { await sendPasswordResetEmail(auth, email); setInfo("Reset link sent 💌"); }) : setErr("Enter your email first")}>Forgot password?</button>}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
