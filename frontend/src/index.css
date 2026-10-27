@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { height: 100%; }
+.h-serif { font-family: "Playfair Display", Georgia, serif; }
+.h-script { font-family: "Great Vibes", cursive; }
+.btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition active:scale-[.98] disabled:opacity-50 disabled:cursor-not-allowed; }
+.btn-primary { @apply btn bg-brand text-white shadow-sm hover:bg-brand-dark; }
+.btn-ghost { @apply btn border border-line bg-white text-brand hover:bg-blush; }
+.card { @apply rounded-3xl border border-line bg-white shadow-soft; }
+.input { @apply w-full rounded-xl border border-line bg-white px-3 py-2.5 text-sm outline-none transition focus:border-brand/40 focus:ring-2 focus:ring-brand/20; }
+.chip { @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3 py-1.5 text-sm transition hover:border-brand/40; }
+.chip-on { @apply border-brand bg-brand text-white hover:border-brand; }
+.badge { @apply inline-flex items-center gap-1 rounded-full bg-blush px-2.5 py-0.5 text-xs font-medium text-brand; }
+.skeleton { @apply animate-pulse rounded-2xl bg-gradient-to-r from-blush/60 via-cream to-blush/60; }
+@keyframes ring { 0% { transform: scale(1); opacity: .55 } 100% { transform: scale(1.55); opacity: 0 } }
+.ring-pulse { animation: ring 1.8s ease-out infinite; }
+@keyframes rise { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+.rise { animation: rise .25s ease-out both; }
+.scroll-thin::-webkit-scrollbar { width: 6px; height: 6px } .scroll-thin::-webkit-scrollbar-thumb { background: #ecd9de; border-radius: 9px }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid #8e2c48; outline-offset: 2px; }
