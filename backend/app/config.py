@@ -17,7 +17,7 @@ class Settings(BaseSettings):
 
     GEMINI_LIVE_MODEL: str = "gemini-live-2.5-flash-native-audio"
     GEMINI_AGENT_MODEL: str = "gemini-2.5-flash"
-    GEMINI_PLANNER_MODEL: str = "gemini-2.5-pro"
+    GEMINI_PLANNER_MODEL: str = "gemini-2.5-flash"
     GEMINI_FAST_MODEL: str = "gemini-2.5-flash"
     GEMINI_EMBED_MODEL: str = "gemini-embedding-001"
     EMBED_DIM: int = 768
