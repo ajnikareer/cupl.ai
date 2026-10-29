@@ -37,7 +37,7 @@ export default function Login() {
         <p className="h-script absolute bottom-10 left-10 right-10 text-5xl text-white">Not just events — a lifetime of beautiful memories.</p>
       </div>
       <div className="grid place-items-center bg-gradient-to-br from-[#fff5f2] via-blush to-[#ecc9d3] p-4">
-        <div className="card w-full max-w-sm p-7">
+        <div className="card w-full max-w-sm p-6 shadow-soft">
           <div className="mb-6 flex justify-center"><Logo /></div>
           <button type="button" disabled={busy} onClick={() => go(() => signInWithPopup(auth, google))} className="btn-ghost w-full py-3">
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="" className="h-4 w-4" /> Continue with Google

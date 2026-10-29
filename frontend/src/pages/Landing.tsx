@@ -29,13 +29,13 @@ export default function Landing() {
             <Logo />
             <Link to={go} className="btn-primary">{user ? "Open app" : "Get started"}</Link>
           </header>
-          <div className="max-w-xl py-14 md:py-24">
-            <h1 className="h-serif text-4xl leading-tight text-ink md:text-6xl">Your AI wedding companion for every chapter of love</h1>
-            <p className="mt-4 text-lg text-ink/80">Plan. Personalize. Celebrate. Together — powered by QLOO taste intelligence.</p>
+          <div className="max-w-xl py-8 md:py-14">
+            <h1 className="h-serif text-3xl leading-tight text-ink md:text-5xl">Your AI wedding companion for every chapter of love</h1>
+            <p className="mt-3 text-base text-ink/80">Plan. Personalize. Celebrate. Together — powered by QLOO taste intelligence.</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to={go} className="btn-primary px-6 py-3 text-base"><AudioLines className="h-5 w-5" /> Start planning with AI</Link>
+              <Link to={go} className="btn-primary px-5 py-2.5 text-sm"><AudioLines className="h-4 w-4" /> Start planning with AI</Link>
             </div>
-            <p className="h-script mt-6 text-3xl text-brand">Different moments, one beautiful journey ♡</p>
+            <p className="h-script mt-4 text-2xl text-brand">Different moments, one beautiful journey ♡</p>
           </div>
         </div>
       </section>

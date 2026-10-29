@@ -24,7 +24,7 @@ export default function Layout() {
   const onChat = loc.pathname === "/app/chat";
   return (
     <div className="flex min-h-screen bg-cream">
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-line bg-white/80 p-5 lg:flex">
+      <aside className="sticky top-0 hidden h-screen w-56 shrink-0 flex-col border-r border-line bg-white/80 p-4 lg:flex">
         <Logo />
         <nav className="mt-8 flex flex-col gap-1">
           {NAV.map((n) => (
@@ -57,15 +57,15 @@ export default function Layout() {
             </NavLink>
           </div>
         </header>
-        <div className={clsx(onChat ? "" : "mx-auto max-w-6xl p-4 lg:p-8")}><Outlet /></div>
+        <div className={clsx(onChat ? "" : "mx-auto max-w-5xl p-4 lg:p-6")}><Outlet /></div>
       </main>
 
       {!onChat && (
-        <section className="sticky top-0 hidden h-screen w-[410px] shrink-0 border-l border-line bg-white 2xl:block"><ChatPanel docked /></section>
+        <section className="sticky top-0 hidden h-screen w-[340px] shrink-0 border-l border-line bg-white xl:block"><ChatPanel docked /></section>
       )}
 
       {!onChat && voice === "off" && (
-        <NavLink to="/app/chat" className="fixed bottom-20 right-4 z-30 flex items-center gap-2 rounded-full bg-brand py-1.5 pl-1.5 pr-4 text-sm text-white shadow-soft lg:bottom-6 2xl:hidden" aria-label="Talk to WeaveWed">
+        <NavLink to="/app/chat" className="fixed bottom-20 right-4 z-30 flex items-center gap-2 rounded-full bg-brand py-1.5 pl-1.5 pr-4 text-sm text-white shadow-soft lg:bottom-6 xl:hidden" aria-label="Talk to WeaveWed">
           <Avatar size={34} /> Talk to WeaveWed
         </NavLink>
       )}

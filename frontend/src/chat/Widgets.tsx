@@ -210,15 +210,16 @@ function Confirm({ w }: { w: any }) {
 
 function Invite({ w }: { w: any }) {
   const [copied, setCopied] = useState(false);
-  const copy = async () => { try { await navigator.clipboard.writeText(w.link); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch {} };
+  const link = (w.link || "").replace(/^https?:\/\/[^\/]+/, window.location.origin) || `${window.location.origin}/join/${w.code || ""}`;
+  const copy = async () => { try { await navigator.clipboard.writeText(link); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch {} };
   const nav: any = navigator;
   return (
     <Box title="💌 Invite your partner" sub="They sign in with their own account — both your tastes count.">
-      <div className="break-all rounded-2xl bg-cream p-2.5 text-xs">{w.link}</div>
+      <div className="break-all rounded-2xl bg-cream p-2.5 text-xs">{link}</div>
       <div className="mt-3 flex flex-wrap gap-2">
         <button type="button" className="btn-primary" onClick={copy}><Copy className="h-4 w-4" />{copied ? "Copied!" : "Copy link"}</button>
-        {nav.share && <button type="button" className="btn-ghost" onClick={() => nav.share({ title: "Join me on WeaveWed 💞", url: w.link }).catch(() => {})}><Share2 className="h-4 w-4" /> Share</button>}
-        <a className="btn-ghost" target="_blank" rel="noreferrer" href={`https://wa.me/?text=${encodeURIComponent("Join me on WeaveWed 💞 " + w.link)}`}>WhatsApp</a>
+        {nav.share && <button type="button" className="btn-ghost" onClick={() => nav.share({ title: "Join me on WeaveWed 💞", url: link }).catch(() => {})}><Share2 className="h-4 w-4" /> Share</button>}
+        <a className="btn-ghost" target="_blank" rel="noreferrer" href={`https://wa.me/?text=${encodeURIComponent("Join me on WeaveWed 💞 " + link)}`}>WhatsApp</a>
       </div>
     </Box>
   );

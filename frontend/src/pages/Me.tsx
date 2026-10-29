@@ -47,8 +47,8 @@ export default function Me() {
           <p className="text-sm text-mut">Invite your partner — or join theirs with a code.</p>
           {invite ? (
             <div className="flex items-center gap-2 rounded-2xl bg-cream p-2 text-xs">
-              <span className="flex-1 break-all">{invite.link}</span>
-              <button type="button" className="btn-ghost" onClick={async () => { await navigator.clipboard.writeText(invite.link).catch(() => {}); setCopied(true); }}>{copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}</button>
+              <span className="flex-1 break-all">{(invite.link || "").replace(/^https?:\/\/[^\/]+/, window.location.origin)}</span>
+              <button type="button" className="btn-ghost" onClick={async () => { const l = (invite.link || "").replace(/^https?:\/\/[^\/]+/, window.location.origin); await navigator.clipboard.writeText(l).catch(() => {}); setCopied(true); }}>{copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}</button>
             </div>
           ) : <button type="button" className="btn-primary" onClick={() => wrap(async () => setInvite(await api("/api/couple/invite", { method: "POST" })))}>Create invite link</button>}
           <div className="flex gap-2">

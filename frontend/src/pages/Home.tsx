@@ -13,16 +13,16 @@ export default function Home() {
   const greet = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
   const first = me?.user?.name?.split(" ")[0] || "";
   return (
-    <div className="space-y-8">
-      <div className="relative overflow-hidden rounded-[2rem]">
+    <div className="space-y-6">
+      <div className="relative overflow-hidden rounded-2xl">
         <img src="/img/hero.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#fff5f2] via-[#fff5f2]/90 to-transparent" />
-        <div className="relative max-w-lg p-6 md:p-10">
-          <div className="h-serif text-3xl text-ink md:text-4xl">{greet}{first && `, ${first}`} ☀️</div>
+        <div className="relative max-w-lg p-5 md:p-7">
+          <div className="h-serif text-2xl text-ink md:text-3xl">{greet}{first && `, ${first}`} ☀️</div>
           <p className="mt-1 text-mut">Let's make beautiful things happen today.</p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            <button type="button" onClick={startVoice} className="btn-primary px-5 py-3"><AudioLines className="h-5 w-5" /> Talk to WeaveWed</button>
-            <Link to="/app/spaces/new" className="btn-ghost px-5 py-3"><Plus className="h-4 w-4" /> Create Event Space</Link>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <button type="button" onClick={startVoice} className="btn-primary px-4 py-2 text-sm"><AudioLines className="h-4 w-4" /> Talk to WeaveWed</button>
+            <Link to="/app/spaces/new" className="btn-ghost px-4 py-2 text-sm"><Plus className="h-4 w-4" /> Create Event Space</Link>
           </div>
         </div>
       </div>
