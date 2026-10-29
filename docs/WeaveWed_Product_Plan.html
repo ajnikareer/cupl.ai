@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WeaveWed — Product Plan</title>
+<style>
+:root{--bg:#fbf6f3;--card:#fff;--ink:#3a2329;--mut:#7d6268;--pri:#8e2c48;--pri2:#f6e3e8;--gold:#c9973a;--bd:#ecd9de}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;color:var(--pri);font-weight:500}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+header.hero{background:linear-gradient(135deg,#fff5f2 0%,#f6e3e8 55%,#ecc9d3 100%);padding:70px 0 60px;border-bottom:1px solid var(--bd)}
+.logo{display:flex;align-items:center;gap:12px;font-family:Georgia,serif;font-size:30px;color:var(--pri)}
+.logo span.h{font-size:38px}
+.tag{font-style:italic;color:var(--mut);margin-top:-4px}
+.hero h1{font-size:44px;line-height:1.2;margin:34px 0 12px;max-width:760px}
+.hero p.lead{font-size:19px;max-width:720px;color:var(--ink)}
+.pill{display:inline-block;background:var(--pri);color:#fff;border-radius:99px;padding:6px 14px;font-size:13px;margin:4px 6px 0 0}
+.pill.l{background:#fff;color:var(--pri);border:1px solid var(--bd)}
+nav.toc{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:18px 24px;margin:-30px auto 30px;position:relative;box-shadow:0 8px 30px rgba(142,44,72,.08)}
+nav.toc ol{columns:3;margin:0;padding-left:20px;font-size:14px}
+nav.toc a{color:var(--pri);text-decoration:none}
+section{padding:34px 0;border-bottom:1px dashed var(--bd)}
+section h2{font-size:32px;margin:0 0 8px}
+.sub{color:var(--mut);margin-top:0;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:18px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:18px 20px}
+.card h3{margin:0 0 6px;font-size:20px}
+.card .ic{font-size:26px}
+.card p{margin:6px 0;font-size:15px}
+.quote{font-family:Georgia,serif;font-style:italic;font-size:22px;color:var(--pri);border-left:4px solid var(--gold);padding:6px 18px;margin:20px 0;background:#fff8f4;border-radius:0 12px 12px 0}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0}
+.flow .st{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 14px;font-size:14px;text-align:center;min-width:110px}
+.flow .st b{display:block;color:var(--pri)}
+.flow .ar{color:var(--gold);font-size:20px}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;margin:14px 0;font-size:14.5px}
+th{background:var(--pri);color:#fff;text-align:left;padding:10px 12px;font-weight:500}
+td{border-top:1px solid var(--bd);padding:10px 12px;vertical-align:top}
+tr:nth-child(even) td{background:#fdf9f8}
+.event{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:22px 24px;margin:22px 0}
+.event .eh{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.event .eh h3{margin:0;font-size:26px}
+.badge{background:var(--pri2);color:var(--pri);font-size:12px;border-radius:99px;padding:4px 10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.two{grid-template-columns:1fr}nav.toc ol{columns:1}.hero h1{font-size:32px}}
+ul.chk{list-style:none;padding:0;margin:8px 0}
+ul.chk li{padding:4px 0 4px 26px;position:relative;font-size:15px}
+ul.chk li:before{content:"♥";color:var(--pri);position:absolute;left:4px;font-size:13px;top:6px}
+ul.no li:before{content:"✕";color:#a0868c}
+.why{background:#fffaf2;border:1px dashed var(--gold);border-radius:12px;padding:12px 16px;font-size:14.5px;margin:12px 0}
+.why b{color:var(--gold)}
+.chatm{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;max-width:520px}
+.bub{padding:9px 13px;border-radius:14px;margin:6px 0;font-size:14.5px;max-width:90%}
+.bub.a{background:var(--pri2)}
+.bub.u{background:var(--pri);color:#fff;margin-left:auto}
+.chips span{display:inline-block;border:1px solid var(--bd);border-radius:99px;padding:4px 10px;font-size:13px;margin:3px;background:var(--bg)}
+.chips span.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.note{font-size:13px;color:var(--mut)}
+footer{text-align:center;padding:40px 0 60px;color:var(--mut)}
+footer .logo{justify-content:center}
+</style>
+</head>
+<body>
+
+<header class="hero">
+<div class="wrap">
+  <div class="logo"><span class="h">♡</span> WeaveWed</div>
+  <div class="tag">happily ever after</div>
+  <h1>An AI companion that gets to know you as a couple and plans every chapter of your love story</h1>
+  <p class="lead">WeaveWed is a voice and chat AI wedding planner and lifelong couple companion. It learns what each of you loves, finds where your tastes meet, and turns that into personal plans for your prewedding, engagement, wedding, honeymoon, trips and every celebration after.</p>
+  <span class="pill">Voice + Chat AI Agent</span><span class="pill">Powered by QLOO Taste Intelligence</span><span class="pill l">Web + Mobile</span><span class="pill l">Learns over time</span>
+</div>
+</header>
+
+<div class="wrap">
+<nav class="toc">
+<ol>
+<li><a href="#problem">The Problem</a></li>
+<li><a href="#idea">The Idea</a></li>
+<li><a href="#who">Who It's For</a></li>
+<li><a href="#how">How It Works</a></li>
+<li><a href="#agent">Meet the Agent</a></li>
+<li><a href="#spaces">Event Spaces</a></li>
+<li><a href="#taste">Getting to Know Your Tastes</a></li>
+<li><a href="#dna">Couple Taste DNA</a></li>
+<li><a href="#plans">What Each Plan Gives You</a></li>
+<li><a href="#everafter">Ever After Companion</a></li>
+<li><a href="#learn">Memory &amp; Learning</a></li>
+<li><a href="#why">"Why This?" Transparency</a></li>
+<li><a href="#privacy">Privacy &amp; Surprise Mode</a></li>
+<li><a href="#stories">A Day With WeaveWed</a></li>
+<li><a href="#qloo">The Magic of QLOO</a></li>
+<li><a href="#honest">What It Does Not Do</a></li>
+<li><a href="#value">Why It Matters</a></li>
+<li><a href="#roadmap">Roadmap</a></li>
+</ol>
+</nav>
+
+<!-- PROBLEM -->
+<section id="problem">
+<h2>1. The Problem</h2>
+<p class="sub">Planning together is harder than it looks.</p>
+<div class="grid">
+  <div class="card"><div class="ic">🤷</div><h3>Two people, two tastes</h3><p>One loves Sufi nights, the other loves Punjabi dhol. Most of the stress in couple planning comes from guessing and compromising, not from the logistics.</p></div>
+  <div class="card"><div class="ic">📋</div><h3>Generic advice everywhere</h3><p>Wedding sites, blogs and apps give everyone the same "Top 10 venues" and "Trending décor". None of it is about <i>you two</i>.</p></div>
+  <div class="card"><div class="ic">🧩</div><h3>Scattered decisions</h3><p>Music, food, outfits, venues and trips get decided in different chats, notes and spreadsheets, and the reasons behind each choice get lost.</p></div>
+  <div class="card"><div class="ic">💔</div><h3>The charm fades</h3><p>After the wedding, life gets busy. Couples forget the little things the other loves: a favourite dish, a song, a dream place. The effort slowly stops.</p></div>
+</div>
+</section>
+
+<!-- IDEA -->
+<section id="idea">
+<h2>2. The Idea</h2>
+<p class="quote">"Not just a wedding planner. A companion that knows you both and stays with you after the wedding."</p>
+<p>WeaveWed is an <b>AI agent you talk to</b>, by voice or chat, like a warm and friendly wedding planner. It gets to know each partner's taste in music, food, fashion, travel, films, places and brands through natural conversation and quick tap-to-pick choices. Using <b>QLOO's cultural taste intelligence</b>, it finds what you both genuinely love and turns that into practical plans for each event in your journey.</p>
+<p>The same agent stays with you after the wedding. It remembers, learns from every trip and celebration, reminds one partner of what the other loves, and helps plan surprises.</p>
+<div class="grid">
+  <div class="card"><h3>🎙 Talk, don't fill forms</h3><p>The agent is the main way you use the app. It asks, suggests, listens and plans.</p></div>
+  <div class="card"><h3>💞 Built for two</h3><p>Each partner has their own account and taste profile. Plans are built from both.</p></div>
+  <div class="card"><h3>📅 Every chapter</h3><p>Prewedding → Engagement → Wedding → Honeymoon → Trips → Life Beyond.</p></div>
+  <div class="card"><h3>🧠 Gets better with time</h3><p>Every conversation, choice and memory makes the next plan more <i>you</i>.</p></div>
+</div>
+</section>
+
+<!-- WHO -->
+<section id="who">
+<h2>3. Who It's For</h2>
+<table>
+<tr><th>User</th><th>What they need</th><th>How WeaveWed helps</th></tr>
+<tr><td><b>Engaged couples</b></td><td>Plan their events together without endless back-and-forth</td><td>Plans built from both tastes, with clear reasons, in one place</td></tr>
+<tr><td><b>Newly married couples</b></td><td>A honeymoon and first trips that feel personal</td><td>Destinations and itineraries matched to both partners</td></tr>
+<tr><td><b>Long-time couples</b></td><td>Keep the spark: anniversaries, date nights, surprises</td><td>The Ever After companion remembers what the partner loves</td></tr>
+<tr><td><b>One partner planning a surprise</b></td><td>A proposal, a birthday or an anniversary gift</td><td>Surprise Mode suggests ideas from the partner's tastes and keeps them hidden</td></tr>
+</table>
+</section>
+
+<!-- HOW -->
+<section id="how">
+<h2>4. How It Works: The Journey</h2>
+<p class="sub">Simple at its core: two people, their tastes, one plan.</p>
+<div class="flow">
+  <div class="st"><b>1. Sign up</b>Meet the agent</div><span class="ar">→</span>
+  <div class="st"><b>2. Create Event Space</b>Wedding, Trip…</div><span class="ar">→</span>
+  <div class="st"><b>3. Invite partner</b>One link</div><span class="ar">→</span>
+  <div class="st"><b>4. Share tastes</b>Talk + tap</div><span class="ar">→</span>
+  <div class="st"><b>5. Couple DNA</b>Where you meet</div><span class="ar">→</span>
+  <div class="st"><b>6. Your Plan</b>With reasons</div><span class="ar">→</span>
+  <div class="st"><b>7. Refine &amp; live it</b>It keeps learning</div>
+</div>
+<div class="two">
+<div>
+<h3>Step by step</h3>
+<ul class="chk">
+<li><b>Sign up.</b> The agent welcomes you. With no Event Space yet, it acts as a <b>Guide</b>: it explains WeaveWed and helps you get started.</li>
+<li><b>Create an Event Space.</b> Tell the agent "We're getting married in Udaipur in February", or use the short wizard. The agent asks for anything missing: date, city, budget, guest count.</li>
+<li><b>Invite your partner.</b> They join from their own account, so both voices count.</li>
+<li><b>Share tastes.</b> The agent chats with each of you separately and shows live suggestions you can tap.</li>
+<li><b>See your Couple Taste DNA.</b> Shared loves, individual favourites, and gentle differences.</li>
+<li><b>Get the plan.</b> Organised by sections, each with recommendations and a "Why this?" reason.</li>
+<li><b>Refine by talking.</b> "Karan doesn't like loud DJs" and the plan updates. Like, skip or mark items done.</li>
+</ul>
+</div>
+<div>
+<h3>The golden rule</h3>
+<div class="why"><b>No Event Space = no planning.</b><br>Without an active Event Space, the agent stays in Guide mode: it answers questions about the app and offers to create a space. Plans always belong to an event, so every recommendation has the right context: who, where, when and how much.</div>
+<h3>Web and mobile</h3>
+<p>The same experience on phone and computer. Talk to the agent on the go, review the full plan on a bigger screen. Everything stays in sync for both partners.</p>
+</div>
+</div>
+</section>
+
+<!-- AGENT -->
+<section id="agent">
+<h2>5. Meet the Agent</h2>
+<p class="sub">Your warm, smart, always-available wedding planner friend.</p>
+<div class="grid">
+  <div class="card"><h3>🗣 Talks like a human</h3><p>A natural, warm voice that smiles through its words and keeps responses short. You can interrupt it like in a real conversation.</p></div>
+  <div class="card"><h3>💬 Chat with interactive picks</h3><p>When it asks "Who's your favourite singer?", it shows live suggestion chips, a search box and an option to add your own. Tap or just say it.</p></div>
+  <div class="card"><h3>🧠 Remembers everything</h3><p>Names, likes, dislikes, decisions and past events. You never have to repeat yourself.</p></div>
+  <div class="card"><h3>🤝 Does things, not just talks</h3><p>Creates Event Spaces, updates plans, re-balances budgets, adds to-dos and sets reminders.</p></div>
+  <div class="card"><h3>✅ Asks before deciding</h3><p>Important changes are confirmed with you first. You're always in control.</p></div>
+  <div class="card"><h3>💡 Explains itself</h3><p>Every suggestion comes with why it fits you two.</p></div>
+</div>
+<h3 style="margin-top:24px">What a taste conversation looks like</h3>
+<div class="chatm">
+  <div class="bub a">Hi Priya! 😊 Let's get to know your music soul. Who could you listen to all day?</div>
+  <div class="chips"><span class="on">💞 Arijit Singh</span><span>Shreya Ghoshal</span><span class="on">💞 A.R. Rahman</span><span>Prateek Kuhad</span><span>+ Add your own</span></div>
+  <div class="bub u">Arijit Singh, A.R. Rahman</div>
+  <div class="bub a">Lovely! You and Karan both love A.R. Rahman 💞 That's going straight into your Sangeet plan. What vibe do you want for that night?</div>
+  <div class="chips"><span class="on">Soulful Sufi night</span><span>Bollywood dance party</span><span>Punjabi dhol</span><span>Acoustic &amp; intimate</span></div>
+</div>
+<p class="note">Suggestions are live, based on your location and your partner's picks (💞). Nothing is pre-filled.</p>
+</section>
+
+<!-- SPACES -->
+<section id="spaces">
+<h2>6. Event Spaces</h2>
+<p class="sub">Each event gets its own space with its own details, plan, to-dos and memories.</p>
+<table>
+<tr><th>Event Space</th><th>What the agent asks for</th><th>What you get</th></tr>
+<tr><td>💍 <b>Prewedding</b></td><td>City, date window, mood (romantic, fun, royal, nature), budget</td><td>Shoot locations, theme &amp; outfit mood, proposal ideas, date experiences</td></tr>
+<tr><td>💫 <b>Engagement</b></td><td>City, date, guest count, budget, rituals</td><td>Venue style, menu direction, music, décor palette, outfit mood</td></tr>
+<tr><td>🕌 <b>Wedding</b></td><td>City, dates, guest count, budget, culture &amp; ceremonies</td><td>A full plan for each ceremony: Mehendi, Haldi, Sangeet, Wedding, Reception</td></tr>
+<tr><td>🌴 <b>Honeymoon</b></td><td>Dates, budget, departure city, travel style</td><td>Destination shortlist, day-wise itinerary, food &amp; experiences</td></tr>
+<tr><td>✈️ <b>Trip</b></td><td>Destination (or "suggest one"), dates, budget, who's going</td><td>Itinerary, places, food spots, experiences, and live ideas while you're there</td></tr>
+<tr><td>🎂 <b>Life Beyond</b></td><td>Occasion: anniversary, birthday, date night, baby shower, house-warming</td><td>Celebration ideas, gift ideas, places &amp; experiences</td></tr>
+</table>
+<p>You can have many Event Spaces at once. An upcoming wedding and a Goa trip can live side by side, and the agent always knows which one you're talking about.</p>
+</section>
+
+<!-- TASTE -->
+<section id="taste">
+<h2>7. Getting to Know Your Tastes</h2>
+<p class="sub">Not a boring questionnaire. A friendly conversation.</p>
+<div class="two">
+<div>
+<h3>Taste areas</h3>
+<ul class="chk">
+<li><b>Music:</b> singers, bands, genres</li>
+<li><b>Food:</b> cuisines, favourite dishes, restaurants</li>
+<li><b>Films &amp; shows:</b> favourite movies, actors, series</li>
+<li><b>Fashion &amp; brands:</b> designers, styles, brands you love</li>
+<li><b>Travel &amp; places:</b> dream destinations, beach or mountains, city or nature</li>
+<li><b>Books &amp; podcasts:</b> what you read and listen to</li>
+<li><b>Experiences:</b> adventure, relaxing, culture, nightlife</li>
+</ul>
+</div>
+<div>
+<h3>How tastes are collected</h3>
+<ul class="chk">
+<li>The agent asks one question at a time, naturally</li>
+<li>Live suggestion chips: tap to pick, search, or add your own</li>
+<li>Voice works too: just say the names</li>
+<li>Tastes also come up in normal chat ("I hate crowded beaches") and get saved automatically</li>
+<li>Each partner shares separately, so it's honest and nobody overrides the other</li>
+<li>You can view and edit your taste profile any time</li>
+</ul>
+</div>
+</div>
+</section>
+
+<!-- DNA -->
+<section id="dna">
+<h2>8. Couple Taste DNA</h2>
+<p class="sub">The heart of WeaveWed: where your two worlds meet.</p>
+<div class="grid">
+  <div class="card"><h3>💞 Shared Loves</h3><p>What you both genuinely love. These become the core <b>theme</b> of your plans.</p><p class="note">e.g. "You both love Sufi music and coastal food."</p></div>
+  <div class="card"><h3>🌗 Your Unique Flavours</h3><p>Things only one of you loves. WeaveWed adds these as personal touches so each of you feels seen.</p></div>
+  <div class="card"><h3>⚖️ Gentle Differences</h3><p>Where your tastes differ. The agent suggests a <b>middle ground</b> instead of picking a winner.</p><p class="note">e.g. "Beach vs mountains → a hill station with a lake view."</p></div>
+  <div class="card"><h3>🎨 Your Couple Vibe</h3><p>A short, shareable description of your style as a couple, like "Soulful, coastal, vintage-romantic", plus a colour and mood palette.</p></div>
+</div>
+</section>
+
+<!-- PLANS -->
+<section id="plans">
+<h2>9. What Each Plan Gives You</h2>
+<p class="sub">Different events need different intelligence. Here's exactly what you get in each one.</p>
+
+<div class="event">
+<div class="eh"><h3>💍 Prewedding</h3><span class="badge">Shoot · Proposal · Dates</span></div>
+<div class="two">
+<div><ul class="chk">
+<li><b>Shoot Location Shortlist:</b> places in your city that match both your tastes (heritage, nature, cafés, beaches), each with a "why it fits" reason</li>
+<li><b>Theme &amp; Mood Board:</b> a concept built from shared films, music and fashion, e.g. "Retro Bollywood romance"</li>
+<li><b>Outfit Mood:</b> styles and brands that suit both of you and match each other</li>
+<li><b>Background Music Picks:</b> songs you both love for reels and the save-the-date video</li>
+</ul></div>
+<div><ul class="chk">
+<li><b>Proposal Ideas</b> (Surprise Mode): settings and experiences your partner would love</li>
+<li><b>Couple Date Experiences:</b> restaurants and activities for the "getting to know each other" phase</li>
+<li><b>Budget Split</b> across shoot, outfits and experiences</li>
+<li><b>To-do timeline</b> before the shoot date</li>
+</ul></div>
+</div>
+</div>
+
+<div class="event">
+<div class="eh"><h3>💫 Engagement</h3><span class="badge">Ring ceremony · Party</span></div>
+<div class="two">
+<div><ul class="chk">
+<li><b>Venue Style:</b> types of places that suit your couple vibe and guest count</li>
+<li><b>Menu Direction:</b> cuisines and signature dishes from both partners' food tastes</li>
+<li><b>Music &amp; Entertainment:</b> playlist and entertainment style</li>
+</ul></div>
+<div><ul class="chk">
+<li><b>Décor Palette:</b> colours and themes drawn from your Couple Vibe</li>
+<li><b>Outfit Coordination:</b> matching looks for both partners</li>
+<li><b>Budget Split, Checklist &amp; Timeline</b></li>
+</ul></div>
+</div>
+</div>
+
+<div class="event">
+<div class="eh"><h3>🕌 Wedding</h3><span class="badge">The big one: planned ceremony by ceremony</span></div>
+<p>The wedding plan is split into each ceremony, because every ceremony has a different mood:</p>
+<table>
+<tr><th>Ceremony</th><th>What WeaveWed plans</th></tr>
+<tr><td>🌿 <b>Mehendi</b></td><td>Colour theme, music (folk/light), snacks &amp; drinks, fun activities, outfit mood</td></tr>
+<tr><td>💛 <b>Haldi</b></td><td>Playful theme, décor ideas, music, food, outfit suggestions</td></tr>
+<tr><td>💃 <b>Sangeet</b></td><td><b>Couple playlist</b> (both partners' favourite artists), dance song picks, performance ideas, entertainment style, crowd-friendly songs for guests</td></tr>
+<tr><td>🔥 <b>Wedding Day</b></td><td>Venue style, décor theme, entry song, outfits, menu, photography mood</td></tr>
+<tr><td>🥂 <b>Reception</b></td><td>Menu &amp; cuisine mix, music &amp; ambience, décor, outfit change, guest experience ideas</td></tr>
+</table>
+<div class="two">
+<div><ul class="chk">
+<li><b>Venue Shortlist:</b> places in your city that match your Couple Vibe</li>
+<li><b>Signature Menu:</b> dishes inspired by both partners' food loves, plus a "Couple's Special" dish</li>
+<li><b>Couple Story Touches:</b> small details from your shared tastes, e.g. table names from your favourite films</li>
+</ul></div>
+<div><ul class="chk">
+<li><b>Guest Taste Mode</b> (optional): music and food picks that work for your guests' age groups and region</li>
+<li><b>Smart Budget Split</b> across ceremonies, adjusted to what matters most to you</li>
+<li><b>Master Timeline &amp; To-dos</b> counting down to the wedding day</li>
+</ul></div>
+</div>
+</div>
+
+<div class="event">
+<div class="eh"><h3>🌴 Honeymoon</h3><span class="badge">Your first trip as a married couple</span></div>
+<div class="two">
+<div><ul class="chk">
+<li><b>Destination Match:</b> 3–5 places ranked by how well they fit both partners, with a match reason</li>
+<li><b>Middle-ground picks</b> when your travel styles differ</li>
+<li><b>Day-wise Itinerary:</b> a balance of "his", "her" and "together" experiences</li>
+</ul></div>
+<div><ul class="chk">
+<li><b>Food Trail:</b> restaurants and local dishes you'll both love</li>
+<li><b>Romantic Moments:</b> sunset spots, special dinners, surprise ideas</li>
+<li><b>Budget estimate</b> and a packing / to-do list</li>
+</ul></div>
+</div>
+</div>
+
+<div class="event">
+<div class="eh"><h3>✈️ Trip</h3><span class="badge">Any trip, any time: a smarter companion each time</span></div>
+<div class="two">
+<div><ul class="chk">
+<li><b>"Suggest where to go"</b> if you haven't decided yet</li>
+<li><b>Itinerary</b> with places, food spots and experiences matched to your Couple DNA</li>
+<li><b>Learns from past trips:</b> "Last time you loved quiet sunsets, so I skipped the crowded beach"</li>
+</ul></div>
+<div><ul class="chk">
+<li><b>On-trip companion:</b> ask "Where should we eat tonight?" and get answers that fit both of you</li>
+<li><b>Rainy-day / plan-B ideas</b></li>
+<li><b>Trip Memory:</b> after the trip, tell the agent what you loved, and it remembers for next time</li>
+</ul></div>
+</div>
+</div>
+
+<div class="event">
+<div class="eh"><h3>🎂 Life Beyond</h3><span class="badge">Anniversaries · Birthdays · Date nights · Milestones</span></div>
+<div class="two">
+<div><ul class="chk">
+<li><b>Anniversary Plans:</b> places, experiences and gift ideas from both your tastes and your history</li>
+<li><b>Birthday Surprises:</b> ideas based on what your partner loves (kept hidden from them)</li>
+<li><b>Date Night Ideas:</b> fresh suggestions so date nights never get repetitive</li>
+</ul></div>
+<div><ul class="chk">
+<li><b>Milestones:</b> baby shower, house-warming, first home, family celebrations</li>
+<li><b>Gift Finder:</b> brands, books, music and experiences your partner would love</li>
+<li><b>Gentle reminders</b> before special dates</li>
+</ul></div>
+</div>
+</div>
+
+<h3>Every plan always includes</h3>
+<div class="grid">
+<div class="card"><h3>📌 Sections &amp; Recommendations</h3><p>Organised cards you can like, skip, or mark done.</p></div>
+<div class="card"><h3>💡 "Why This?"</h3><p>A clear reason for every recommendation.</p></div>
+<div class="card"><h3>💰 Budget View</h3><p>Smart split with estimates, which adjusts when priorities change.</p></div>
+<div class="card"><h3>✅ To-dos &amp; Timeline</h3><p>What to do and when, shared by both partners.</p></div>
+<div class="card"><h3>🔄 Live Updates</h3><p>Talk to the agent and the plan changes. Previous versions are kept.</p></div>
+<div class="card"><h3>📸 Memories</h3><p>After the event, save highlights. They feed future plans.</p></div>
+</div>
+</section>
+
+<!-- EVER AFTER -->
+<section id="everafter">
+<h2>10. The Ever After Companion</h2>
+<p class="sub">After the wedding, WeaveWed stays with you.</p>
+<p class="quote">"Never forget what your partner loves."</p>
+<div class="grid">
+  <div class="card"><h3>💌 Know Your Partner</h3><p>Ask "What would Priya love for dinner tonight?" or "What's a good gift for Karan?" The agent answers from the tastes your partner has <b>chosen to share</b>.</p></div>
+  <div class="card"><h3>🎁 Surprise Planner</h3><p>Plan a surprise privately. Ideas come from your partner's tastes and nothing shows up on their side.</p></div>
+  <div class="card"><h3>📆 Never Miss a Moment</h3><p>Reminders before anniversaries, birthdays and special dates, with a ready idea attached.</p></div>
+  <div class="card"><h3>🌱 Tastes Grow With You</h3><p>As your tastes change over the years, the companion keeps up.</p></div>
+  <div class="card"><h3>🗺 Your Story Timeline</h3><p>Every event and trip you've planned together, with memories, in one place.</p></div>
+  <div class="card"><h3>✨ Spark Nudges</h3><p>Occasional gentle ideas: "Karan's favourite band has a new album. Weekend listening date?"</p></div>
+</div>
+</section>
+
+<!-- LEARN -->
+<section id="learn">
+<h2>11. Memory &amp; Learning</h2>
+<p class="sub">The longer you use it, the better it knows you.</p>
+<div class="two">
+<div>
+<h3>What it remembers</h3>
+<ul class="chk">
+<li>Each partner's tastes, likes and dislikes</li>
+<li>Your shared loves and differences</li>
+<li>Decisions you've made ("We chose a palace venue")</li>
+<li>Your feedback on every recommendation</li>
+<li>How past events and trips went: what you loved and what you didn't</li>
+</ul>
+</div>
+<div>
+<h3>How it learns</h3>
+<ul class="chk">
+<li><b>From conversations:</b> new tastes mentioned in chat are saved</li>
+<li><b>From your choices:</b> likes, skips and "done" teach it what works</li>
+<li><b>From experiences:</b> after an event or trip, the agent asks how it went and remembers</li>
+<li><b>From changes over time:</b> newer preferences gently replace old ones</li>
+</ul>
+</div>
+</div>
+<div class="why"><b>Example:</b> On your Goa trip you told the agent you loved the quiet shack dinner but hated the crowded beach. A year later, for your anniversary trip, it suggests quiet, scenic places with great local food and explains that this comes from your Goa experience.</div>
+<p>You can always see what the agent remembers about you, edit it, or delete it.</p>
+</section>
+
+<!-- WHY -->
+<section id="why">
+<h2>12. "Why This?" Transparency</h2>
+<p class="sub">No black box. Every recommendation explains itself.</p>
+<div class="why"><b>Recommended: Sufi live band for Sangeet</b><br>
+💞 Both of you love A.R. Rahman and Nusrat Fateh Ali Khan<br>
+🎵 Priya picked "Soulful Sufi night" as the vibe<br>
+🚫 Karan mentioned he doesn't enjoy loud DJ sets<br>
+📊 Strong taste match for both partners</div>
+<p>This builds trust, helps couples decide faster, and makes it easy to say "No, change this" when something doesn't feel right.</p>
+</section>
+
+<!-- PRIVACY -->
+<section id="privacy">
+<h2>13. Privacy &amp; Surprise Mode</h2>
+<div class="grid">
+  <div class="card"><h3>🔒 Your profile, your control</h3><p>Each partner decides which tastes are shared with the other. Private tastes still shape shared plans but are never shown directly.</p></div>
+  <div class="card"><h3>🤫 Surprise Mode</h3><p>Surprise plans and gift ideas are visible only to the person planning them. The partner's agent never brings them up.</p></div>
+  <div class="card"><h3>🗑 Forget anytime</h3><p>View, edit or delete any memory. Leaving a couple space removes your data from it.</p></div>
+  <div class="card"><h3>🙅 No selling data</h3><p>Your tastes are used only to plan for you.</p></div>
+</div>
+</section>
+
+<!-- STORIES -->
+<section id="stories">
+<h2>14. A Day With WeaveWed</h2>
+<div class="grid">
+  <div class="card"><h3>☀️ Morning</h3><p>Priya, on her commute: "Hey WeaveWed, Karan said he wants a beach wedding now 😅". The agent compares it with their Couple DNA, suggests two beach venues that keep their royal vibe, and asks her to confirm.</p></div>
+  <div class="card"><h3>🌤 Afternoon</h3><p>Karan opens the app, sees the update, and taps his music picks from live suggestions. The Sangeet playlist refreshes automatically.</p></div>
+  <div class="card"><h3>🌙 Evening</h3><p>Together on the laptop, they review the full wedding plan, re-balance the budget by voice ("Spend less on décor, more on food"), and tick off to-dos.</p></div>
+  <div class="card"><h3>📅 One year later</h3><p>Karan gets a reminder: "Your anniversary is in 10 days. Priya loved the quiet Goa sunset dinner. Want a similar plan?" He plans it in Surprise Mode.</p></div>
+</div>
+</section>
+
+<!-- QLOO -->
+<section id="qloo">
+<h2>15. The Magic of QLOO</h2>
+<p class="sub">Why WeaveWed understands taste and doesn't just match keywords.</p>
+<p>QLOO maps how tastes connect across music, food, films, fashion, brands, books and places. If you love a certain singer and a certain film, QLOO knows which restaurants, destinations and styles people with similar tastes tend to love.</p>
+<table>
+<tr><th>WeaveWed feature</th><th>How QLOO powers it</th></tr>
+<tr><td>Live suggestion chips</td><td>Popular and relevant picks for your location and your partner's tastes</td></tr>
+<tr><td>Couple Taste DNA</td><td>Finds deeper connections between both partners' tastes, not just exact matches</td></tr>
+<tr><td>Sangeet / event playlists</td><td>Artists that match both partners and, optionally, your guests</td></tr>
+<tr><td>Menu direction &amp; food trails</td><td>Cuisines and restaurants matched to both partners' tastes in the event city</td></tr>
+<tr><td>Venue &amp; shoot locations</td><td>Places in the city that match your Couple Vibe</td></tr>
+<tr><td>Honeymoon &amp; trip destinations</td><td>Destinations and local spots ranked by fit for both of you</td></tr>
+<tr><td>Outfit &amp; décor mood</td><td>Fashion and brand tastes translated into a style direction</td></tr>
+<tr><td>Gifts &amp; surprises</td><td>Brands, books, music and experiences the partner would love</td></tr>
+<tr><td>"Why this?" reasons</td><td>The taste connections behind every recommendation</td></tr>
+</table>
+</section>
+
+<!-- HONEST -->
+<section id="honest">
+<h2>16. What WeaveWed Does Not Do (Yet)</h2>
+<p class="sub">We keep it honest.</p>
+<ul class="chk no">
+<li>It doesn't book venues, vendors or tickets. It recommends and links out so you can book yourself.</li>
+<li>Prices are estimates to guide budgeting, not quotes.</li>
+<li>It doesn't replace family conversations. It helps you both arrive with clarity.</li>
+<li>It doesn't share a partner's private tastes or reveal surprises.</li>
+<li>No fake reviews, no fake data. Everything comes from your tastes and live intelligence.</li>
+</ul>
+</section>
+
+<!-- VALUE -->
+<section id="value">
+<h2>17. Why It Matters</h2>
+<div class="grid">
+  <div class="card"><h3>For couples</h3><p>Less arguing, more agreeing. Plans that feel personal, and a companion that keeps the spark alive.</p></div>
+  <div class="card"><h3>Beyond one event</h3><p>Most wedding apps are used for a few months. WeaveWed stays useful for years: trips, anniversaries, milestones.</p></div>
+  <div class="card"><h3>Real AI, not a chatbot add-on</h3><p>An agent that listens, remembers, acts, explains and learns.</p></div>
+  <div class="card"><h3>QLOO at its best</h3><p>Taste intelligence used for the most personal decisions people make together.</p></div>
+</div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+<h2>18. Roadmap</h2>
+<table>
+<tr><th>Phase</th><th>What's included</th></tr>
+<tr><td><b>Phase 1 (Hackathon)</b></td><td>Sign up, partner invite, voice + chat agent, Guide mode, Event Spaces (Wedding, Honeymoon, Trip first), taste collection with live picks, Couple Taste DNA, plans with "Why this?", memory &amp; learning, to-dos</td></tr>
+<tr><td><b>Phase 2</b></td><td>Prewedding, Engagement and Life Beyond plans in full, Surprise Mode, reminders, post-event memories, Guest Taste Mode</td></tr>
+<tr><td><b>Phase 3</b></td><td>Native mobile apps, regional languages, vendor partnerships &amp; booking hand-offs, shared family view</td></tr>
+</table>
+</section>
+</div>
+
+<footer>
+<div class="logo"><span class="h">♡</span> WeaveWed</div>
+<div class="tag">happily ever after</div>
+<p>Product Plan · v1</p>
+</footer>
+</body>
+</html>

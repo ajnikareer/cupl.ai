@@ -1,0 +1,15 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "episodes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "couple_id", "order": "ASCENDING" },
+        { "fieldPath": "embedding", "vectorConfig": { "dimension": 768, "flat": {} } }
+      ]
+    }
+  ],
+  "fieldOverrides": [
+    { "collectionGroup": "qloo_cache", "fieldPath": "body", "indexes": [] }
+  ]
+}
