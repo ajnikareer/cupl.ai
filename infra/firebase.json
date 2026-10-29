@@ -1,0 +1,9 @@
+{
+  "firestore": { "rules": "infra/firestore.rules", "indexes": "infra/firestore.indexes.json" },
+  "hosting": {
+    "public": "frontend/dist",
+    "ignore": ["firebase.json", "**/.*"],
+    "headers": [{ "source": "/img/**", "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }] }],
+    "rewrites": [{ "source": "**", "destination": "/index.html" }]
+  }
+}
