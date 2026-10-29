@@ -1,0 +1,56 @@
+1
+00:00:03,513 --> 00:00:07,525
+[WELCOME TO WEAVEWED] Your AI wedding companion powered by QLOO taste intelligence.
+
+2
+00:00:12,684 --> 00:00:16,203
+[GROOM ONBOARDING] Narayan signs in as the groom to start planning with a fresh slate.
+
+3
+00:00:18,878 --> 00:00:22,394
+[WEAVEWED AI CHAT] Narayan tells WeaveWed AI about their dream royal wedding in Udaipur.
+
+4
+00:00:34,921 --> 00:00:38,453
+[TASTE INTELLIGENCE (QLOO)] WeaveWed captures Narayan's music and cuisine tastes — respecting dislikes.
+
+5
+00:00:48,797 --> 00:00:52,803
+[CULTURAL ROOTS & HERITAGE] Narayan anchors his roots: Maharashtrian Heritage & Hindu Vedic Traditions.
+
+6
+00:00:55,937 --> 00:00:59,469
+[PARTNER INVITATION] A wedding is woven for two — Narayan creates a private invite for his fiancée Amruta.
+
+7
+00:01:02,789 --> 00:01:06,294
+[PERSPECTIVE SWITCH] 📱 Switching to Amruta's device — opening Narayan's wedding invite.
+
+8
+00:01:11,956 --> 00:01:15,463
+[BRIDE'S AESTHETIC] Amruta chats with WeaveWed: indie acoustic music, pastel florals, vegan dining.
+
+9
+00:01:28,878 --> 00:01:32,382
+[BRIDE'S CULTURAL HERITAGE] Amruta adds her cultural roots: Bengali Heritage & Kolkata traditions.
+
+10
+00:01:37,406 --> 00:01:42,409
+[COUPLE TASTE DNA · CULTURAL HARMONY] QLOO synthesizes both worlds: Bridging Maharashtrian & Bengali Traditions.
+
+11
+00:01:51,017 --> 00:01:55,525
+[TAB 1: PLAN (QLOO MASTERPLAN)] Weaving the 3-day royal masterplan from synthesized couple tastes.
+
+12
+00:01:57,072 --> 00:02:01,099
+[SECRET SURPRISES] Narayan plans a secret lakeside surprise — guaranteed 100% invisible to Amruta.
+
+13
+00:02:03,150 --> 00:02:07,161
+[GEMINI LIVE VOICE UI] Hands-free planning on the go with Gemini 2.5 Live multi-modal voice.
+
+14
+00:02:13,289 --> 00:02:17,803
+[WEAVEWED · HAPPILY EVER AFTER] Two distinct worlds, woven into one unforgettable celebration.
+

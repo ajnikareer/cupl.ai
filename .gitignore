@@ -9,3 +9,7 @@ __pycache__/
 *.pyc
 *.pyo
 credentials/
+
+# Video recordings
+*.webm
+automation_output/raw_video/
