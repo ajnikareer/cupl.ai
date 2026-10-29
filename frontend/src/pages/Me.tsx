@@ -8,6 +8,8 @@ import { auth } from "../lib/firebase";
 import { ErrorBox, PageTitle, Spinner } from "../components/ui";
 
 const STATUSES = ["dating", "engaged", "married", "parents"];
+const HERITAGES = ["Maharashtrian", "Bengali", "Punjabi", "Gujarati", "South Indian", "Marwari", "Malayali", "Cross-cultural"];
+const TRADITIONS = ["Hindu", "Sikh", "Christian", "Muslim", "Jain", "Inter-faith", "Secular"];
 
 export default function Me() {
   const qc = useQueryClient();
@@ -18,6 +20,8 @@ export default function Me() {
   const [invite, setInvite] = useState<any>(null);
   const [copied, setCopied] = useState(false);
   const [code, setCode] = useState("");
+  const [stateVal, setStateVal] = useState("");
+  useEffect(() => { if (me?.user?.profile?.state) setStateVal(me.user.profile.state); }, [me?.user?.profile?.state]);
   const [err, setErr] = useState<any>(null);
   useEffect(() => { if (me?.user?.name) setName(me.user.name); }, [me?.user?.name]);
   if (!me) return <Spinner />;
@@ -38,6 +42,66 @@ export default function Me() {
         <div><div className="mb-1 text-xs text-mut">Love status</div>
           <div className="flex flex-wrap gap-1.5">{STATUSES.map((s) => (
             <button type="button" key={s} onClick={() => wrap(() => api("/api/couple", { method: "PATCH", body: { status: s } }))} className={clsx("chip capitalize", me.couple?.status === s && "chip-on")}>{s}</button>))}</div>
+        </div>
+      </div>
+
+      <div className="card space-y-4 p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="h-serif text-xl text-brand flex items-center gap-2">
+              <span>🏛️</span> Cultural Roots & Heritage
+            </h2>
+            <p className="text-xs text-mut mt-0.5">Powers QLOO cultural intelligence to weave your regional traditions, rituals & cuisine.</p>
+          </div>
+          <span className="badge border-gold/40 bg-gold/10 text-gold text-xs">QLOO Cultural IQ</span>
+        </div>
+
+        <div>
+          <div className="mb-1.5 text-xs font-medium text-brand">Heritage / Community</div>
+          <div className="flex flex-wrap gap-1.5">
+            {HERITAGES.map((h) => (
+              <button
+                type="button"
+                key={h}
+                onClick={() => wrap(() => api("/api/me", { method: "PATCH", body: { heritage: h } }))}
+                className={clsx("chip", me.user?.profile?.heritage === h && "chip-on")}
+              >
+                {h}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="mb-1.5 text-xs font-medium text-brand">Wedding Tradition / Faith</div>
+          <div className="flex flex-wrap gap-1.5">
+            {TRADITIONS.map((t) => (
+              <button
+                type="button"
+                key={t}
+                onClick={() => wrap(() => api("/api/me", { method: "PATCH", body: { tradition: t } }))}
+                className={clsx("chip", me.user?.profile?.tradition === t && "chip-on")}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2 sm:flex-row pt-1">
+          <input
+            className="input flex-1"
+            placeholder="Home state or city (e.g. Maharashtra, Kolkata, Punjab, New York)"
+            value={stateVal}
+            onChange={(e) => setStateVal(e.target.value)}
+          />
+          <button
+            type="button"
+            className="btn-ghost"
+            onClick={() => wrap(() => api("/api/me", { method: "PATCH", body: { state: stateVal.trim() } }))}
+          >
+            Save Region
+          </button>
         </div>
       </div>
 

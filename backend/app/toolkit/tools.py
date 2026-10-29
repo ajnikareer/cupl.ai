@@ -63,13 +63,19 @@ async def app_help(c, a):
     return {"guide": APP_GUIDE}
 
 
-@tool("remember_about_us", "profile", """Save a personal (non-taste) detail the user shared, e.g. partner_name, how_met,
-relationship_since, hometown, culture, family_notes, nickname. Use this for life details, NOT for tastes.""",
+@tool("remember_about_us", "profile", """Save a personal or cultural detail the user shared, e.g. partner_name, how_met,
+heritage, tradition, religion, country, state, hometown, culture, family_notes, nickname. Use this for life & heritage details, NOT for specific tastes.""",
       obj({"key": {"type": "string", "enum": ["partner_name", "how_met", "relationship_since", "hometown", "culture",
+                                               "heritage", "tradition", "religion", "country", "state",
                                                "family_notes", "nickname", "love_language"]}, "value": S}, ["key", "value"]),
       mutates=True)
 async def remember_about_us(c, a):
     await db.document(f"users/{c.uid}").set({"profile": {a["key"]: a["value"][:200]}}, merge=True)
+    if c.user.get("couple_id") and a["key"] in ("heritage", "tradition", "religion", "culture", "state"):
+        try:
+            await dna_svc.compute(c.user["couple_id"])
+        except Exception:
+            pass
     return {"saved": {a["key"]: a["value"][:200]}}
 
 

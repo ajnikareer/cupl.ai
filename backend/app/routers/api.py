@@ -46,17 +46,43 @@ async def me(user=Depends(current_user)):
             "categories": {k: v["label"] for k, v in taste_intel.CATEGORIES.items()}}
 
 
-class NameBody(BaseModel):
-    name: str
+class ProfileUpdateBody(BaseModel):
+    name: str | None = None
+    heritage: str | None = None
+    tradition: str | None = None
+    state: str | None = None
+    country: str | None = None
 
 
 @router.patch("/me")
-async def update_me(body: NameBody, user=Depends(current_user)):
-    name = body.name.strip()[:40]
-    if not name:
-        raise HTTPException(400, "Name can't be empty")
-    await db.document(f"users/{user['uid']}").update({"name": name, "name_confirmed": True})
-    return {"ok": True}
+async def update_me(body: ProfileUpdateBody, user=Depends(current_user)):
+    upd: dict = {}
+    if body.name is not None:
+        name = body.name.strip()[:40]
+        if not name:
+            raise HTTPException(400, "Name can't be empty")
+        upd["name"] = name
+        upd["name_confirmed"] = True
+
+    prof_upd = {}
+    for k in ["heritage", "tradition", "state", "country"]:
+        val = getattr(body, k, None)
+        if val is not None:
+            prof_upd[k] = val.strip()[:60]
+
+    if prof_upd:
+        for k, v in prof_upd.items():
+            upd[f"profile.{k}"] = v
+
+    if upd:
+        await db.document(f"users/{user['uid']}").update(upd)
+        if user.get("couple_id"):
+            try:
+                await dna_svc.compute(user["couple_id"])
+            except Exception as e:
+                log.warning("DNA recompute failed: %s", e)
+
+    return {"ok": True, "profile": prof_upd}
 
 
 @router.post("/couple/invite")

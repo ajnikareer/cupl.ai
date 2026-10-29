@@ -64,8 +64,17 @@ def _brief(space: dict, ctx: dict) -> str:
     lines = ["EVENT: " + ", ".join(f"{k}={space[k]}" for k in keys if space.get(k) not in (None, "", []))]
     for p in ctx["people"]:
         lines.append(f"PARTNER {p['name']}:")
+        prof = p.get("profile") or {}
+        cult = [f"{k}: {v}" for k, v in prof.items() if k in ("heritage", "tradition", "religion", "state", "country") and v]
+        if cult:
+            lines.append(f"  Cultural roots: {', '.join(cult)}")
         lines += _fact_lines(p["facts"]) or ["- (no tastes shared yet)"]
     dna = (ctx["couple"] or {}).get("dna") or {}
+    if dna.get("cultural_harmony"):
+        lines.append(f"CULTURAL HARMONY: {dna['cultural_harmony'].get('title')} — {dna['cultural_harmony'].get('summary')}")
+        if dna['cultural_harmony'].get('ideas'):
+            for idea in dna['cultural_harmony']['ideas']:
+                lines.append(f"  * {idea.get('category', 'Fusion')}: {idea.get('title')} — {idea.get('description')}")
     if dna.get("vibe"):
         lines.append(f"COUPLE VIBE: {dna['vibe']} — {dna.get('description', '')}")
     if dna.get("shared"):

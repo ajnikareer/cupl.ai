@@ -25,6 +25,29 @@ export default function Dna() {
             <div className="mt-4 flex gap-2">{(d.palette || []).map((c: string) => <div key={c} className="h-10 w-10 rounded-2xl border-2 border-white shadow" style={{ background: c }} title={c} />)}</div>
           </div>
         </div>
+
+        {d.cultural_harmony && (
+          <div className="card space-y-3 p-6 border-gold/30 bg-gradient-to-br from-white via-[#fffaf5] to-cream">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">🏛️</span>
+              <h2 className="h-serif text-xl text-brand">{d.cultural_harmony.title || "Cultural Harmony"}</h2>
+              <span className="badge border-gold/40 bg-gold/10 text-gold text-xs">QLOO Cultural IQ</span>
+            </div>
+            <p className="text-sm text-mut leading-relaxed">{d.cultural_harmony.summary}</p>
+            {d.cultural_harmony.ideas?.length > 0 && (
+              <div className="grid gap-3 pt-2 sm:grid-cols-3">
+                {d.cultural_harmony.ideas.map((idea: any, idx: number) => (
+                  <div key={idx} className="rounded-2xl bg-white p-3.5 border border-line shadow-soft text-xs space-y-1">
+                    <span className="font-semibold uppercase tracking-wider text-[10px] text-gold">{idea.category}</span>
+                    <div className="font-medium text-brand text-sm">{idea.title}</div>
+                    <p className="text-mut leading-relaxed">{idea.description}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="card p-6">
           <h2 className="h-serif text-xl text-brand">💞 Shared loves</h2>
           {d.shared?.length ? <div className="mt-3 flex flex-wrap gap-2">{d.shared.map((s: any) => (

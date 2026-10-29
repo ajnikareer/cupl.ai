@@ -68,7 +68,59 @@ async def compute(couple_id: str) -> dict:
                 temperature=0.7)
         except Exception as e:  # noqa
             log.warning("vibe failed: %s", e)
+    cultural_harmony = None
+    if len(members) == 2 and len(users) == 2 and users[0] and users[1]:
+        p0 = users[0].get("profile") or {}
+        p1 = users[1].get("profile") or {}
+        c0 = p0.get("heritage") or p0.get("culture") or p0.get("state")
+        c1 = p1.get("heritage") or p1.get("culture") or p1.get("state")
+        t0 = p0.get("tradition") or p0.get("religion")
+        t1 = p1.get("tradition") or p1.get("religion")
+        if c0 or c1 or t0 or t1:
+            roots_desc = []
+            if c0 or t0:
+                roots_desc.append(f"{names[members[0]]}: {c0 or ''}" + (f" ({t0})" if t0 else ""))
+            if c1 or t1:
+                roots_desc.append(f"{names[members[1]]}: {c1 or ''}" + (f" ({t1})" if t1 else ""))
+            prompt = (
+                f"You are WeaveWed, an expert in multicultural & Indian wedding traditions.\n"
+                f"The couple is celebrating their wedding. Their cultural roots are:\n" + "\n".join(roots_desc) + "\n"
+                f"Couple tastes: {all_names}\n\n"
+                f"Write a warm, 2-sentence 'cultural harmony' summary celebrating how their two backgrounds blend "
+                f"(e.g. bridging Maharashtrian and Bengali rituals, or East meets West fusion). "
+                f"Give 3 specific ideas: one for ceremony fusion, one for food fusion, one for music."
+            )
+            try:
+                ch_out = await gen_json(prompt, {
+                    "type": "OBJECT",
+                    "properties": {
+                        "title": {"type": "STRING"},
+                        "summary": {"type": "STRING"},
+                        "ideas": {"type": "ARRAY", "items": {"type": "OBJECT", "properties": {
+                            "category": {"type": "STRING"},
+                            "title": {"type": "STRING"},
+                            "description": {"type": "STRING"}
+                        }, "required": ["category", "title", "description"]}}
+                    },
+                    "required": ["title", "summary", "ideas"]
+                }, temperature=0.6)
+                cultural_harmony = {
+                    "roots": {members[0]: {"heritage": c0, "tradition": t0}, members[1]: {"heritage": c1, "tradition": t1}},
+                    "title": ch_out.get("title") or f"Bridging {c0 or 'Tradition'} & {c1 or 'Tradition'}",
+                    "summary": ch_out.get("summary") or "A beautiful harmony of two rich heritages woven into one celebration.",
+                    "ideas": ch_out.get("ideas") or []
+                }
+            except Exception as e:
+                log.warning("cultural harmony synthesis failed: %s", e)
+                cultural_harmony = {
+                    "roots": {members[0]: {"heritage": c0, "tradition": t0}, members[1]: {"heritage": c1, "tradition": t1}},
+                    "title": f"Harmonizing {c0 or 'Traditions'} & {c1 or 'Traditions'}",
+                    "summary": f"Honoring {names[members[0]]}'s and {names[members[1]]}'s heritage in every chapter of love.",
+                    "ideas": []
+                }
+
     dna = {"shared": shared, "unique": unique, "overlap": overlap, "differences": differences,
+           "cultural_harmony": cultural_harmony,
            "vibe": vibe.get("vibe", ""), "description": vibe.get("description", ""),
            "palette": [p for p in vibe.get("palette", []) if isinstance(p, str) and p.startswith("#")][:4],
            "partners": [names[u] for u in members], "version": ((couple.get("dna") or {}).get("version", 0)) + 1,
