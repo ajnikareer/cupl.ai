@@ -12,7 +12,7 @@ export default function Dna() {
   if (isLoading) return <Spinner />;
   return (
     <div className="space-y-6">
-      <PageTitle title="Our Taste DNA" sub="Where your two worlds meet — built only from tastes you've chosen to share." right={btn} />
+      <PageTitle title="Tastes DNA" sub="Where your two worlds meet — built only from tastes you've chosen to share." right={btn} />
       <ErrorBox error={m.error} />
       {!d ? <Empty image="/img/engagement.jpg" title="No DNA yet" text="Share some tastes (chat with cupl or the Me page), invite your partner, then hit Refresh." /> : (<>
         <div className="relative overflow-hidden rounded-[2rem]">

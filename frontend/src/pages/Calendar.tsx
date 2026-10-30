@@ -125,7 +125,7 @@ export default function CalendarPage() {
       {/* Page Title & Actions */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <PageTitle
-          title="Our Calendar & Milestones"
+          title="Calendar & Milestones"
           sub="Synchronized schedule, celebration countdowns, and date-night plans"
         />
         <div className="flex items-center gap-2">

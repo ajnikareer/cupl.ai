@@ -9,7 +9,7 @@ export default function Spaces() {
   const { data, isLoading } = useQuery({ queryKey: ["spaces"], queryFn: () => api("/api/spaces") });
   return (
     <div>
-      <PageTitle title="👑 Our Events" sub="Milestone celebration masterplans: Weddings, Preweddings, Engagements, Honeymoons, and Trips" right={<Link to="/app/spaces/new" className="btn-primary"><Plus className="h-4 w-4" /> New Event</Link>} />
+      <PageTitle title="👑 Events" sub="Milestone celebration masterplans: Weddings, Preweddings, Engagements, Honeymoons, and Trips" right={<Link to="/app/spaces/new" className="btn-primary"><Plus className="h-4 w-4" /> New Event</Link>} />
       {isLoading ? <Spinner /> : data?.spaces?.length ? (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {data.spaces.map((s: any) => <SpaceCard key={s.id} s={s} active={s.id === data.active_space_id} />)}

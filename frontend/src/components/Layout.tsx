@@ -10,11 +10,11 @@ import { useChat } from "../chat/ChatContext";
 const NAV = [
   { to: "/app", label: "Home", short: "Home", icon: Home, end: true },
   { to: "/app/chat", label: "cupl AI", short: "cupl AI", icon: MessageCircleHeart },
-  { to: "/app/recommends", label: "cupl Suggests", short: "Suggests", icon: Sparkles },
-  { to: "/app/plans", label: "Our Plans", short: "Plans", icon: CalendarCheck },
-  { to: "/app/spaces", label: "Our Events", short: "Events", icon: CalendarHeart },
-  { to: "/app/dna", label: "Our DNA", short: "DNA", icon: Dna },
-  { to: "/app/calendar", label: "Our Calendar", short: "Calendar", icon: CalendarDays },
+  { to: "/app/recommends", label: "Recommendations", short: "Picks", icon: Sparkles },
+  { to: "/app/plans", label: "Plans", short: "Plans", icon: CalendarCheck },
+  { to: "/app/spaces", label: "Events", short: "Events", icon: CalendarHeart },
+  { to: "/app/dna", label: "Tastes DNA", short: "DNA", icon: Dna },
+  { to: "/app/calendar", label: "Calendar", short: "Calendar", icon: CalendarDays },
   { to: "/app/me", label: "My Profile", short: "Profile", icon: UserRound },
 ];
 

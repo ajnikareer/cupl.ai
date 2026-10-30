@@ -84,7 +84,7 @@ export default function Plans() {
       {/* Title & Action */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <PageTitle
-          title="✨ Our Plans"
+          title="✨ Plans"
           sub="Everyday couple plans, movie streaming nights, dinner dates, and spontaneous getaways"
           right={
             <Link
