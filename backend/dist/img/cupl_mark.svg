@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <linearGradient id="cuplBurgundy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7e1f37" />
+      <stop offset="50%" stop-color="#6c1a30" />
+      <stop offset="100%" stop-color="#501121" />
+    </linearGradient>
+    <linearGradient id="cuplGold" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b8843e" />
+      <stop offset="35%" stop-color="#d8aa65" />
+      <stop offset="70%" stop-color="#fae4bf" />
+      <stop offset="100%" stop-color="#c9974d" />
+    </linearGradient>
+    <filter id="cuplShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#18040a" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <!-- Squircle Base with ambient rim -->
+  <rect x="3.5" y="3.5" width="93" height="93" rx="26" fill="url(#cuplBurgundy)" stroke="rgba(250,226,188,0.25)" stroke-width="0.8" />
+
+  <!-- Right Ring (Base Layer) -->
+  <circle cx="58.3" cy="50" r="17.2" fill="none" stroke="url(#cuplGold)" stroke-width="3.8" />
+
+  <!-- Left Ring (Top Crossover on top) with drop shadow -->
+  <circle cx="41.7" cy="50" r="17.2" fill="none" stroke="url(#cuplGold)" stroke-width="3.8" filter="url(#cuplShadow)" />
+
+  <!-- Right Ring Bottom Overpass Arc (Interlocking Weave) -->
+  <path d="M 51.5 65.2 A 17.2 17.2 0 0 1 41.5 53.0" fill="none" stroke="url(#cuplGold)" stroke-width="3.8" stroke-linecap="round" filter="url(#cuplShadow)" />
+</svg>
+

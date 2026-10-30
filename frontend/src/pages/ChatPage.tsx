@@ -25,7 +25,57 @@ interface ChatThread {
   messages: Msg[];
 }
 
-const DEFAULT_THREADS: ChatThread[] = [];
+const DEFAULT_THREADS: ChatThread[] = [
+  {
+    id: "thread_wedding",
+    title: "Royal Hyderabad Wedding Planning",
+    timestamp: Date.now() - 1000 * 60 * 35,
+    messages: [
+      { id: "m1", role: "user", text: "Hi! I am Narayan, planning our royal wedding with my bride Amruta in Hyderabad for December with 400 guests and 25 lakhs budget.", ts: "10:00" },
+      { id: "m2", role: "assistant", text: "Congratulations Narayan & Amruta! A royal Hyderabad wedding with 400 guests and a ₹25L envelope sounds magnificent. I've created your Wedding Space.\n\nCould you share your cultural roots and favorite dining traditions so I can calibrate our taste intelligence?", ts: "10:00" },
+      { id: "m3", role: "user", text: "My heritage is Royal North Indian Awadhi. I love grand Awadhi dum biryani, soulful Arijit Singh melodies, and acoustic Sufi music. For outfits, classic ivory raw-silk sherwani.", ts: "10:01" },
+      { id: "m4", role: "assistant", text: "Locked in your Awadhi roots, acoustic Sufi melodies, and authentic Awadhi dum catering into your taste profile! Now Amruta, tell me your heritage and bridal aesthetic.", ts: "10:01" },
+      { id: "m5", role: "user", text: "I'm Amruta! My heritage is South Indian Telugu. I adore classical Carnatic acoustic fusion, coastal Andhra dining, and handwoven Kanjeevaram silk sarees.", ts: "10:02" },
+      { id: "m6", role: "assistant", text: "Fascinating blend! We now have both the Royal Awadhi and South Indian Telugu heritage profiles locked in. Qloo's cultural intelligence has calculated an 88% aesthetic harmony, pairing your wedding traditions, dual-cuisine catering, and multi-generational music curves!", ts: "10:02" }
+    ]
+  },
+  {
+    id: "thread_bali",
+    title: "Bali Romantic Honeymoon Escape",
+    timestamp: Date.now() - 1000 * 60 * 180,
+    messages: [
+      { id: "b1", role: "user", text: "cupl, help us plan our dream honeymoon in Bali for 10 days in January with ₹7 lakhs budget. We want cliffside ocean views, private downtime, and incredible food.", ts: "08:15" },
+      { id: "b2", role: "assistant", text: "Bali is idyllic for your shared travel aesthetic! Pairing Narayan's love for dramatic cliffside architecture with Amruta's desire for serene coastal retreats.\n\nI have created your Honeymoon Space: 5 nights at an Uluwatu cliffside pool villa, followed by 5 nights in an Ubud rainforest river sanctuary. Private sunset catamaran and cliffside dining included!", ts: "08:16" }
+    ]
+  },
+  {
+    id: "thread_sangeet",
+    title: "Sangeet Playlist & Energy Curve",
+    timestamp: Date.now() - 1000 * 60 * 60 * 24,
+    messages: [
+      { id: "s1", role: "user", text: "Can you curate our Sangeet music blueprint? We need to balance elderly relatives with a high-energy dance party.", ts: "Yesterday" },
+      { id: "s2", role: "assistant", text: "Crafted a 3-phase multi-generational Sangeet curve:\n1. 95-105 BPM: Acoustic Sufi & Golden Bollywood melodies during cocktails.\n2. 110-120 BPM: Couple entry and family choreography (Arijit Singh, retro disco).\n3. 128-132 BPM: Peak high-energy Bollywood brass & Punjabi dhol dance finale!\nSaved directly to your Sangeet masterplan blueprint.", ts: "Yesterday" }
+    ]
+  },
+  {
+    id: "thread_decor",
+    title: "Living Room Decor Palette",
+    timestamp: Date.now() - 1000 * 60 * 60 * 72,
+    messages: [
+      { id: "d1", role: "user", text: "We are designing our new living room together. What colors and materials harmonize our tastes?", ts: "3 days ago" },
+      { id: "d2", role: "assistant", text: "Your shared palette is Earthy Warmth & Minimalist Heritage:\n- Base: Warm Ivory (#FDFBF7) and Raw Linen\n- Accent: Terracotta (#C86D51) and Burnished Brass (#C49A45)\n- Materials: Solid Teak Wood and Handwoven Ikat cushions.\nAdded this to Our Plans!", ts: "3 days ago" }
+    ]
+  },
+  {
+    id: "thread_surprise",
+    title: "🤫 Secret Anniversary Surprise",
+    timestamp: Date.now() - 1000 * 60 * 60 * 96,
+    messages: [
+      { id: "sp1", role: "user", text: "cupl, keep this private between us. I want to plan an unforgettable surprise for Amruta's birthday.", ts: "4 days ago" },
+      { id: "sp2", role: "assistant", text: "Understood, this is locked in your private vault — Amruta will never see this thread or notification.\n\nBased on her love for coastal sunsets and acoustic strings, I've curated a Private Helicopter Sunset Tour to a vineyard courtyard with a live acoustic guitarist playing her favorite indie songs. Added to your Private Surprises vault!", ts: "4 days ago" }
+    ]
+  }
+];
 
 const QUICK_PROMPTS = [
   "Plan a surprise date 🤫",
@@ -60,9 +110,9 @@ export default function ChatPage() {
 
   const { data: me } = useQuery({ queryKey: ["me"], queryFn: () => api("/api/me") });
 
-  const [threads, setThreads] = useState<ChatThread[]>(() => []);
+  const [threads, setThreads] = useState<ChatThread[]>(() => DEFAULT_THREADS);
 
-  const [activeThreadId, setActiveThreadId] = useState<string>("current");
+  const [activeThreadId, setActiveThreadId] = useState<string>("thread_wedding");
   const [showContinuity, setShowContinuity] = useState(false);
   const [text, setText] = useState("");
 

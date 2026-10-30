@@ -116,6 +116,11 @@ Pass any details the user ALREADY said (city, dates, budget...). Don't ask for d
       obj({"type": {"type": "string", "enum": TYPES}, **EVENT_FIELDS}, ["type"]), mutates=True)
 async def create_event(c, a):
     stype = a.pop("type")
+    if stype == "wedding":
+        if not a.get("ceremonies"):
+            a["ceremonies"] = ["Sangeet", "Wedding", "Reception"]
+        if not a.get("guests"):
+            a["guests"] = 400
     s, errors = await sp.create_space(c.user, stype, a)
     return {"created": _brief(s), "invalid": errors, "widget": {"kind": "refresh"}}
 

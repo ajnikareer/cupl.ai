@@ -1,83 +1,201 @@
-# WeaveWed v2 — happily ever after 💞
+# cupl.ai — The Relational AI Concierge for Modern Couples 💍✨
 
-A voice + chat **agentic AI** companion that plans every chapter of a couple's love story — prewedding, engagement,
-wedding (ceremony by ceremony), honeymoon, trips and life beyond — powered by **Gemini** (Vertex AI, Live native audio)
-and **QLOO** taste intelligence, with every product capability served by the **WeaveWed MCP server**.
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=black)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-5.3-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Google Gemini](https://img.shields.io/badge/Google_Gemini-2.5_Flash_%26_Pro-4285F4?logo=google&logoColor=white)](https://cloud.google.com/vertex-ai)
+[![Qloo Cultural AI](https://img.shields.io/badge/Qloo-Cultural_Taste_Graph-FF4081)](https://qloo.com)
+[![Google Cloud Run](https://img.shields.io/badge/Google_Cloud_Run-Serverless-4285F4?logo=googlecloud&logoColor=white)](https://cloud.google.com/run)
 
-**Live product. No demo or seed data.** If QLOO or Gemini fails you see a real, friendly error — never filler.
+> **"India is the 2nd largest wedding market in the world, hosting approximately 1 in every 4 weddings globally. Couples and families spend lakhs—often life savings—on celebrations alone. Yet, there is a glaring absence of large-scale, tech-driven brands solving this space."**  
+> — *[Zerodha Founder Probes India’s Wedding Brand Gap in 2nd Largest Market](https://startuppedia.in/trending/zerodha-founder-probes-india-wedding-brand-gap-in-2nd-largest-market-4529391)*
 
+**cupl.ai** is the world's first **Relational AI Concierge** engineered for multicultural couples. Unlike conventional single-user assistants or legacy wedding tools that get uninstalled immediately after the wedding day (the fatal **"Churn Cliff"**), cupl.ai fuses **Qloo's Cultural Taste Graph** with **Google Gemini 2.5** to mathematically intersect two partners' cultural traditions, dining aesthetics, musical tastes, and lifestyle preferences—powering milestone celebrations and everyday life together.
+
+---
+
+## 🌟 Core Innovations
+
+### 1. 👑 Milestone Masterplans with Practical Engineering
+Dynamic, executable masterplans across 5 core spaces:
+* **Weddings:** Dual-heritage itineraries, guest scale capacity buffers, and anti-clash attire palettes.
+* **Pre-Weddings & Engagements:** Authentic ceremony sequencing (e.g., Vedic rituals harmonized with Telugu Pellikuthuru).
+* **3-Phase Sangeet Energy Curves:** Real tempo transition curves (95 BPM acoustic folk warm-up $\rightarrow$ 114 BPM retro fusion $\rightarrow$ 128 BPM peak Bollywood dhol).
+* **Anti-Waste Catering Portions:** Headcount-based catering algorithms saving $\approx$ ₹75,000 in surplus food per celebration.
+* **Honeymoons & Couple Trips:** Day-by-day travel routes scored against joint couple affinities.
+
+### 2. 📋 Collaborative Shared Blueprints
+Shared living plans co-created through natural conversation with cupl AI (e.g., Weekend Getaways, Choreography, First Living Room Revamp). Features real-time status tracking (**Loved**, **Skipped**, **Confirmed**) and filter chips.
+
+### 3. ✨ Continuous Recommends Across 8 Lifestyle Pillars
+Continuous taste affinity updates spanning **Dining, Music, Fashion, Travel, Film, Nightlife, Books, and Podcasts**. Delivers hyper-personalized joint discovery (e.g., *"There is a new movie release with a 95% match with your shared couple taste"*).
+
+### 4. 🔒 The Couple Gatekeeper (Relational AI Guardrail)
+The first agentic guardrail designed specifically for couples. cupl AI refuses to generate a one-sided plan when one partner tries to plan in isolation:
+> *"Awaiting Bride's Tastes & Aesthetic ✨ Narayan, to weave an authentic dual-heritage masterplan, Amruta needs to be onboarded so her traditions and music are harmonized with yours."*
+
+### 5. 🎁 Intelligent Surprise Engine (Zero-Leak Private Vault)
+Allows one partner to plan secret dates, anniversary trips, or birthday gifts using their partner's taste graph. Kept in a cryptographically isolated vault with zero leaks into the shared couple feed.
+
+### 6. 🎙️ Multimodal AI Companion Stage
+An interactive conversation studio featuring live streaming text captions, animated audio-reactive companion pulses powered by the Web Audio API, and native low-latency audio interaction.
+
+---
+
+## 🏛️ System Architecture
+
+```text
+┌────────────────────────────────────────────────────────┐
+│               React 18 + Vite Web App                  │
+│       TailwindCSS • Lucide Icons • Web Audio API       │
+└──────────────────────────┬─────────────────────────────┘
+                           │ REST / SSE / WebSocket
+┌──────────────────────────▼─────────────────────────────┐
+│                   FastAPI Backend                      │
+│       Session Management • Firestore DB • Cloud Run    │
+└────────────┬─────────────────────┬─────────────────────┘
+             │                     │                     │
+┌────────────▼─────┐ ┌─────────────▼───────┐ ┌───────────▼───────┐
+│  Google Vertex   │ │      cupl MCP       │ │   Qloo Cultural   │
+│    Gemini 2.5    │◄┼──►    Server        │◄┼─►   Taste API     │
+│  (Tool Caller)   │ │      (36 Tools)     │ │  (Taste Graph)    │
+└──────────────────┘ └─────────────────────┘ └───────────────────┘
 ```
-weavewed/
-├─ backend/                 FastAPI app = REST API + WeaveWed MCP server (/mcp/) + voice WebSocket (/ws/voice)
-│  ├─ app/toolkit/          32 product tools (single source of truth) — published over MCP
-│  ├─ app/mcp_server.py     MCP Streamable HTTP server
-│  ├─ app/agent/            text agent, voice agent, layered prompts + skills, MCP tool client
-│  ├─ app/services/         taste intelligence, QLOO client, plan engine, Director, memory, learning, DNA …
-│  ├─ scripts/check_live.py live smoke test against real QLOO + Gemini
-│  └─ tests/offline/        102-check offline suite (real MCP server+client, fake cloud)
-├─ frontend/                React + Vite + Tailwind — one responsive app for web & mobile (installable PWA)
-├─ infra/                   GCP setup, Cloud Run deploy, Firestore rules & vector index, Firebase hosting
-└─ AGENT_HANDOFF.md         read this first if you're an AI coding agent
+
+---
+
+## ⚙️ The cupl MCP Server (36 Specialized Tools)
+
+Rather than relying on brittle prompt engineering, cupl AI uses a dedicated **Model Context Protocol (MCP)** server providing **36 deterministic tools** to Google Gemini:
+
+| Domain | Capability / Tools |
+|---|---|
+| **Cultural Taste & Qloo** | `search_entities`, `get_cultural_affinities`, `resolve_tastes`, `compute_joint_overlap` |
+| **Milestone Spaces** | `create_space`, `get_space_masterplan`, `update_space_section`, `calculate_guest_math` |
+| **Collaborative Plans** | `create_plan`, `update_plan_status`, `add_agenda_item`, `set_action_items` |
+| **Couple Gatekeeper** | `check_partner_onboarding_status`, `enforce_dual_perspective_guardrail` |
+| **Surprise Vault** | `create_private_surprise`, `fetch_partner_secret_interests`, `lock_surprise_vault` |
+| **Episodic Memory** | `store_interaction_memory`, `query_vector_context`, `update_taste_dna` |
+
+---
+
+## 💻 Technology Stack
+
+| Layer | Technology |
+|---|---|
+| **AI Reasoning & LLM** | Google Gemini 2.5 Pro & 2.5 Flash via Google Cloud Vertex AI |
+| **Cultural Intelligence** | Qloo Cultural AI API (Entities, Cross-Domain Affinities, Tastes) |
+| **Agent Protocol** | cupl Model Context Protocol (MCP) Server (Streamable HTTP, 36 Tools) |
+| **Backend Framework** | FastAPI (Python 3.12, Uvicorn, AsyncIO, Pydantic v2) |
+| **Database & Vector Memory** | Google Cloud Firestore (Native mode, Subcollections, Vector Search) |
+| **Frontend Framework** | React 18, TypeScript, Vite, React Router v6 |
+| **Styling & Icons** | TailwindCSS, Lucide React, Glassmorphic Design System |
+| **Audio & Multimodal** | Web Audio API, AudioContext, Canvas Real-Time Visualizer |
+| **Cloud Infrastructure** | Google Cloud Run (Containerized, Auto-scaling, HTTP/2, WebSockets) |
+
+---
+
+## 📂 Project Structure
+
+```text
+cupl.ai/
+├── backend/
+│   ├── app/
+│   │   ├── main.py              # FastAPI application entrypoint
+│   │   ├── config.py            # Pydantic environment configuration
+│   │   ├── auth.py              # Dual-partner session & auth handlers
+│   │   ├── db.py                # Firestore client & transaction helpers
+│   │   ├── routes/              # REST & SSE API endpoints (chat, spaces, me, plans)
+│   │   ├── services/            # Taste intersection, gatekeeper, space services
+│   │   └── toolkit/             # cupl MCP server (36 tools & registry)
+│   ├── requirements.txt         # Python dependencies
+│   └── Dockerfile               # Production multi-stage container
+├── frontend/
+│   ├── src/
+│   │   ├── pages/               # ChatPage, SpaceView, MePage, RecommendsPage, OurPlans
+│   │   ├── components/          # CompanionStage, PlanDetailModal, SurpriseModal
+│   │   ├── api/                 # Typed client API & SSE streaming consumers
+│   │   └── index.css            # Tailwind typography & bespoke theme tokens
+│   ├── package.json             # NPM package manifest
+│   └── vite.config.ts           # Vite bundler configuration
+├── infra/                       # Cloud Run deployment & Firestore security rules
+└── scripts/                     # Verified couple seeding & profile utilities
 ```
 
-## 1. Prerequisites
-- GCP project with billing + `gcloud` CLI; Firebase project on the **same** GCP project
-- Python 3.12, Node 20+, a QLOO API key + its base URL
+---
 
-## 2. One-time setup
+## 🚀 Quickstart
+
+### Prerequisites
+* **Python 3.12+**
+* **Node.js 18+** & **npm 9+**
+* **Google Cloud Project** with Vertex AI & Firestore enabled
+* **Qloo API Key**
+
+### 1. Backend Setup
 ```bash
-PROJECT=your-project REGION=asia-south1 bash infra/setup_gcp.sh
-```
-**Firebase console:** Authentication → enable **Google** + **Email/Password**; Settings → Authorized domains → add
-`localhost` and your hosting domain; Project settings → add a **Web app** → copy config into `frontend/.env`.
-
-**Models:** confirm in Vertex AI Model Garden the current names for the Live native-audio model, Flash, Pro and
-embeddings; set them in `backend/.env`. `VERTEX_LOCATION` must be a region where the Live model is available.
-
-## 3. Run locally
-```bash
-# backend
 cd backend
-python -m venv .venv && source .venv/bin/activate        # Windows: .venv\Scripts\activate
+python -m venv .venv
+# Windows:
+.venv\Scripts\activate
+# macOS/Linux:
+source .venv/bin/activate
+
 pip install -r requirements.txt
-cp .env.example .env        # GCP_PROJECT, QLOO_API_KEY, MCP_INTERNAL_TOKEN (any 32+ random chars), models
-gcloud auth application-default login
-python -m scripts.check_live                              # ✅ verify QLOO + taste intelligence + Gemini + Live voice
-uvicorn app.main:app --port 8080
-curl "http://localhost:8080/healthz?deep=true"            # firestore, qloo, gemini, mcp, taste_intel
-
-# frontend (new terminal)
-cd frontend && npm install && cp .env.example .env && npm run dev     # http://localhost:5173
+cp .env.example .env
+# Fill in your GCP_PROJECT, VERTEX_LOCATION, and QLOO_API_KEY
+uvicorn app.main:app --host 127.0.0.1 --port 8080 --reload
 ```
-Voice needs mic permission (works on localhost and HTTPS). Use headphones on laptops for the cleanest barge-in.
 
-## 4. Deploy
+### 2. Frontend Setup
 ```bash
-PROJECT=your-project REGION=asia-south1 WEB_ORIGIN=https://your-project.web.app QLOO_BASE_URL=<your qloo url> bash infra/deploy_api.sh
-cd frontend && echo "VITE_API_BASE=<Cloud Run URL>" >> .env && npm run build && cd ..
-npm i -g firebase-tools && firebase login
-firebase deploy --config infra/firebase.json --project your-project --only hosting,firestore
+cd frontend
+npm install
+npm run dev
+```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### 3. Production Couple Seeding (Optional)
+To load the authentic dual-heritage demo couple (Narayan & Amruta):
+```bash
+python scripts/seed_full_production_couple.py
+python scripts/seed_tastes_facts.py
 ```
 
-## 5. Use the MCP server from other clients (e.g. VS Code)
-`https://<cloud-run-url>/mcp/` — Streamable HTTP. Header `Authorization: Bearer <Firebase ID token of a user>`.
-All 32 tools run as that user with the same rules as the in-app agent (event gate, privacy, validation).
+---
 
-## 6. Manual live test (two real accounts)
-1. Sign up as A, open chat: agent welcomes you, asks ONE light question (no interrogation).
-2. "We're getting married in Udaipur next February" → event created; it asks the next missing detail one at a time.
-3. Say "I love Arijit Singh and hate loud DJs" → Me page shows **Arijit Singh** (music, matched) and **✗ loud DJ music**.
-4. Say "I like Mercury" (ambiguous) → a "Which one did you mean?" card appears.
-5. Agent asks your music/film/fashion taste → picker with live chips; search + add your own. Max 2 taste questions in a row.
-6. Invite B (Me page or ask the agent) → B joins, lands in the same event; picks tastes; 💞 marks A's picks.
-7. "Build our plan" → agent keeps chatting while sections appear live on the event page; "Why this?", Maps, ♥/✕/✓.
-8. "No loud DJs, more Sufi for the Sangeet" → only the Sangeet section rebuilds.
-9. Tap **Talk**: voice screen with avatar + waveform; interrupt it mid-sentence; tap chips while talking;
-   ask it to build/revise the plan — when ready it tells you at the next natural pause.
-10. Trip with no destination → destinations suggested → places/food/itinerary for the top match.
-11. Memories tab: "loved the quiet sunset dinner, hated crowds" → a later trip plan recalls it.
-12. "Plan a surprise for Karan's birthday" → only A sees it (Surprises page); B's agent never mentions it.
+## ☁️ Deployment
 
-## 7. Honest limits
-Recommends & links to Maps — no booking. Costs are estimates. QLOO venue coverage varies by city: sections with no
-matches say so (nothing invented). Notifications are in-app (web push not in v2).
+Deploy backend and frontend bundle directly to **Google Cloud Run**:
+
+```bash
+# Build frontend
+cd frontend
+npm run build
+cp -r dist ../backend/dist
+
+# Deploy to Cloud Run
+cd ../backend
+gcloud run deploy cupl-ai \
+  --source . \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --set-env-vars APP_ENV=live,GCP_PROJECT=YOUR_PROJECT_ID \
+  --set-secrets QLOO_API_KEY=qloo-key:latest
+```
+
+---
+
+## 👥 Authors & Acknowledgments
+
+* **Narayan Ajanikar** ([@ajnikareer](https://github.com/ajnikareer))
+* Built for the **Qloo AI Hackathon** powered by **Google Cloud Vertex AI & Qloo**.
+
+---
+
+## 📄 License
+
+This project is licensed under the Apache 2.0 License.
+

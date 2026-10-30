@@ -132,8 +132,6 @@ function PlanTab({ s }: { s: any }) {
 
   useEffect(() => { if (!building) qc.invalidateQueries({ queryKey: ["plan", s.id] }); }, [building]);
 
-  if (s.missing_fields?.length)
-    return <div className="card p-6 text-sm">A few details first: <b>{s.missing_fields.join(", ").replace(/_/g, " ")}</b> — add them in the Details tab, or just tell cupl in chat.</div>;
   if (isLoading) return <Spinner />;
   if (!plan && building)
     return (
