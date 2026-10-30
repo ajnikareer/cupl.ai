@@ -186,3 +186,4 @@ async def get_added_rec_ids(user: dict) -> list[str]:
         if d.get("recommendation_id"):
             ids.append(d["recommendation_id"])
     return ids
+

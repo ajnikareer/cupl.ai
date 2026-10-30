@@ -42,22 +42,37 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
     p_names = [f["text"] for f in snap.partner_facts[:6]]
     dna_vibe = (snap.couple.get("dna") or {}).get("vibe") or "Romantic, soulful, elegant"
 
-    # Couple Recommendation 1: Friday Movie Match
-    # Blends romance & cinema tastes
+    # Couple Recommendation 1: Cozy At-Home Movie Streaming
     movie_rec = {
-        "id": "rec_movie_friday",
+        "id": "rec_movie_streaming",
         "category": "movie",
-        "category_label": "Friday Movie Night Match",
-        "title": "Dilwale Dulhania Le Jayenge & Modern Cinema Night",
-        "subtitle": "96% Couple Taste Match",
+        "category_label": "🛋️ Cozy Streaming Night (OTT)",
+        "title": "Dilwale Dulhania Le Jayenge (Prime Video)",
+        "subtitle": "96% Taste Match • Stream Tonight at Home",
         "affinity": 0.96,
         "image": "https://images.qloo.com/i/661E4E6A-0024-48A0-90D2-5A12E902D4FD-420x-auto.jpg",
-        "description": f"Curated for {first} & {pname}: Timeless romance, melodic music, and picturesque European landscapes. Perfect cozy watch with your shared favorites.",
+        "description": f"Cozy Friday movie night at home for {first} & {pname} on Prime Video. Timeless romance, iconic melodies, and picturesque European landscapes.",
         "why": f"Matches {first}'s love for grand Bollywood melodies and {pname}'s acoustic romance.",
         "suggested_date": dates["friday"],
         "suggested_time": "20:30",
         "streaming": "Prime Video",
-        "action_prompt": "Tell WeaveWed: 'What movie should we watch together tonight?'"
+        "action_prompt": "Tell WeaveWed: 'What movie should we stream together tonight?'"
+    }
+
+    # Couple Recommendation 1B: In-Theaters Cinema Date
+    cinema_rec = {
+        "id": "rec_cinema_theaters",
+        "category": "movie",
+        "category_label": f"🎟️ In Theaters Now ({city})",
+        "title": f"Weekend Cinema Date at PVR / Inox ({city})",
+        "subtitle": "Current Romantic Releases • Book Tickets",
+        "affinity": 0.94,
+        "image": None,
+        "description": f"Catch the latest romantic drama running this week in {city} cinemas. Perfect Friday/Saturday dinner-and-a-movie date.",
+        "why": f"A classic movie date out of the house tailored to your shared cinematic taste.",
+        "suggested_date": dates["friday"],
+        "suggested_time": "19:00",
+        "action_prompt": f"Tell WeaveWed: 'What new movies in theaters in {city} fit our taste?'"
     }
 
     # Couple Recommendation 2: Weekend Romantic Dining
@@ -129,7 +144,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
         "action_prompt": f"Tell WeaveWed privately: 'Help me arrange a secret rooftop dinner for {pname}'"
     }
 
-    couple_recs = [movie_rec, dining_rec, escape_rec]
+    couple_recs = [movie_rec, cinema_rec, dining_rec, escape_rec]
     private_recs = [private_gift, private_date]
 
     # Annotate with calendar status
@@ -144,3 +159,4 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
         "partner_name": pname,
         "couple_vibe": dna_vibe
     }
+

@@ -3,8 +3,11 @@ import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+_env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
+
+
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_file=(_env_path if os.path.isfile(_env_path) else ".env"), extra="ignore")
 
     APP_ENV: str = "live"
     GCP_PROJECT: str = ""

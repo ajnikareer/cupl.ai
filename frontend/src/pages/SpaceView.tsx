@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Check, ExternalLink, Heart, RefreshCw, Sparkles, Trash2, X } from "lucide-react";
+import { Check, ExternalLink, Heart, RefreshCw, Sparkles, Trash2, X, ShieldCheck, Users, Coins, Music, Utensils, Palette, Clock } from "lucide-react";
 import clsx from "clsx";
 import { api, daysTo, fmtDate, fmtINR, IMG } from "../lib/api";
 import { ErrorBox, STATE_LABEL, Spinner } from "../components/ui";
@@ -136,26 +136,126 @@ function ItemCard({ it, sid, type }: { it: any; sid: string; type: string }) {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["plan", sid] }) });
   const set = (st: string) => m.mutate(it.status === st ? "suggested" : st);
   return (
-    <div className={clsx("card flex flex-col overflow-hidden", it.status === "skipped" && "opacity-50")}>
+    <div className={clsx("card flex flex-col overflow-hidden transition-shadow hover:shadow-md", it.status === "skipped" && "opacity-50")}>
+      {it.act && (
+        <div className="bg-brand/10 border-b border-brand/20 px-4 py-2 text-xs font-semibold text-brand flex items-center justify-between">
+          <span className="flex items-center gap-1.5 truncate">
+            <Music className="h-3.5 w-3.5 shrink-0" />
+            {it.act}
+          </span>
+          {it.tempo_bpm && (
+            <span className="bg-white/90 px-2 py-0.5 rounded-full text-[11px] font-mono text-charcoal shrink-0 border border-brand/10">
+              {it.tempo_bpm}
+            </span>
+          )}
+        </div>
+      )}
       <div className="relative h-40">
         <img src={it.image || IMG[type]} alt="" className="h-full w-full object-cover" onError={(e: any) => (e.currentTarget.src = IMG[type])} />
         {it.loved_by_both && <span className="badge absolute left-3 top-3 bg-white/95"><Heart className="h-3 w-3 fill-brand" /> Loved by both</span>}
         {it.status === "done" && <span className="badge absolute right-3 top-3 bg-white/95"><Check className="h-3 w-3" /> Done</span>}
+        {it.course_type && (
+          <span className="badge absolute left-3 bottom-3 bg-white/95 shadow-sm text-xs font-medium text-brand">
+            <Utensils className="h-3 w-3 text-gold" /> {it.course_type}
+          </span>
+        )}
       </div>
       <div className="flex flex-1 flex-col p-4">
-        <div className="font-medium">{it.title}</div>
-        <div className="mt-1 flex flex-wrap gap-1">
-          {typeof it.affinity === "number" && it.affinity > 0 && <span className="badge">{Math.round(Math.min(1, it.affinity) * 100)}% match</span>}
+        <div className="font-medium text-base text-charcoal">{it.title}</div>
+        
+        {/* Badges row */}
+        <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+          {typeof it.affinity === "number" && it.affinity > 0 && (
+            <span className="badge bg-gold/15 text-gold-dark font-medium">{Math.round(Math.min(1, it.affinity) * 100)}% QLOO match</span>
+          )}
+          {it.vibe_tag && (
+            <span className="badge bg-[#fff5ea] text-[#b45309] font-medium">{it.vibe_tag}</span>
+          )}
+          {it.heritage_origin && (
+            <span className="badge bg-purple-50 text-purple-700 font-medium">🏛️ {it.heritage_origin}</span>
+          )}
           {it.est_cost > 0 && <span className="badge">~{fmtINR(it.est_cost)}</span>}
         </div>
-        <p className="mt-2 flex-1 text-sm text-mut">{it.description}</p>
-        {it.why?.length > 0 && <button type="button" onClick={() => setOpen(!open)} className="mt-2 self-start text-xs font-medium text-gold">💡 Why this?</button>}
-        {open && <ul className="mt-1 list-disc space-y-0.5 rounded-xl bg-[#fffaf2] p-2 pl-6 text-xs">{it.why.map((w: string, i: number) => <li key={i}>{w}</li>)}</ul>}
-        <div className="mt-3 flex items-center gap-1.5">
+
+        {/* Color Swatches */}
+        {it.hex_colors && it.hex_colors.length > 0 && (
+          <div className="mt-2.5 flex items-center gap-2">
+            <span className="text-xs text-mut font-medium flex items-center gap-1">
+              <Palette className="h-3.5 w-3.5" /> Palette:
+            </span>
+            <div className="flex flex-wrap items-center gap-1.5">
+              {it.hex_colors.map((hex: string, i: number) => (
+                <span key={i} className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-full border border-line bg-surface">
+                  <span className="h-3 w-3 rounded-full border border-black/15 shrink-0" style={{ backgroundColor: hex }} />
+                  {hex}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <p className="mt-2 text-sm text-mut leading-relaxed">{it.description}</p>
+
+        {/* Special structured callouts */}
+        {it.cue_note && (
+          <div className="mt-2.5 rounded-xl bg-amber-50/70 border border-amber-200/60 p-2.5 text-xs text-amber-950">
+            <span className="font-semibold text-amber-900 block mb-0.5">🎬 Choreography & DJ Cue:</span>
+            {it.cue_note}
+          </div>
+        )}
+
+        {it.portion_math && (
+          <div className="mt-2.5 rounded-xl bg-emerald-50/80 border border-emerald-200/70 p-2.5 text-xs text-emerald-950">
+            <span className="font-semibold text-emerald-900 flex items-center gap-1 mb-0.5">🍃 Anti-Waste Math:</span>
+            {it.portion_math}
+          </div>
+        )}
+
+        {it.bride_groom_pairing && (
+          <div className="mt-2.5 rounded-xl bg-purple-50/70 border border-purple-200/60 p-2.5 text-xs text-purple-950">
+            <span className="font-semibold text-purple-900 block mb-0.5">👫 Styling Pair:</span>
+            {it.bride_groom_pairing}
+          </div>
+        )}
+
+        {it.anti_clash_check && (
+          <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/50 self-start">
+            <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+            {it.anti_clash_check}
+          </div>
+        )}
+
+        {it.capacity_check && (
+          <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 bg-slate-100 px-2.5 py-1 rounded-full self-start">
+            <Users className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+            {it.capacity_check}
+          </div>
+        )}
+
+        {it.budget_breakdown && (
+          <div className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full self-start">
+            <Coins className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+            {it.budget_breakdown}
+          </div>
+        )}
+
+        {it.lighting_spec && (
+          <div className="mt-2.5 rounded-xl bg-amber-50/70 border border-amber-200/60 p-2.5 text-xs text-amber-950">
+            <span className="font-semibold text-amber-900 flex items-center gap-1 mb-0.5">
+              <Sparkles className="h-3.5 w-3.5 text-amber-600" /> Lighting & Camera Spec:
+            </span>
+            {it.lighting_spec}
+          </div>
+        )}
+
+        {it.why?.length > 0 && <button type="button" onClick={() => setOpen(!open)} className="mt-2.5 self-start text-xs font-medium text-gold hover:underline">💡 Why this fits both of you?</button>}
+        {open && <ul className="mt-1.5 list-disc space-y-1 rounded-xl bg-[#fffaf2] p-2.5 pl-6 text-xs text-charcoal">{it.why.map((w: string, i: number) => <li key={i}>{w}</li>)}</ul>}
+        
+        <div className="mt-4 pt-2 border-t border-line/60 flex items-center gap-1.5">
           <button type="button" onClick={() => set("liked")} className={clsx("chip", it.status === "liked" && "chip-on")} aria-label="Love it"><Heart className="h-3.5 w-3.5" /></button>
           <button type="button" onClick={() => set("skipped")} className={clsx("chip", it.status === "skipped" && "chip-on")} aria-label="Skip"><X className="h-3.5 w-3.5" /></button>
           <button type="button" onClick={() => set("done")} className={clsx("chip", it.status === "done" && "chip-on")} aria-label="Done"><Check className="h-3.5 w-3.5" /></button>
-          {it.maps_url && <a href={it.maps_url} target="_blank" rel="noreferrer" className="ml-auto inline-flex items-center gap-1 text-xs text-brand">Maps <ExternalLink className="h-3 w-3" /></a>}
+          {it.maps_url && <a href={it.maps_url} target="_blank" rel="noreferrer" className="ml-auto inline-flex items-center gap-1 text-xs text-brand font-medium hover:underline">Maps <ExternalLink className="h-3 w-3" /></a>}
         </div>
       </div>
     </div>

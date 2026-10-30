@@ -30,6 +30,22 @@ ITEM_SCHEMA = {
             "description": {"type": "STRING"},
             "why": {"type": "ARRAY", "items": {"type": "STRING"}},
             "est_cost": {"type": "NUMBER"},
+            # Structured intelligence & deliverable attributes
+            "track_title": {"type": "STRING"},
+            "artist_name": {"type": "STRING"},
+            "act": {"type": "STRING"},
+            "tempo_bpm": {"type": "STRING"},
+            "vibe_tag": {"type": "STRING"},
+            "cue_note": {"type": "STRING"},
+            "course_type": {"type": "STRING"},
+            "heritage_origin": {"type": "STRING"},
+            "portion_math": {"type": "STRING"},
+            "bride_groom_pairing": {"type": "STRING"},
+            "hex_colors": {"type": "ARRAY", "items": {"type": "STRING"}},
+            "anti_clash_check": {"type": "STRING"},
+            "capacity_check": {"type": "STRING"},
+            "budget_breakdown": {"type": "STRING"},
+            "lighting_spec": {"type": "STRING"},
         }, "required": ["title", "description", "why"]}},
     },
     "required": ["summary", "items"],
@@ -137,6 +153,96 @@ async def _build_section(spec: dict, space: dict, ctx: dict, location: str | Non
     other = ""
     if spec["key"] == "itinerary" and ctx.get("plan_so_far"):
         other = "RECOMMENDED PLACES ALREADY IN THIS PLAN (use these by name): " + "; ".join(ctx["plan_so_far"]) + "\n\n"
+    # Dynamic metrics scaled to space budget and guest count
+    guests = int(space.get("guests") or 250)
+    budget = float(space.get("budget") or 2500000)
+    venue_envelope = round(budget * 0.32)
+    fb_envelope = round(budget * 0.25)
+    decor_envelope = round(budget * 0.12)
+    outfit_envelope = round(budget * 0.15)
+    music_envelope = round(budget * 0.08)
+
+    per_plate_target = round(fb_envelope / max(1, guests))
+    anti_waste_standard_kg = round(guests * 0.38)
+    anti_waste_buffer_kg = round(anti_waste_standard_kg * 0.12)
+    ceremonies = space.get("ceremonies") or ["Haldi", "Mehendi", "Sangeet", "Wedding", "Reception"]
+
+    special_rules = ""
+    if spec["key"] in ("sangeet", "music"):
+        cand_sample = ", ".join(c["name"] for c in candidates[:8]) if candidates else "blended artists"
+        special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR SANGEET & CEREMONY MUSIC BLUEPRINT:
+1. Ground every single track strictly in the QLOO artist candidates above (e.g. {cand_sample}).
+2. Structure the items following the Multi-Generational Sangeet Energy Curve across 5-6 items:
+   - 'Act 1: Golden Hour Acoustic Sunset Bridge' (~75-85 BPM gentle romantic acoustic)
+   - 'Act 2: Elders & Parents Flashmob' (~105-115 BPM retro/vintage crowd-pleasing melodious groove)
+   - 'Act 3: Couple First Dance Medley' (~75-80 BPM intimate acoustic romance)
+   - 'Act 4: High-Energy Youth & Sibling Dance Floor' (~125-135 BPM peak floor-filler Bollywood/Punjabi beat)
+   - 'Act 5: Sacred Pheras & Bridal Entry Ambient' (Royal Shehnai / Sufi sacred ambient)
+3. For EACH item, you MUST populate:
+   - title: Specific Song/Track Title (e.g. 'Tum Ho', 'O Sanam', 'Kasoor', 'Kesariya', 'Subhanallah', 'Gud Naal Ishq Mitha', etc.)
+   - candidate_id: The exact entity_id of the QLOO artist
+   - artist_name: The QLOO artist's name
+   - act: Exact act name (e.g. 'Act 1: Golden Hour Acoustic Sunset Bridge')
+   - tempo_bpm: Specific tempo (e.g. '78 BPM - Gentle Sway', '128 BPM - Peak Floor-Filler')
+   - vibe_tag: Short badge (e.g. 'Acoustic Soul', 'Retro Melodic', 'First Dance Medley', 'Peak Bolly Explosion', 'Sacred Royal')
+   - cue_note: DJ / choreography cue note (e.g. 'Low-fog entry with acoustic guitar solo, transitioning to live dhol at chorus')
+   - why: 2-3 specific reasons citing both partners' music tastes by name.\n"""
+    elif spec["key"] == "menu":
+        special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR DUAL-HERITAGE ANTI-WASTE CATERING:
+Dynamic Event Metrics:
+- Guest Count: {guests} guests
+- Total Wedding Budget: ₹{budget:,.0f} | F&B Catering Budget: ₹{fb_envelope:,.0f} (~₹{per_plate_target:,.0f}/plate target)
+- Anti-Waste Baseline: {anti_waste_standard_kg} kg total food weight ({guests} guests x 380g standard portion)
+- Waste Mitigation: -12% carb buffer (saving ~{anti_waste_buffer_kg} kg buffet binning) + staggered 30-min live batch replenishment
+
+Design 5-6 structured catering courses/stations balancing both partners' cultural roots and dietary preferences:
+1. Partner 1 Regional Heritage Live Counter (e.g., Live Mumbai/Pune Wada Pav fondue & chaat)
+2. Partner 2 Regional Heritage Live Counter (e.g., Purani Dilli Kebab skewers / Kolkata Puchka shot bar)
+3. Multi-Generational Main Feast Progression (mild elder-digestible gravies + rich festive curry)
+4. WeaveWed Couple Special Fusion Dish (marrying both partners' favorite regional flavors)
+5. Anti-Waste Starch & Bread Station (-12% calculated buffer with live tandoor roti/naan)
+6. Artisanal Regional Dessert Counter (e.g. Shrikhand Tartlets & Nolen Gur Rosogolla)
+
+For EACH item, you MUST populate:
+- title: Station/Course Name
+- course_type: 'Live Hometown Counter' | 'Main Feast' | 'Elder & Kids Friendly' | 'Couple Special' | 'Artisanal Dessert'
+- heritage_origin: Name the cultural roots (e.g. 'Maharashtrian Roots', 'Awadhi / North Indian', 'Cross-Cultural Fusion')
+- portion_math: Detailed anti-waste portion formula scaled for {guests} guests (e.g. 'Scaled for {guests} guests: 380g/plate sizing, 30-min live batch prep saves ~{anti_waste_buffer_kg}kg food waste')
+- est_cost: Estimated station cost in INR within the ₹{fb_envelope:,.0f} catering envelope
+- why: Reasons tied to both partners' food preferences and cultural background by name.\n"""
+    elif spec["key"] == "outfits":
+        special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR CEREMONY OUTFITS & COLOR HARMONY:
+Choose designer brands strictly from the QLOO brand candidates above.
+For each wedding ceremony ({', '.join(ceremonies[:5])}), provide 4-5 ceremony outfits with exact color pairings and zero-backdrop clash check:
+For EACH item, you MUST populate:
+- title: Ceremony Name & Aesthetic Look (e.g. 'Haldi Morning: Sunflower & Raw Ivory Sunburst', 'Sangeet Night: Midnight Indigo & Champagne Glamour', 'Sacred Pheras: Royal Vermillion & Antique Gold')
+- candidate_id: The QLOO designer brand's entity_id
+- bride_groom_pairing: Specific pairing (e.g. 'Bride: Mustard Yellow Raw Silk Lehenga with Gota Patti | Groom: Ivory Chanderi Silk Kurta with Mustard Bandi')
+- hex_colors: Array of 2-3 exact HEX color codes (e.g. ['#E1AD01', '#FFFFF0', '#D4AF37'])
+- anti_clash_check: Zero-backdrop clash statement (e.g. '100% clash-free verified: High contrast against green foliage & marigold mandap backdrop')
+- description: Fabrics (Chanderi, Raw Silk, Organza, Velvet), silhouettes, and lighting suitability.
+- why: 2-3 specific reasons tied to partners' fashion tastes and heritage.\n"""
+    elif spec["key"] in ("ceremonies", "decor"):
+        special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR STAGE & MANDAP DECORATION THEMES:
+Provide 4-5 architectural decor concepts for the wedding ceremonies within the ₹{decor_envelope:,.0f} decor envelope:
+For EACH item, you MUST populate:
+- title: Ceremony & Theme (e.g. 'Sacred Mandap: 4-Pillar Open Rajwada Stone Canopy', 'Sangeet Stage: Geometric Jali & 2700K Warm Brass Screen')
+- hex_colors: Array of 3 exact HEX color codes for floral & backdrop palette (e.g. ['#FFA500', '#F8F8FF', '#B5A642'])
+- lighting_spec: Ambient lighting temperature and camera spec (e.g. '2700K warm incandescent glow with diffused key lights, zero fluorescent glare for 4K video')
+- description: Architectural structure, floral varieties, and photo backdrop contrast for phone & DSLR cameras.
+- why: Tied to couple vibe, aesthetic DNA, and romantic atmosphere.\n"""
+    elif spec["key"] == "venue":
+        special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR VENUE SHORTLIST:
+Dynamic Event Metrics:
+- Guest Count: {guests} guests
+- Total Wedding Budget: ₹{budget:,.0f} | Venue Envelope (32%): ₹{venue_envelope:,.0f}
+Choose ONLY from the QLOO venue candidates above.
+For EACH item, you MUST populate:
+- title: Venue name
+- candidate_id: The QLOO venue candidate's entity_id
+- capacity_check: State capacity buffer for {guests} guests (e.g. 'Capacity: 450 guests (Comfortably accommodates your {guests} guests with ~25% buffer)')
+- budget_breakdown: Estimated rental vs per-plate cost (e.g. 'Est. Rental: ₹3.5L | F&B Target: ₹1,800/plate within your ₹{venue_envelope:,.0f} venue envelope')
+- why: Specific reasons tied to atmosphere, hospitality, and couple vibe.\n"""
     prompt = (
         f"You are WeaveWed, a warm and expert Indian wedding & couple planner. Write the plan section '{spec['title']}'.\n"
         f"Section brief: {spec['brief']}\n\n{_brief(space, ctx)}\n\n{other}"
@@ -144,6 +250,7 @@ async def _build_section(spec: dict, space: dict, ctx: dict, location: str | Non
         + (f"PREVIOUS VERSION OF THIS SECTION: {[i['title'] for i in prev.get('items', [])]}\n\n" if prev and instruction else "")
         + ("CANDIDATES from QLOO taste intelligence (choose ONLY from these; copy the id into candidate_id exactly):\n"
            + "\n".join(cand_lines) if candidates else "This is an ideas section: write original, specific ideas (candidate_id empty).")
+        + special_rules
         + "\n\nRules: choose 4-6 items that genuinely fit THIS event and brief (skip candidates that don't fit, e.g. a "
           "museum in a food section, a hotel in a music section). Each 'why' = 2-3 short, specific reasons tied to the "
           "partners' tastes BY NAME (never mention private tastes). est_cost = rough INR estimate or 0 if unknown. "
@@ -170,14 +277,40 @@ async def _build_section(spec: dict, space: dict, ctx: dict, location: str | Non
     for it in out.get("items", [])[:6]:
         c = by_id.get((it.get("candidate_id") or "").strip()) or by_name.get((it.get("title") or "").strip().lower())
         if spec["kind"] == "qloo" and not c:
+            art_nm = (it.get("artist_name") or "").strip().lower()
+            if art_nm and art_nm in by_name:
+                c = by_name[art_nm]
+            else:
+                for cand in candidates:
+                    c_low = cand["name"].lower()
+                    if c_low in it.get("title", "").lower() or c_low in it.get("artist_name", "").lower() or c_low in it.get("description", "").lower():
+                        c = cand
+                        break
+        if spec["kind"] == "qloo" and not c and spec["key"] not in ("sangeet", "music"):
             continue  # guardrail: never invent recommendations
-        title = c["name"] if c else it["title"]
+
+        if spec["key"] in ("sangeet", "music"):
+            track = it.get("track_title") or it.get("title")
+            art = (c["name"] if c else it.get("artist_name")) or ""
+            title = f"{track} — {art}" if art and art.lower() not in track.lower() else track
+        else:
+            title = c["name"] if c and spec["key"] in ("venue", "outfits") else it["title"]
+
         item = {"id": new_id("i"), "title": title, "description": it.get("description", ""), "why": it.get("why", [])[:3],
                 "est_cost": max(0, it.get("est_cost") or 0), "entity_id": c["entity_id"] if c else None,
                 "image": c.get("image") if c else None, "affinity": c.get("affinity") if c else None,
                 "loved_by_both": bool(c and c.get("loved_by_both")), "tags": c.get("tags", []) if c else [],
                 "address": c.get("address") if c else None,
                 "status": prev_status.get((c["entity_id"] if c else title.lower()), "suggested")}
+
+        for field in ("track_title", "artist_name", "act", "tempo_bpm", "vibe_tag", "cue_note",
+                      "course_type", "heritage_origin", "portion_math", "bride_groom_pairing",
+                      "hex_colors", "anti_clash_check", "capacity_check", "budget_breakdown", "lighting_spec"):
+            if it.get(field):
+                item[field] = it[field]
+        if c and not item.get("artist_name") and spec["key"] in ("sangeet", "music"):
+            item["artist_name"] = c["name"]
+
         if c and spec["qtype"] in (qloo.PLACE, qloo.DEST):
             q = f"{title} {where}" if spec["qtype"] == qloo.PLACE else title
             item["maps_url"] = "https://www.google.com/maps/search/?api=1&query=" + urllib.parse.quote(q.strip())
