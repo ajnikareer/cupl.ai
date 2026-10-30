@@ -20,8 +20,8 @@ export const Logo = ({ small = false, className = "" }: { small?: boolean; class
       src="/img/cupl_logo.png"
       alt="cupl.ai — Your AI concierge for life together"
       className={clsx(
-        "w-auto rounded-xl object-contain shadow-2xs transition",
-        small ? "h-9 max-w-[170px]" : "h-11 md:h-12 max-w-[230px]"
+        "rounded-xl object-contain shadow-2xs transition",
+        small ? "h-10 md:h-11 w-auto max-w-[190px]" : "w-full max-w-[240px] h-auto max-h-[88px]"
       )}
     />
   </div>
