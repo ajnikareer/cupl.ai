@@ -29,12 +29,12 @@ export default function Layout() {
 
   return (
     <div className="flex min-h-screen bg-cream">
-      <aside className="sticky top-0 hidden h-screen w-[272px] shrink-0 flex-col border-r border-line bg-white/80 p-5 lg:flex">
+      <aside className="sticky top-0 hidden h-screen w-[220px] xl:w-[250px] shrink-0 flex-col border-r border-line bg-white/80 p-3.5 xl:p-5 lg:flex">
         <Logo />
         <nav className="mt-8 flex flex-col gap-1">
           {NAV.map((n) => (
             <NavLink key={n.to} to={n.to} end={n.end}
-              className={({ isActive }) => clsx("flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition",
+              className={({ isActive }) => clsx("flex items-center gap-2.5 xl:gap-3 rounded-2xl px-2.5 py-2 xl:px-3 xl:py-2.5 text-xs xl:text-sm transition",
                 isActive ? "bg-blush font-medium text-brand" : "text-ink hover:bg-cream")}>
               <n.icon className="h-[18px] w-[18px]" /> {n.label}
             </NavLink>
