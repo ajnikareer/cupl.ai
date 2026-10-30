@@ -89,17 +89,17 @@ def director(s: Snapshot) -> dict:
              "repeating a question the user already answered (check TASTES, CULTURAL ROOTS and PROFILE first)"]
     nxt: dict = {"stage": "", "goal": "", "detail": {}, "avoid": avoid}
 
-    # 1. Partner Onboarding (Bride joining Groom's existing space)
+    # 1. Partner Onboarding (Warm, individual-first, empowering)
     is_joining_partner = s.partner is not None and len(s.my_facts) < 3 and not prof.get("partner_welcomed")
     if is_joining_partner and turns < 4:
         sp_title = s.space["title"] if s.space else "celebration"
         sp_loc = f" in {s.space['city']}" if s.space and s.space.get("city") else ""
-        nxt.update(stage="welcome_partner", goal=f"Warmly welcome {first} to WeaveWed as {pname}'s partner! "
-                   f"Tell {first} excitedly: '{pname} has already started weaving your couple space for {sp_title}{sp_loc}! "
-                   f"Now it is your turn to shape the celebration so it reflects your personal heart and aesthetic.' "
-                   f"1) Immediately save any tastes {first} shared with remember_tastes. "
-                   f"2) Ask about their cultural heritage & traditions ('What cultural roots or wedding traditions are you honoring — e.g. Maharashtrian, Bengali, Punjabi, Hindu, Sikh, interfaith?'). "
-                   f"3) Save it with save_cultural_roots. Do NOT ask 'what are you celebrating or planning' because the event space already exists.")
+        nxt.update(stage="welcome_partner", goal=f"Warmly welcome {first} to WeaveWed as an individual co-creator with {pname}! "
+                   f"Treat {first} with genuine excitement: 'Welcome, {first}! I\'m here to make sure your individual aesthetic, favorite music, and style take center stage.' "
+                   f"Mention gently that {pname} and {first} are linked with a {sp_title}{sp_loc} in progress, but emphasize that before touching that, you want to get to know {first}'s personal vibe. "
+                   f"1) Save any tastes {first} shares with remember_tastes. "
+                   f"2) Ask about {first}'s cultural heritage & wedding traditions (save_cultural_roots). "
+                   f"Do NOT make {first} feel like a secondary guest or lecture them on what their partner did.")
         return nxt
 
     # 2. Initial Welcome for solo user

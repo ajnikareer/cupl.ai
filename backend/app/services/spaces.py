@@ -203,6 +203,41 @@ async def list_spaces(couple_id: str) -> list[dict]:
     return out
 
 
+async def check_schedule_conflict(couple_id: str, start_date: str, end_date: str | None = None, exclude_sid: str | None = None) -> dict | None:
+    """Detect if proposed dates overlap with an existing event space for this couple."""
+    if not start_date:
+        return None
+    try:
+        s_new = date.fromisoformat(start_date[:10])
+        e_new = date.fromisoformat(end_date[:10]) if end_date else s_new
+    except (ValueError, TypeError):
+        return None
+
+    existing = await list_spaces(couple_id)
+    for sp in existing:
+        if exclude_sid and sp["id"] == exclude_sid:
+            continue
+        s_str = sp.get("start_date")
+        if not s_str:
+            continue
+        try:
+            s_cur = date.fromisoformat(s_str[:10])
+            e_cur = date.fromisoformat(sp["end_date"][:10]) if sp.get("end_date") else s_cur
+        except (ValueError, TypeError):
+            continue
+
+        if max(s_new, s_cur) <= min(e_new, e_cur):
+            d_str = f"{s_cur.isoformat()} to {e_cur.isoformat()}" if s_cur != e_cur else s_cur.isoformat()
+            return {
+                "conflict": True,
+                "event_id": sp["id"],
+                "event_title": sp["title"],
+                "event_type": sp["type"],
+                "dates": d_str,
+            }
+    return None
+
+
 async def create_space(user: dict, stype: str, fields: dict) -> tuple[dict, list[str]]:
     if stype not in TEMPLATES:
         raise HTTPException(400, f"Unknown event type '{stype}'. Use one of {list(TEMPLATES)}")

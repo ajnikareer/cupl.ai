@@ -116,6 +116,20 @@ async def _build_section(spec: dict, space: dict, ctx: dict, location: str | Non
         if not candidates:
             sec["error"] = "No strong matches found yet. Share a few more tastes and refresh."
             return sec
+
+        if spec["qtype"] == qloo.PLACE and space.get("type") in ("wedding", "prewedding", "engagement", "honeymoon"):
+            UNSUITABLE_CHAINS = ("collection o", "capital o", "fabhotel", "oyo", "motel", "hostel", "dorm", "lodge", "budget inn")
+            CELEBRATION_PRIORITY = ("palace", "resort", "heritage", "fort", "villa", "garden", "boutique", "haveli", "chateau", "castle", "luxury", "estate", "retreat", "taj", "oberoi", "itc", "leela", "marriott", "hyatt")
+            def _venue_rank(x):
+                nm = (x.get("name") or "").lower()
+                tgs = " ".join(x.get("tags") or []).lower()
+                score = x.get("affinity") or 0.5
+                if any(u in nm for u in UNSUITABLE_CHAINS):
+                    score -= 0.45
+                if any(p in nm or p in tgs for p in CELEBRATION_PRIORITY):
+                    score += 0.25
+                return score
+            candidates.sort(key=_venue_rank, reverse=True)
     cand_lines = [
         f"{c['entity_id']} | {c['name']} | tags: {', '.join(c.get('tags') or [])} | affinity: {round(c.get('affinity') or 0, 2)}"
         f"{' | LOVED BY BOTH' if c.get('loved_by_both') else ''} | {c.get('description', '')[:120]}"

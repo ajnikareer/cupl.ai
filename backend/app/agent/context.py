@@ -51,6 +51,14 @@ def build_system(s: Snapshot, voice: bool = False) -> str:
         lines.append(f"WHAT {first.upper()} TOLD YOU ABOUT THE PARTNER: {prof['partner_hints'][-10:]}")
     if s.conv.get("summary"):
         lines.append(f"STORY SO FAR: {s.conv['summary']}")
+    timeline = []
+    for x in s.spaces:
+        if x.get("start_date"):
+            d_range = x["start_date"] + (f" to {x['end_date']}" if x.get("end_date") else "")
+            timeline.append(f"{x['title']} ({x['type']}): {d_range} in {x.get('city') or x.get('destination') or 'TBD'}")
+    if timeline:
+        lines.append("COUPLE SCHEDULE & TIMELINE (check for conflicts when dates are discussed): " + " | ".join(timeline))
+
     if s.space:
         sp_ = s.space
         fields = {k: sp_.get(k) for k in sp.FIELD_META if sp_.get(k) not in (None, "", [])}

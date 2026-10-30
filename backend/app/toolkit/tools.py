@@ -153,7 +153,12 @@ async def update_event(c, a):
             return {"error": "No active event space found. Please create an event first with create_event."}
     s, errors = await sp.update_space(target_space["id"], c.user["couple_id"], a)
     await state.bump_taste_streak(c.uid, reset=True)
-    return {"event": _brief(s), "invalid": errors, "widget": {"kind": "refresh"}}
+    res = {"event": _brief(s), "invalid": errors, "widget": {"kind": "refresh"}}
+    if a.get("start_date"):
+        conflict = await sp.check_schedule_conflict(c.user["couple_id"], a["start_date"], a.get("end_date"), exclude_sid=target_space["id"])
+        if conflict:
+            res["schedule_note"] = f"Heads up: These dates overlap with your existing event '{conflict['event_title']}' ({conflict['dates']}). Mention this warmly to confirm their schedule."
+    return res
 
 
 @tool("switch_event", "events", "Make another event space active (by id from list_events).",
