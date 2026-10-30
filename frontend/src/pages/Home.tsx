@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { AudioLines, Plus } from "lucide-react";
+import { AudioLines, Plus, Sparkles } from "lucide-react";
 import { api, daysTo, fmtDate, IMG } from "../lib/api";
 import { Avatar, Empty, STATE_LABEL, Spinner } from "../components/ui";
 import { useChat } from "../chat/ChatContext";
@@ -22,7 +22,7 @@ export default function Home() {
           <p className="mt-1 text-mut">Let's make beautiful things happen today.</p>
           <div className="mt-4 flex flex-wrap gap-2">
 
-            <Link to="/app/spaces/new" className="btn-primary px-4 py-2 text-sm"><Plus className="h-4 w-4" /> Create Event Space</Link>
+            <Link to="/app/chat" className="btn-primary px-5 py-2.5 text-sm shadow-xs inline-flex items-center gap-2"><Sparkles className="h-4 w-4" /> Start with cupl AI</Link>
           </div>
         </div>
       </div>
@@ -37,17 +37,17 @@ export default function Home() {
 
       <div>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="h-serif text-2xl text-brand">Your Event Spaces</h2>
+          <h2 className="h-serif text-2xl text-brand">Your Events</h2>
           <Link to="/app/spaces" className="text-sm text-brand">See all</Link>
         </div>
         {isLoading ? <Spinner /> : sp?.spaces?.length ? (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {sp.spaces.slice(0, 5).map((s: any) => <SpaceCard key={s.id} s={s} active={s.id === sp.active_space_id} />)}
-            <Link to="/app/spaces/new" className="card grid min-h-[220px] place-items-center border-dashed text-brand"><span className="flex flex-col items-center gap-2"><Plus /> Create New Event Space</span></Link>
+            <Link to="/app/spaces/new" className="card grid min-h-[220px] place-items-center border-dashed text-brand"><span className="flex flex-col items-center gap-2"><Plus /> Create New Event</span></Link>
           </div>
         ) : (
-          <Empty image="/img/wedding.jpg" title="No event spaces yet" text="Create one for your prewedding, engagement, wedding, honeymoon, a trip or any celebration — or just tell cupl what you're planning."
-            action={<Link to="/app/spaces/new" className="btn-primary mt-2">Create Event Space</Link>} />
+          <Empty image="/img/wedding.jpg" title="No events yet" text="Create one for your prewedding, engagement, wedding, honeymoon, a trip or any celebration — or just tell cupl what you're planning."
+            action={<Link to="/app/chat" className="btn-primary mt-2 inline-flex items-center gap-2"><Sparkles className="h-4 w-4" /> Start with cupl AI</Link>} />
         )}
       </div>
     </div>

@@ -102,10 +102,11 @@ def director(s: Snapshot) -> dict:
                    f"Do NOT make {first} feel like a secondary guest or lecture them on what their partner did.")
         return nxt
 
-    # 2. Initial Welcome for solo user
+    # 2. Initial Welcome for solo user (Exact cupl AI Tour protocol)
     if turns < 2 and not prof.get("greeted"):
-        nxt.update(stage="welcome", goal=f"Warmly welcome {first}. Introduce yourself in one line and ask, lightly, what "
-                   "they're celebrating or planning right now. Do NOT ask for dates, budget or tastes yet.")
+        nxt.update(stage="welcome", goal=f"Warmly welcome {first}: 'Hello {first}! Welcome to cupl AI — your AI concierge for life together. "
+                   "How can I help you today? Would you like a quick tour of what ways I can assist you, or is there an upcoming celebration or weekend plan on your mind?' "
+                   "Do NOT ask for dates, budget or tastes yet.")
         return nxt
 
     # 3. Rapport (ask partner's name)

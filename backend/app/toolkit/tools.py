@@ -3,8 +3,7 @@ import asyncio
 
 from ..core.llm import gen_json
 from ..db import db, list_col, new_id, now_iso
-from ..services import couple as couple_svc
-from ..services import dna as dna_svc
+from ..services import calendar_svc, couple as couple_svc, dna as dna_svc, recommends_svc
 from ..services import plan_engine, qloo, state, taste_intel
 from ..services import spaces as sp
 from ..services import tastes
@@ -494,3 +493,56 @@ async def show_choices(c, a):
       obj({"summary": S}, ["summary"]))
 async def confirm_action(c, a):
     return {"shown": True, "widget": {"kind": "confirm", "title": a["summary"]}}
+
+
+# ============================== Everyday Couple Plans & Recommendations ==============================
+@tool("add_couple_plan", "plans", """Add an everyday couple plan to the couple's Plans tab and unified Calendar (e.g. movie streaming night, romantic dinner, spontaneous 2-day getaway, or couple experience).
+Takes: title, category (movie, dining, travel, cocktail, decor, music, experience), date (YYYY-MM-DD), time (e.g. '8:00 PM'), description, maps_url (optional), is_private (optional).
+Call this whenever the couple agrees on an everyday date, movie night, dinner reservation, or getaway to schedule.""",
+      obj({"title": S, "category": {"type": "string", "enum": ["movie", "dining", "travel", "cocktail", "decor", "music", "experience"]},
+           "date": DATE, "time": S, "description": S, "maps_url": S, "is_private": B}, ["title", "category", "date"]), mutates=True)
+async def add_couple_plan(c, a):
+    item = await calendar_svc.add_calendar_item(c.user, {
+        "title": a["title"],
+        "category": a.get("category", "dining"),
+        "date": a["date"],
+        "time": a.get("time"),
+        "description": a.get("description", ""),
+        "maps_url": a.get("maps_url"),
+        "is_private": a.get("is_private", False),
+    })
+    return {
+        "ok": True,
+        "plan_id": item.get("id"),
+        "title": a["title"],
+        "date": a["date"],
+        "message": f"Added '{a['title']}' to your couple Plans and Calendar for {a['date']} ✨"
+    }
+
+
+@tool("get_lifestyle_recommends", "recommends", """Fetch the couple's active curated lifestyle recommendations (Friday night movies, weekend dining, signature cocktails, living room decor, spontaneous getaways) tailored to their Couple Taste DNA and life-stage.
+Call this when the user asks for recommendations, date night ideas, movie suggestions, or weekend escapes.""",
+      obj({}, []))
+async def get_lifestyle_recommends(c, a):
+    recs = await recommends_svc.get_lifestyle_recommendations(c.user)
+    return {
+        "couple_vibe": recs.get("couple_vibe"),
+        "active_city": recs.get("active_city"),
+        "couple_status": recs.get("couple_status"),
+        "recommendations": [
+            {
+                "id": r["id"],
+                "category": r["category"],
+                "category_label": r.get("category_label"),
+                "title": r["title"],
+                "subtitle": r.get("subtitle"),
+                "affinity": r.get("affinity"),
+                "description": r.get("description"),
+                "why": r.get("why"),
+                "suggested_date": r.get("suggested_date"),
+                "est_cost": r.get("est_cost"),
+                "maps_url": r.get("maps_url"),
+            }
+            for r in recs.get("couple_recs", [])[:4]
+        ]
+    }

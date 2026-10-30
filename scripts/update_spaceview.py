@@ -618,3 +618,4 @@ with open('frontend/src/pages/SpaceView.tsx', 'w', encoding='utf-8') as f:
     f.write(full)
 
 print('Success updating SpaceView.tsx!')
+

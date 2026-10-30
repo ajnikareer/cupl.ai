@@ -384,3 +384,4 @@ with open('frontend/src/pages/Plans.tsx', 'w', encoding='utf-8') as f:
     f.write(content)
 
 print('Success updating Plans.tsx!')
+
