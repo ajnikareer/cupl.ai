@@ -62,3 +62,4 @@ voice_updated = voice_content.replace('src="/img/avatar.jpg"', 'src="/img/avatar
 with open("frontend/src/chat/VoiceOverlay.tsx", "w", encoding="utf-8", newline="") as f:
     f.write(voice_updated)
 print("Updated VoiceOverlay.tsx")
+

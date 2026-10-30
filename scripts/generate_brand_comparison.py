@@ -81,3 +81,4 @@ canvas.paste(imp_logo_disp, (1210 + (1090 - 1020) // 2, 1260))
 out_path = os.path.join(ARTIFACT_DIR, "cupl_brand_refinement_comparison.jpg")
 canvas.save(out_path, "JPEG", quality=95)
 print(f"Comparison image saved to: {out_path}")
+

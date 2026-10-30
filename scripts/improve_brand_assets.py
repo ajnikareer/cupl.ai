@@ -315,3 +315,4 @@ icon_1024.save(os.path.join(ARTIFACT_DIR, "cupl_improved_icon_master.png"), "PNG
 avatar_final.save(os.path.join(ARTIFACT_DIR, "cupl_improved_avatar_preview.jpg"), "JPEG", quality=98)
 
 print("All improved brand assets generated and saved successfully!")
+

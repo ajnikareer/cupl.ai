@@ -67,3 +67,4 @@ hd_clean.save(artifact_path, "PNG")
 
 print(f"Successfully created Full HD logo ({TARGET_W}x{TARGET_H}) and 2K logo ({W*5}x{H*5})!")
 print(f"Saved to {out_png} and {artifact_path}")
+

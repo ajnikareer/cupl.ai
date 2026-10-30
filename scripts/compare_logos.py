@@ -44,3 +44,4 @@ comp.paste(im_new_scaled, (40, y2 + 40))
 out_path = r"C:\Users\admin\.gemini\antigravity\brain\6d8e9353-5c79-4cdf-92cf-1fafc99c77a9\logo_recreation_comparison.jpg"
 comp.save(out_path, "JPEG", quality=95)
 print(f"Saved comparison to: {out_path}")
+

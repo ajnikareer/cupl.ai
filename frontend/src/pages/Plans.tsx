@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import {
   Calendar,
   CalendarCheck,
+  ChevronRight,
   Compass,
   Film,
   Gift,
@@ -15,7 +16,8 @@ import {
   Plus,
   Sparkles,
   Trash2,
-  Utensils
+  Utensils,
+  X,
 } from "lucide-react";
 import clsx from "clsx";
 import { api } from "../lib/api";
@@ -25,6 +27,7 @@ export default function Plans() {
   const qc = useQueryClient();
   const [filter, setFilter] = useState<string>("all");
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [activeModalPlan, setActiveModalPlan] = useState<any | null>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["plans"],
@@ -139,88 +142,113 @@ export default function Plans() {
         )}
       </div>
 
-      {/* Plans List */}
+      {/* Plans Grid matching Recommends structure */}
       {filteredPlans.length > 0 ? (
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {filteredPlans.map((plan: any) => {
             const isDeleting = deletingId === plan.id;
 
             return (
               <div
                 key={plan.id}
-                className="card p-4 sm:p-5 flex flex-col gap-3 border border-line hover:border-brand/30 transition shadow-2xs group"
+                onClick={() => setActiveModalPlan(plan)}
+                className="rounded-2xl border border-line/80 bg-white p-4 sm:p-5 flex flex-col justify-between hover:border-brand/40 hover:shadow-md transition-all duration-200 group cursor-pointer shadow-2xs"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-start gap-3">
+                <div>
+                  {/* Card Header: Icon + Badges + Delete */}
+                  <div className="flex items-center justify-between gap-2">
                     <div className="h-9 w-9 shrink-0 rounded-xl bg-blush/70 border border-brand/20 flex items-center justify-center shadow-3xs">
                       {getCategoryIcon(plan.category)}
                     </div>
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-semibold text-base text-ink group-hover:text-brand transition">
-                          {plan.title}
+                    <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                      <span className="badge bg-emerald-50 text-emerald-800 border-emerald-200/80 text-[10px] font-bold flex items-center gap-1 py-0.5 px-2">
+                        <CalendarCheck className="h-3 w-3 text-emerald-600" /> Confirmed
+                      </span>
+                      {plan.is_private && (
+                        <span className="badge bg-amber-50 text-amber-800 border-amber-200 text-[10px] font-bold py-0.5 px-2">
+                          🤫 Surprise
                         </span>
-                        <span className="badge bg-emerald-50 text-emerald-800 border-emerald-200 text-[10px] font-bold flex items-center gap-1">
-                          <CalendarCheck className="h-3 w-3 text-emerald-600" /> Confirmed Plan
-                        </span>
-                        {plan.date && (
-                          <span className="badge bg-purple-50 text-purple-700 text-[11px] font-medium">
-                            📅 {plan.date} {plan.time ? `• ${plan.time}` : ""}
-                          </span>
-                        )}
-                        {plan.is_private && (
-                          <span className="badge bg-amber-50 text-amber-800 border-amber-200 text-[10px] font-bold">
-                            🤫 Secret Surprise
-                          </span>
-                        )}
-                      </div>
-                      {plan.subtitle && (
-                        <div className="text-xs font-medium text-brand mt-0.5">{plan.subtitle}</div>
                       )}
+                      <button
+                        type="button"
+                        disabled={isDeleting}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeletePlan(plan.id);
+                        }}
+                        className="text-mut hover:text-red-600 p-1 rounded-lg hover:bg-red-50 transition ml-1"
+                        title="Remove from plans"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
                     </div>
                   </div>
 
-                  <button
-                    type="button"
-                    disabled={isDeleting}
-                    onClick={() => handleDeletePlan(plan.id)}
-                    className="text-mut hover:text-red-600 p-1.5 rounded-lg hover:bg-red-50 transition"
-                    title="Remove from plans"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+                  {/* Category Label Pill */}
+                  <div className="text-[10px] font-bold tracking-wider uppercase text-brand/85 mt-3 line-clamp-1">
+                    {plan.category_label || plan.category}
+                  </div>
+
+                  {/* Title & Subtitle */}
+                  <div className="mt-1">
+                    <h4 className="font-serif text-base font-bold text-ink leading-snug group-hover:text-brand transition line-clamp-2 min-h-[2.5rem]">
+                      {plan.title}
+                    </h4>
+                    {plan.subtitle && (
+                      <p className="text-[11px] font-medium text-mut line-clamp-1 mt-0.5">
+                        {plan.subtitle}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Date & Time Badge */}
+                  {plan.date && (
+                    <div className="inline-flex items-center gap-1 rounded-md bg-purple-50 text-purple-700 text-[10px] font-medium px-2 py-0.5 mt-2">
+                      <span>📅 {plan.date} {plan.time ? `• ${plan.time}` : ""}</span>
+                    </div>
+                  )}
+
+                  {/* Description snippet */}
+                  {plan.description && (
+                    <p className="text-xs text-mut/90 leading-relaxed line-clamp-2 mt-2">
+                      {plan.description}
+                    </p>
+                  )}
                 </div>
 
-                {plan.description && (
-                  <p className="text-sm text-mut pl-12 leading-relaxed">{plan.description}</p>
-                )}
-
-                <div className="pt-2 border-t border-line/60 flex items-center justify-between gap-2 pl-12">
-                  <div className="flex items-center gap-3">
-                    {plan.maps_url && (
+                {/* Footer Actions */}
+                <div
+                  className="pt-3 mt-3 border-t border-line/60 flex items-center justify-between gap-1.5"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center gap-2">
+                    {plan.maps_url ? (
                       <a
                         href={plan.maps_url}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-xs text-mut hover:text-brand flex items-center gap-1"
                       >
-                        <MapPin className="h-3.5 w-3.5" /> View on Map
+                        <MapPin className="h-3.5 w-3.5" /> Map
                       </a>
+                    ) : (
+                      <Link
+                        to="/app/calendar"
+                        className="text-xs text-mut hover:text-brand flex items-center gap-1"
+                      >
+                        <Calendar className="h-3.5 w-3.5" /> Calendar
+                      </Link>
                     )}
-                    <Link
-                      to="/app/calendar"
-                      className="text-xs text-mut hover:text-brand flex items-center gap-1"
-                    >
-                      <Calendar className="h-3.5 w-3.5" /> View in Calendar
-                    </Link>
                   </div>
 
-                  <Link
-                    to="/app/chat"
-                    className="text-xs font-medium text-brand hover:underline flex items-center gap-1"
+                  <button
+                    type="button"
+                    onClick={() => setActiveModalPlan(plan)}
+                    className="text-xs font-semibold text-brand hover:text-brand-dark flex items-center gap-0.5 hover:underline"
                   >
-                    <MessageCircleHeart className="h-3.5 w-3.5" /> Chat with cupl AI about this plan →
-                  </Link>
+                    <span>Details</span>
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </button>
                 </div>
               </div>
             );
@@ -248,7 +276,103 @@ export default function Plans() {
           </div>
         </div>
       )}
+
+      {/* Plan Details Modal */}
+      {activeModalPlan && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs animate-in fade-in duration-200"
+          onClick={() => setActiveModalPlan(null)}
+        >
+          <div
+            className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl space-y-4 border border-line"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-3 border-b border-line/60 pb-4">
+              <div className="flex items-start gap-3">
+                <div className="h-11 w-11 rounded-2xl bg-blush/70 border border-brand/20 flex items-center justify-center shadow-3xs shrink-0">
+                  {getCategoryIcon(activeModalPlan.category)}
+                </div>
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="badge bg-cream border border-line text-[11px] font-medium text-mut uppercase">
+                      {activeModalPlan.category}
+                    </span>
+                    <span className="badge bg-emerald-50 text-emerald-800 border-emerald-200/80 text-[10px] font-bold">
+                      ✓ Confirmed Plan
+                    </span>
+                  </div>
+                  <h3 className="h-serif text-xl sm:text-2xl font-bold text-ink mt-1">
+                    {activeModalPlan.title}
+                  </h3>
+                  {activeModalPlan.subtitle && (
+                    <p className="text-xs font-medium text-brand mt-0.5">
+                      {activeModalPlan.subtitle}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setActiveModalPlan(null)}
+                className="rounded-full p-1.5 text-mut hover:bg-cream hover:text-ink transition"
+                aria-label="Close"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {activeModalPlan.description && (
+              <p className="text-sm text-mut leading-relaxed">
+                {activeModalPlan.description}
+              </p>
+            )}
+
+            {/* Date & Time */}
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              {activeModalPlan.date && (
+                <span className="badge bg-purple-50 text-purple-700">
+                  📅 {activeModalPlan.date} {activeModalPlan.time ? `• ${activeModalPlan.time}` : ""}
+                </span>
+              )}
+              {activeModalPlan.is_private && (
+                <span className="badge bg-amber-50 text-amber-800 border-amber-200">
+                  🤫 Secret Surprise
+                </span>
+              )}
+            </div>
+
+            {/* Modal Actions */}
+            <div className="pt-3 border-t border-line flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                {activeModalPlan.maps_url && (
+                  <a
+                    href={activeModalPlan.maps_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-brand hover:underline flex items-center gap-1 font-medium"
+                  >
+                    <MapPin className="h-3.5 w-3.5" /> View on Google Maps
+                  </a>
+                )}
+                <Link
+                  to="/app/calendar"
+                  className="text-xs text-mut hover:text-brand flex items-center gap-1 font-medium"
+                >
+                  <Calendar className="h-3.5 w-3.5" /> Calendar
+                </Link>
+              </div>
+
+              <Link
+                to="/app/chat"
+                className="btn-primary text-xs py-1.5 px-3.5 shadow-xs flex items-center gap-1.5"
+              >
+                <MessageCircleHeart className="h-3.5 w-3.5" /> Chat about this plan
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
