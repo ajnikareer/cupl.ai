@@ -156,7 +156,7 @@ export default function Recommends() {
       {/* Top Controls: Title, On/Off Toggle, Refresh Button, and Perspective Tabs */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <PageTitle
-          title="✨ Recommendations"
+          title="✨ Recommends"
           sub="Taste-intelligence recommendations for your happily ever after"
         />
 
