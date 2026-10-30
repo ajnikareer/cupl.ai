@@ -207,8 +207,22 @@ async def create_space(user: dict, stype: str, fields: dict) -> tuple[dict, list
     if stype not in TEMPLATES:
         raise HTTPException(400, f"Unknown event type '{stype}'. Use one of {list(TEMPLATES)}")
     f, errors = clean_fields(fields, stype)
+    title = f.pop("title", None) or TEMPLATES[stype]["label"]
+
+    # Deduplication: reuse/activate existing space of same type or title
+    existing = await list_spaces(user["couple_id"])
+    match = next((s for s in existing if s.get("type") == stype or s.get("title", "").strip().lower() == title.strip().lower()), None)
+    if match:
+        sid = match["id"]
+        if f:
+            await update_space(sid, user["couple_id"], f)
+            match = await get_space(sid, user["couple_id"])
+        await db.document(f"users/{user['uid']}").update({"active_space_id": sid})
+        user["active_space_id"] = sid
+        return public(match), errors
+
     sid = new_id("s")
-    space = {"couple_id": user["couple_id"], "type": stype, "title": f.pop("title", None) or TEMPLATES[stype]["label"],
+    space = {"couple_id": user["couple_id"], "type": stype, "title": title,
              "currency": "INR", "created_by": user["uid"], "created_at": now_iso(), "active_plan_version": 0,
              "building_version": None, "excluded_ids": [], **f}
     space["state"] = compute_state(space)

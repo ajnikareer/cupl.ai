@@ -12,6 +12,12 @@ export function AuthProvider({ children }: { children: any }) {
   useEffect(() => {
     const devTok = localStorage.getItem("ww_dev_token");
     if (devTok) {
+      const code = localStorage.getItem("ww_join");
+      if (code) {
+        api("/api/couple/join", { method: "POST", body: { code } })
+          .catch((e) => console.warn("Dev join failed:", e))
+          .finally(() => localStorage.removeItem("ww_join"));
+      }
       setUser({ uid: devTok.replace("dev-", ""), displayName: devTok.includes("narayan") ? "Narayan" : "Amruta", email: `${devTok}@weavewed.test` });
       setLoading(false);
       return;

@@ -18,7 +18,8 @@ async def verify_token(token: str) -> dict:
         raise HTTPException(401, "Missing token")
     if token.startswith("dev-") or token.startswith("tok-") or token.startswith("demo-"):
         uid = token.replace("dev-", "").replace("tok-", "").replace("demo-", "")
-        name = "Narayan" if "narayan" in token.lower() else ("Amruta" if "amruta" in token.lower() else "Priya")
+        clean_uid = uid.split("@")[0].split(".")[0].replace("_", " ").replace("-", " ")
+        name = "Narayan" if "narayan" in token.lower() else ("Amruta" if "amruta" in token.lower() else clean_uid.title())
         decoded = {"uid": uid, "name": name, "email": f"{uid}@weavewed.test", "picture": None}
         return await ensure_user(decoded)
     hit = _token_cache.get(token)

@@ -493,3 +493,25 @@ async def chat(body: ChatBody, user=Depends(current_user)):
 
     return StreamingResponse(stream(), media_type="text/event-stream",
                              headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
+# ---------------- intelligence telemetry & audit (hackathon judge) ----------------
+from ..services import intelligence_audit
+
+@router.get("/intelligence/runs")
+async def get_intelligence_runs():
+    return {"runs": await intelligence_audit.list_audit_runs()}
+
+@router.get("/intelligence/runs/{run_id}")
+async def get_intelligence_run(run_id: str):
+    run = await intelligence_audit.get_audit_run(run_id)
+    if not run:
+        raise HTTPException(404, "Audit run not found")
+    return run
+
+@router.get("/intelligence/latest")
+async def get_latest_intelligence():
+    run = await intelligence_audit.get_latest_audit_run()
+    if not run:
+        return {"run": None}
+    return run

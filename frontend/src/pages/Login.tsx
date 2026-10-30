@@ -1,14 +1,15 @@
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { auth, google } from "../lib/firebase";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { app, auth, google } from "../lib/firebase";
 import { useAuth } from "../auth/AuthProvider";
 import { ErrorBox, Logo } from "../components/ui";
 
 export default function Login() {
   const { user } = useAuth();
   const nav = useNavigate();
-  const [mode, setMode] = useState<"in" | "up">("in");
+  const [searchParams] = useSearchParams();
+  const [mode, setMode] = useState<"in" | "up">(searchParams.get("mode") === "up" ? "up" : "in");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
@@ -24,9 +25,30 @@ export default function Login() {
     e.preventDefault();
     go(async () => {
       if (mode === "up") {
-        const c = await createUserWithEmailAndPassword(auth, email, pw);
-        if (name) { await updateProfile(c.user, { displayName: name }); await c.user.getIdToken(true); }
-      } else await signInWithEmailAndPassword(auth, email, pw);
+        if (app) {
+          const c = await createUserWithEmailAndPassword(auth, email, pw);
+          if (name) {
+            try { await updateProfile(c.user, { displayName: name }); } catch {}
+            try { await api("/api/me", { method: "PATCH", body: { name: name.trim() } }); } catch {}
+            await c.user.getIdToken(true);
+          }
+        } else {
+          const uid = email.split("@")[0].toLowerCase().replace(/[^a-z0-9]/g, "");
+          localStorage.setItem("ww_dev_token", `dev-${uid}`);
+          if (name) {
+            try { await api("/api/me", { method: "PATCH", body: { name: name.trim() } }); } catch {}
+          }
+          window.location.href = "/app";
+        }
+      } else {
+        if (app) {
+          await signInWithEmailAndPassword(auth, email, pw);
+        } else {
+          const uid = email.split("@")[0].toLowerCase().replace(/[^a-z0-9]/g, "");
+          localStorage.setItem("ww_dev_token", `dev-${uid}`);
+          window.location.href = "/app";
+        }
+      }
     });
   };
   return (
@@ -43,22 +65,6 @@ export default function Login() {
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="" className="h-4 w-4" /> Continue with Google
           </button>
           
-          <div className="mt-3 flex gap-2">
-            <button 
-              type="button" 
-              onClick={() => { localStorage.setItem("ww_dev_token", "dev-narayan"); window.location.href = "/app"; }} 
-              className="flex-1 rounded-xl border border-brand/20 bg-brand/5 py-2 text-xs font-medium text-brand hover:bg-brand/10"
-            >
-              🤵 Narayan (Groom)
-            </button>
-            <button 
-              type="button" 
-              onClick={() => { localStorage.setItem("ww_dev_token", "dev-amruta"); window.location.href = "/app"; }} 
-              className="flex-1 rounded-xl border border-brand/20 bg-brand/5 py-2 text-xs font-medium text-brand hover:bg-brand/10"
-            >
-              👰 Amruta (Bride)
-            </button>
-          </div>
           <div className="my-4 text-center text-xs text-mut">or</div>
           <form onSubmit={emailAuth} className="space-y-3">
             {mode === "up" && <input className="input" placeholder="Your first name" value={name} onChange={(e) => setName(e.target.value)} required />}

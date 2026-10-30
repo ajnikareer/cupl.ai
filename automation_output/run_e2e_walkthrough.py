@@ -2,7 +2,14 @@ import asyncio
 import json
 import os
 import shutil
+import sys
 import time
+
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 from playwright.async_api import async_playwright
 
 BASE_URL = "https://weavewed-v2-sem5hyzlrq-uc.a.run.app"
@@ -104,9 +111,18 @@ async def type_slow(locator, text, delay_ms=25):
     await locator.press_sequentially(text, delay=delay_ms)
 
 async def run_automation():
+    # 1. Clean previous video files
     if os.path.exists(RAW_VIDEO_DIR):
         shutil.rmtree(RAW_VIDEO_DIR)
     os.makedirs(RAW_VIDEO_DIR, exist_ok=True)
+
+    # 2. Complete database wipe first
+    print("=== WIPING DATABASE FOR PRISTINE ONBOARDING ===", flush=True)
+    sys.path.insert(0, ".")
+    sys.path.insert(0, "backend")
+    from scripts.wipe_personas import wipe
+    await wipe()
+    print("=== DATABASE WIPED CLEANLY ===", flush=True)
 
     print("=== LAUNCHING PLAYWRIGHT FULL HD RECORDING ===", flush=True)
     async with async_playwright() as p:
@@ -140,7 +156,7 @@ async def run_automation():
         await page.wait_for_timeout(1000)
 
         # -----------------------------------------------------------------
-        # SCENE 2: Groom 1-Click Sign-In
+        # SCENE 2: Groom Authentic Account Creation
         # -----------------------------------------------------------------
         start_btn = page.locator("button:has-text('Start planning with AI')")
         if await start_btn.count() > 0:
@@ -152,14 +168,30 @@ async def run_automation():
 
         await set_hud(
             page, t0,
-            "GROOM ONBOARDING",
-            "Narayan signs in as the groom to start planning with a fresh slate.",
+            "AUTHENTIC ONBOARDING",
+            "Narayan creates an account as the groom to start wedding planning.",
             wait_sec=3.5,
-            narration="Narayan signs in as the groom for the very first time. His dashboard is completely clean, ready to weave their celebration from scratch."
+            narration="Narayan creates his account as the groom with a clean slate. No shortcuts, an authentic onboarding flow."
         )
 
-        groom_btn = page.locator("button:has-text('Narayan')")
-        await groom_btn.first.click()
+        # Toggle to "Create an account"
+        create_toggle = page.locator("button:has-text('Create an account')").first
+        if await create_toggle.count() > 0:
+            await create_toggle.click()
+            await page.wait_for_timeout(800)
+
+        name_input = page.locator("input[placeholder*='first name']").first
+        if await name_input.count() > 0:
+            await type_slow(name_input, "Narayan", delay_ms=30)
+
+        email_input = page.locator("input[type='email']").first
+        await type_slow(email_input, "narayan@weavewed.ai", delay_ms=25)
+
+        pw_input = page.locator("input[type='password']").first
+        await type_slow(pw_input, "password123", delay_ms=25)
+
+        submit_btn = page.locator("button.btn-primary:has-text('Create account'), button.btn-primary:has-text('Sign in')").first
+        await submit_btn.click()
         await page.wait_for_url("**/app**", timeout=12000)
         await page.wait_for_timeout(2000)
 
@@ -174,33 +206,33 @@ async def run_automation():
             narration="Narayan tells WeaveWed AI about their vision: a 3-day royal wedding in Udaipur for 250 guests with a 40-lakh budget, lakeside palaces, and soulful Sufi music."
         )
 
-        chat_link = page.locator("aside a[href='/app/chat']")
+        chat_link = page.locator("aside a[href='/app/chat']").first
         if await chat_link.count() > 0:
-            await chat_link.first.click()
+            await chat_link.click()
             await page.wait_for_timeout(1500)
 
         chat_input = page.locator("input[placeholder*='Message WeaveWed']").first
         await chat_input.wait_for(state="visible", timeout=10000)
-        await chat_input.first.click()
+        await chat_input.click()
         await type_slow(chat_input, "We're planning our royal wedding in Udaipur for February 2027! We'll have about 250 guests and a budget of 40 lakhs. We love Sufi music and lakeside heritage palaces.")
         await page.keyboard.press("Enter")
-        await page.wait_for_timeout(5000)
+        await page.wait_for_timeout(7000)
 
         # -----------------------------------------------------------------
-        # SCENE 4: Groom's Tastes & Live Chip Picker
+        # SCENE 4: Groom's Partner, Ceremonies & Tastes
         # -----------------------------------------------------------------
         await set_hud(
             page, t0,
-            "TASTE INTELLIGENCE (QLOO)",
-            "WeaveWed captures Narayan's music and cuisine tastes — respecting dislikes.",
+            "CEREMONIES & TASTE CAPTURE",
+            "Narayan introduces bride Amruta and specifies ceremonies & music tastes.",
             wait_sec=3.5,
-            narration="Narayan shares his preferences: loving Arijit Singh and traditional Mughlai dining, while strictly avoiding loud EDM and neon lighting."
+            narration="Narayan introduces his bride Amruta, confirms all five ceremonies, and specifies his love for Arijit Singh and royal Mughlai dining."
         )
 
-        await chat_input.first.click()
-        await type_slow(chat_input, "I love Arijit Singh and royal Mughlai food, but please no loud EDM or neon lights.")
+        await chat_input.click()
+        await type_slow(chat_input, "My partner's name is Amruta! For our wedding, the date is 2027-02-01, and we want Haldi, Mehendi, Sangeet, Wedding, and Reception. I love Arijit Singh, traditional Mughlai food, and royal sherwanis. But please no loud EDM or neon lights.")
         await page.keyboard.press("Enter")
-        await page.wait_for_timeout(5000)
+        await page.wait_for_timeout(8000)
 
         # Click any interactive chip if rendered
         chips = page.locator("button.chip")
@@ -211,8 +243,8 @@ async def run_automation():
         # -----------------------------------------------------------------
         # SCENE 5: Narayan Anchors Cultural Roots in Me
         # -----------------------------------------------------------------
-        me_link = page.locator("aside a[href='/app/me']")
-        await me_link.first.click()
+        me_link = page.locator("aside a[href='/app/me']").first
+        await me_link.click()
         await page.wait_for_timeout(1500)
 
         await set_hud(
@@ -236,12 +268,12 @@ async def run_automation():
             await page.wait_for_timeout(800)
 
         # Region input
-        reg_input = page.locator("input[placeholder*='Home state or city']")
+        reg_input = page.locator("input[placeholder*='Home state or city']").first
         if await reg_input.count() > 0:
             await reg_input.fill("Pune, Maharashtra")
-            save_reg = page.locator("button:has-text('Save Region')")
+            save_reg = page.locator("button:has-text('Save Region')").first
             if await save_reg.count() > 0:
-                await save_reg.first.click()
+                await save_reg.click()
                 await page.wait_for_timeout(1000)
 
         # -----------------------------------------------------------------
@@ -249,372 +281,291 @@ async def run_automation():
         # -----------------------------------------------------------------
         await set_hud(
             page, t0,
-            "PARTNER INVITATION",
-            "A wedding is woven for two — Narayan creates a private invite for his fiancée Amruta.",
+            "PARTNER COLLABORATION",
+            "Generating a unique invite link so bride Amruta's tastes are woven together.",
             wait_sec=3.5,
-            narration="A wedding is woven for two. Narayan creates a private invite link for his fiancée Amruta and copies it to share."
+            narration="WeaveWed is built for couples. Narayan creates a partner invite link so Amruta can join with her own account and tastes."
         )
 
-        invite_btn = page.locator("button:has-text('Create invite link')")
+        invite_btn = page.locator("button:has-text('Create invite link')").first
         if await invite_btn.count() > 0:
-            await invite_btn.first.click()
-            await page.wait_for_timeout(2000)
+            await invite_btn.click()
+            await page.wait_for_timeout(1500)
 
-        copy_btn = page.locator("button:has-text('Copy link')")
-        if await copy_btn.count() == 0:
-            copy_btn = page.locator("button svg.lucide-copy").locator("..")
+        # Retrieve the invite code from the UI
+        invite_code = ""
+        invite_span = page.locator("span:has-text('/join/')").first
+        try:
+            await invite_span.wait_for(state="visible", timeout=6000)
+            val = await invite_span.inner_text()
+            if "/join/" in val:
+                invite_code = val.split("/join/")[-1].strip()
+            else:
+                invite_code = val.strip()
+        except Exception as e:
+            print(f"Waiting for invite span fallback: {e}", flush=True)
 
-        invite_url = ""
-        break_all = page.locator("span.break-all")
-        if await break_all.count() > 0:
-            invite_url = (await break_all.first.inner_text()).strip()
-        print("Captured invite URL:", invite_url, flush=True)
+        print(f"Partner invite code created: {invite_code}", flush=True)
 
-        if await copy_btn.count() > 0:
-            await copy_btn.first.click()
+        # Sign out Narayan cleanly
+        signout_btn = page.locator("button:has-text('Sign out')").first
+        if await signout_btn.count() > 0:
+            await signout_btn.click()
             await page.wait_for_timeout(1200)
 
         # -----------------------------------------------------------------
-        # SCENE 7: Perspective Switch — Amruta Joins
+        # SCENE 7: Bride Amruta Accepts Invite & Onboards
         # -----------------------------------------------------------------
+        join_url = f"{BASE_URL}/join/{invite_code}" if invite_code else f"{BASE_URL}/login"
+        print(f"Navigating Amruta to join URL: {join_url}", flush=True)
+        await page.goto(join_url, wait_until="networkidle")
+        await page.wait_for_timeout(1500)
+
         await set_hud(
             page, t0,
-            "PERSPECTIVE SWITCH",
-            "📱 Switching to Amruta's device — opening Narayan's wedding invite.",
+            "BRIDE ONBOARDING",
+            "Amruta accepts the wedding invitation to co-plan the celebration.",
             wait_sec=3.5,
-            narration="Switching to Amruta's perspective. She opens the invite link and signs in with her own account."
+            narration="Amruta opens the invitation link. She signs in to join Narayan's wedding space and contribute her unique aesthetic."
         )
 
-        # Clear Narayan's token to simulate bride on her own device
-        await page.evaluate("localStorage.clear()")
-        if invite_url and "join/" in invite_url:
-            await page.goto(invite_url, wait_until="networkidle")
-        else:
-            await page.goto(f"{BASE_URL}/login")
+        # Click "Sign in to join" on the Join page
+        join_btn = page.locator("a:has-text('Sign in to join')").first
+        if await join_btn.count() > 0:
+            await join_btn.click()
+            await page.wait_for_url("**/login**", timeout=8000)
+            await page.wait_for_timeout(800)
 
-        await page.wait_for_timeout(1500)
-        sign_in_join = page.locator("a:has-text('Sign in to join')")
-        if await sign_in_join.count() > 0:
-            await sign_in_join.first.click()
-            await page.wait_for_url("**/login**", timeout=10000)
+        # On login page, switch to "Create an account"
+        create_toggle_a = page.locator("button:has-text('Create an account')").first
+        if await create_toggle_a.count() > 0:
+            await create_toggle_a.click()
+            await page.wait_for_timeout(800)
 
-        bride_btn = page.locator("button:has-text('Amruta')")
-        await bride_btn.first.click()
+        name_input_a = page.locator("input[placeholder*='first name']").first
+        if await name_input_a.count() > 0:
+            await type_slow(name_input_a, "Amruta", delay_ms=30)
+
+        email_input_a = page.locator("input[type='email']").first
+        await type_slow(email_input_a, "amruta@weavewed.ai", delay_ms=25)
+
+        pw_input_a = page.locator("input[type='password']").first
+        await type_slow(pw_input_a, "password123", delay_ms=25)
+
+        submit_btn_a = page.locator("button.btn-primary:has-text('Create account'), button.btn-primary:has-text('Sign in')").first
+        await submit_btn_a.click()
         await page.wait_for_url("**/app**", timeout=12000)
         await page.wait_for_timeout(2000)
 
         # -----------------------------------------------------------------
-        # SCENE 8: Amruta Adds Her Aesthetic in Chat
+        # SCENE 8: Bride Chats Aesthetic with WeaveWed AI
         # -----------------------------------------------------------------
         await set_hud(
             page, t0,
-            "BRIDE'S AESTHETIC",
-            "Amruta chats with WeaveWed: indie acoustic music, pastel florals, vegan dining.",
+            "BRIDE'S TASTES (QLOO)",
+            "Amruta shares her aesthetic: Indie acoustic, pastel florals & Sabyasachi.",
             wait_sec=3.5,
-            narration="Amruta chats with WeaveWed AI, sharing her love for Prateek Kuhad, soft pastel floral decor, Sabyasachi lehengas, and vegan catering options."
+            narration="Amruta shares her aesthetic: indie acoustic music like Prateek Kuhad, soft pastel floral decor, Sabyasachi bridal wear, and vegan catering."
         )
 
-        chat_link = page.locator("aside a[href='/app/chat']")
-        if await chat_link.count() > 0:
-            await chat_link.first.click()
+        chat_link_a = page.locator("aside a[href='/app/chat']").first
+        if await chat_link_a.count() > 0:
+            await chat_link_a.click()
             await page.wait_for_timeout(1500)
+        else:
+            await page.goto(f"{BASE_URL}/app/chat", wait_until="networkidle")
 
-        chat_input = page.locator("input[placeholder*='Message WeaveWed']").first
-        await chat_input.first.click()
-        await type_slow(chat_input, "Hi WeaveWed! I'm Amruta. I adore indie acoustic music like Prateek Kuhad, soft pastel decor, Sabyasachi lehengas, and vegan options for our friends.")
+        chat_input_a = page.locator("input[placeholder*='Message WeaveWed']").first
+        await chat_input_a.wait_for(state="visible", timeout=10000)
+        await chat_input_a.click()
+        await type_slow(chat_input_a, "Hi WeaveWed! I'm Amruta. I love indie acoustic vibes like Prateek Kuhad, soft pastel floral decor, Sabyasachi lehengas, and vegan catering options for our friends.")
         await page.keyboard.press("Enter")
-        await page.wait_for_timeout(5000)
+        await page.wait_for_timeout(7000)
 
         # -----------------------------------------------------------------
-        # SCENE 9: Amruta Anchors Her Cultural Roots in Me
+        # SCENE 9: Bride Sets Bengali Cultural Roots
         # -----------------------------------------------------------------
-        me_link = page.locator("aside a[href='/app/me']")
-        await me_link.first.click()
+        me_link_a = page.locator("aside a[href='/app/me']").first
+        await me_link_a.click()
         await page.wait_for_timeout(1500)
 
         await set_hud(
             page, t0,
             "BRIDE'S CULTURAL HERITAGE",
-            "Amruta adds her cultural roots: Bengali Heritage & Kolkata traditions.",
+            "Amruta anchors her roots: Bengali Heritage from Kolkata, West Bengal.",
             wait_sec=3.5,
-            narration="In her profile, Amruta adds her cultural roots: Bengali heritage and traditions from Kolkata."
+            narration="Amruta selects her cultural roots: Bengali heritage and Kolkata traditions. Now both partners' cultural backgrounds are fully known."
         )
 
-        b_chip = page.locator("button:has-text('Bengali')")
+        b_chip = page.locator("button:has-text('Bengali')").first
         if await b_chip.count() > 0:
-            await b_chip.first.click()
+            await b_chip.click()
             await page.wait_for_timeout(800)
 
-        h_chip = page.locator("button:has-text('Hindu')")
-        if await h_chip.count() > 0:
-            await h_chip.first.click()
+        h_chip_a = page.locator("button:has-text('Hindu')").first
+        if await h_chip_a.count() > 0:
+            await h_chip_a.click()
             await page.wait_for_timeout(800)
 
-        reg_input = page.locator("input[placeholder*='Home state or city']")
-        if await reg_input.count() > 0:
-            await reg_input.fill("Kolkata, West Bengal")
-            save_reg = page.locator("button:has-text('Save Region')")
-            if await save_reg.count() > 0:
-                await save_reg.first.click()
+        reg_input_a = page.locator("input[placeholder*='Home state or city']").first
+        if await reg_input_a.count() > 0:
+            await reg_input_a.fill("Kolkata, West Bengal")
+            save_reg_a = page.locator("button:has-text('Save Region')").first
+            if await save_reg_a.count() > 0:
+                await save_reg_a.click()
                 await page.wait_for_timeout(1000)
 
         # -----------------------------------------------------------------
-        # SCENE 10: Couple Taste DNA Revelation (Cultural Harmony)
+        # SCENE 10: Couple Taste DNA & Cultural Harmony
         # -----------------------------------------------------------------
-        dna_link = page.locator("aside a[href='/app/dna']")
-        await dna_link.first.click()
+        dna_link = page.locator("aside a[href='/app/dna']").first
+        await dna_link.click()
         await page.wait_for_timeout(2000)
 
         await set_hud(
             page, t0,
-            "COUPLE TASTE DNA · CULTURAL HARMONY",
-            "QLOO synthesizes both worlds: Bridging Maharashtrian & Bengali Traditions.",
-            wait_sec=5.0,
-            narration="Opening Couple DNA reveals the power of QLOO taste intelligence: synthesizing their compatibility score, shared loves, and weaving Maharashtrian and Bengali heritages into harmonious ceremony, cuisine, and music fusions."
+            "COUPLE TASTE DNA & CULTURAL HARMONY",
+            "QLOO synthesizes their shared vibe & cross-cultural Maharashtrian-Bengali fusion.",
+            wait_sec=4.5,
+            narration="Under Couple Taste DNA, QLOO synthesizes where their two worlds meet: discovering shared passions, unique individual flavours, and tailored Maharashtrian-Bengali cultural harmony ideas."
         )
 
-        await page.evaluate("window.scrollBy({top: 400, behavior: 'smooth'})")
-        await page.wait_for_timeout(2000)
-        await page.evaluate("window.scrollBy({top: 400, behavior: 'smooth'})")
-        await page.wait_for_timeout(2000)
+        await page.evaluate("window.scrollBy({top: 450, behavior: 'smooth'})")
+        await page.wait_for_timeout(2500)
         await page.evaluate("window.scrollTo({top: 0, behavior: 'smooth'})")
         await page.wait_for_timeout(1000)
 
         # -----------------------------------------------------------------
-        # SCENE 11: Event Space Hub — All 5 Tabs
+        # SCENE 11: Masterplan & Event Spaces
         # -----------------------------------------------------------------
-        spaces_link = page.locator("aside a[href='/app/spaces']")
-        await spaces_link.first.click()
-        await page.wait_for_timeout(1500)
+        spaces_link = page.locator("aside a[href='/app/spaces']").first
+        await spaces_link.click()
+        await page.wait_for_timeout(2000)
 
-        # Click Wedding space card
-        wedding_card = page.locator("a[href^='/app/spaces/']").first
+        await set_hud(
+            page, t0,
+            "EVENT SPACES & MASTERPLAN",
+            "Exploring the complete wedding space across all 5 integrated tabs.",
+            wait_sec=4.0,
+            narration="In Event Spaces, Narayan and Amruta have a comprehensive command center for their Udaipur wedding across Plan, Details, Budget, To-dos, and Memories."
+        )
+
+        # Click into the active Wedding space
+        wedding_card = page.locator(".card:has-text('Wedding'), .card:has-text('Udaipur')").first
         if await wedding_card.count() > 0:
-            await wedding_card.first.click()
+            await wedding_card.click()
             await page.wait_for_timeout(2000)
 
         # Tab 1: Plan
         await set_hud(
             page, t0,
-            "TAB 1: PLAN (QLOO MASTERPLAN)",
-            "Weaving the 3-day royal masterplan from synthesized couple tastes.",
-            wait_sec=4.5,
-            narration="Under the Plan tab, WeaveWed weaves a complete multi-day itinerary: Lake Pichola venues, ceremony rituals, fusion Sangeet playlists, and royal dining."
+            "THE AI MASTERPLAN",
+            "AI-curated venues, ceremonies, signature menu & designers with 'Why this?' insights.",
+            wait_sec=4.0,
+            narration="Every section is woven with QLOO intelligence and transparent reasoning — from Taj Lake Palace to a curated Mughlai and Vegan Bengali fusion banquet."
         )
+        await page.evaluate("window.scrollBy({top: 550, behavior: 'smooth'})")
+        await page.wait_for_timeout(2500)
 
-        build_btn = page.locator("button:has-text('Build our plan')")
-        if await build_btn.count() > 0:
-            await build_btn.first.click()
-            await page.wait_for_timeout(6000)
-
-        # Scroll through plan recommendations
-        await page.evaluate("window.scrollBy({top: 500, behavior: 'smooth'})")
-        await page.wait_for_timeout(1500)
-
-        # Expand 'Why this?' if visible
-        why_btn = page.locator("button:has-text('Why this?')").first
-        if await why_btn.count() > 0:
-            await why_btn.first.click()
-            await page.wait_for_timeout(1500)
-
-        # Click Love it chip
-        love_btn = page.locator("button[aria-label='Love it']").first
-        if await love_btn.count() > 0:
-            await love_btn.first.click()
-            await page.wait_for_timeout(1000)
-
-        # Test prompt adjustment
-        plan_input = page.locator("input[placeholder*='no loud DJs']")
-        if await plan_input.count() > 0:
-            await plan_input.fill("more Sufi & acoustic, no loud DJs")
-            update_btn = page.locator("button:has-text('Update plan')")
-            if await update_btn.count() > 0:
-                await update_btn.first.click()
-                await page.wait_for_timeout(2000)
+        # Like a venue card
+        like_btn = page.locator("button:has-text('Like'), button[title*='Like']").first
+        if await like_btn.count() > 0:
+            await like_btn.click()
+            await page.wait_for_timeout(1200)
 
         # Tab 2: Details
-        details_tab = page.locator("button:text-is('Details')")
+        details_tab = page.locator("button:has-text('Details'), a:has-text('Details')").first
         if await details_tab.count() > 0:
-            await details_tab.first.click()
+            await details_tab.click()
             await set_hud(
                 page, t0,
-                "TAB 2: DETAILS",
-                "Event parameters: Udaipur, February 2027, 250 guests, ₹40L budget.",
+                "EVENT DETAILS",
+                "Full event parameters: 250 guests, Rs. 40L budget, and confirmed ceremonies.",
                 wait_sec=3.5,
-                narration="The Details tab manages live parameters: wedding dates, Udaipur venue location, guest count of 250, and their 40-lakh budget."
+                narration="The Details tab maintains live event parameters — Udaipur, 250 guests, 40 lakhs budget, and confirmed Haldi, Mehendi, Sangeet, and Reception."
             )
-            save_det = page.locator("button:has-text('Save details')")
-            if await save_det.count() > 0:
-                await save_det.first.click()
-                await page.wait_for_timeout(1000)
+            await page.wait_for_timeout(2000)
 
         # Tab 3: Budget
-        budget_tab = page.locator("button:text-is('Budget')")
+        budget_tab = page.locator("button:has-text('Budget'), a:has-text('Budget')").first
         if await budget_tab.count() > 0:
-            await budget_tab.first.click()
+            await budget_tab.click()
             await set_hud(
                 page, t0,
-                "TAB 3: BUDGET",
-                "Smart Budget Split: ₹40 Lakhs dynamically distributed across key categories.",
+                "SMART BUDGET ALLOCATION",
+                "Automated Rs. 40,00,000 allocation across Venues, Catering, Decor & Outfits.",
                 wait_sec=3.5,
-                narration="The Budget tab visualizes a smart breakdown: allocating funds across venues, royal catering, decor, and photography."
+                narration="The Budget tab dynamically allocates the 40 lakh budget across venue, catering, decor, and fashion according to couple priorities."
             )
-            adj_btn = page.locator("button:has-text('Adjust split')")
-            if await adj_btn.count() > 0:
-                await adj_btn.first.click()
-                await page.wait_for_timeout(1200)
+            await page.wait_for_timeout(2000)
 
         # Tab 4: To-dos
-        todos_tab = page.locator("button:text-is('To-dos')")
+        todos_tab = page.locator("button:has-text('To-dos'), a:has-text('To-dos')").first
         if await todos_tab.count() > 0:
-            await todos_tab.first.click()
+            await todos_tab.click()
             await set_hud(
                 page, t0,
-                "TAB 4: TO-DOS",
-                "Milestone Checklist: automated milestone tracking from venue booking to pheras.",
+                "COUNTDOWN TIMELINE & TO-DOS",
+                "Intelligent milestone tracking leading up to the February 2027 celebration.",
                 wait_sec=3.5,
-                narration="The To-dos tab tracks key milestones. Tasks can be checked off or added seamlessly."
+                narration="To-dos keep both partners perfectly in sync with timed countdown milestones and collaborative task ownership."
             )
-            checkboxes = page.locator("input[type='checkbox']")
-            if await checkboxes.count() > 0:
-                await checkboxes.first.click()
-                await page.wait_for_timeout(800)
-
-            todo_input = page.locator("input[placeholder*='Add a to-do']")
-            if await todo_input.count() > 0:
-                await todo_input.fill("Book Sangeet choreographer")
-                add_todo = page.locator("button:has-text('Add')")
-                if await add_todo.count() > 0:
-                    await add_todo.first.click()
-                    await page.wait_for_timeout(1000)
+            await page.wait_for_timeout(2000)
 
         # Tab 5: Memories
-        mem_tab = page.locator("button:text-is('Memories')")
-        if await mem_tab.count() > 0:
-            await mem_tab.first.click()
+        memories_tab = page.locator("button:has-text('Memories'), a:has-text('Memories')").first
+        if await memories_tab.count() > 0:
+            await memories_tab.click()
             await set_hud(
                 page, t0,
-                "TAB 5: MEMORIES",
-                "Episodic Memory: reflections and ratings that teach WeaveWed for future plans.",
+                "TIME CAPSULE & MEMORIES",
+                "Capturing photos, voice notes, and milestone moments beyond the wedding day.",
                 wait_sec=3.5,
-                narration="Under Memories, couples log ratings and reflections that feed the agent's long-term memory for anniversaries and future trips."
+                narration="Memories turns the wedding journey into a lasting heirloom of audio notes, photos, and cherished reflections."
             )
-            star5 = page.locator("button[aria-label='5 stars']")
-            if await star5.count() > 0:
-                await star5.first.click()
-                await page.wait_for_timeout(600)
-
-            mem_textarea = page.locator("textarea[placeholder*='What did you love']")
-            if await mem_textarea.count() > 0:
-                await mem_textarea.fill("Loved our venue tasting session in Udaipur! The lakeside sunset view was breathtaking.")
-                save_mem = page.locator("button:has-text('Save memory')")
-                if await save_mem.count() > 0:
-                    await save_mem.first.click()
-                    await page.wait_for_timeout(1200)
+            await page.wait_for_timeout(2000)
 
         # -----------------------------------------------------------------
-        # SCENE 12: Secret Surprises (Privacy Guarantee)
+        # SCENE 12: Final Celebration HUD
         # -----------------------------------------------------------------
-        await set_hud(
-            page, t0,
-            "SECRET SURPRISES",
-            "Narayan plans a secret lakeside surprise — guaranteed 100% invisible to Amruta.",
-            wait_sec=4.0,
-            narration="Narayan secretly plans a sunset violin boat ride on Lake Pichola. WeaveWed guarantees zero leaks on Amruta's account."
-        )
-
-        surprises_link = page.locator("aside a[href='/app/surprises']")
-        await surprises_link.first.click()
-        await page.wait_for_timeout(2000)
-
-        # -----------------------------------------------------------------
-        # SCENE 13: Gemini Live Voice UI Feature Showcase
-        # -----------------------------------------------------------------
-        await set_hud(
-            page, t0,
-            "GEMINI LIVE VOICE UI",
-            "Hands-free planning on the go with Gemini 2.5 Live multi-modal voice.",
-            wait_sec=4.0,
-            narration="For hands-free planning on the go, couples can converse naturally with Gemini 2.5 Live voice."
-        )
-
-        voice_btn = page.locator("button:has-text('Talk to WeaveWed')")
-        if await voice_btn.count() == 0:
-            voice_btn = page.locator("button:has-text('Talk')")
-
-        if await voice_btn.count() > 0:
-            await voice_btn.first.click()
-            await page.wait_for_timeout(4500)
-            close_voice = page.locator("button[aria-label='Close voice']")
-            if await close_voice.count() == 0:
-                close_voice = page.locator("div.fixed button svg.lucide-x").locator("..")
-            if await close_voice.count() > 0:
-                await close_voice.first.click()
-                await page.wait_for_timeout(1000)
-
-        # -----------------------------------------------------------------
-        # SCENE 14: Grand Finale
-        # -----------------------------------------------------------------
-        home_link = page.locator("aside a[href='/app']")
-        await home_link.first.click()
-        await page.wait_for_timeout(1500)
+        await page.goto(f"{BASE_URL}/app", wait_until="networkidle")
+        await page.wait_for_timeout(1000)
 
         await set_hud(
             page, t0,
-            "WEAVEWED · HAPPILY EVER AFTER",
-            "Two distinct worlds, woven into one unforgettable celebration.",
+            "WEAVEWED — HAPPILY EVER AFTER",
+            "Taste intelligence meets lifelong celebration. Woven together with QLOO & Gemini.",
             wait_sec=4.5,
-            narration="Two distinct worlds, woven into one unforgettable celebration. WeaveWed — not just events, a lifetime of beautiful memories."
+            narration="WeaveWed: where taste intelligence meets lifelong love. Two worlds woven into one unforgettable celebration."
         )
-        await page.wait_for_timeout(2000)
 
-        # Close page & browser to flush video
-        print("Closing page and saving video...", flush=True)
-        await page.close()
+        await page.wait_for_timeout(2000)
         await context.close()
         await browser.close()
 
-    # -----------------------------------------------------------------
-    # Process Outputs: Video, SRT, JSON, Markdown
-    # -----------------------------------------------------------------
-    video_files = [f for f in os.listdir(RAW_VIDEO_DIR) if f.endswith(".webm")]
-    if video_files:
-        src_video = os.path.join(RAW_VIDEO_DIR, video_files[0])
-        final_video = os.path.join(OUT_DIR, "weavewed_walkthrough.webm")
-        shutil.copy2(src_video, final_video)
-        print(f"Final video generated: {final_video}", flush=True)
-
-    # Generate SRT Subtitle file
-    srt_path = os.path.join(OUT_DIR, "subtitles.srt")
-    with open(srt_path, "w", encoding="utf-8") as f:
-        for t in timeline:
-            f.write(f"{t['index']}\n")
-            f.write(f"{format_srt_time(t['start'])} --> {format_srt_time(t['end'])}\n")
-            f.write(f"[{t['tag']}] {t['caption']}\n\n")
-    print(f"Subtitles generated: {srt_path}", flush=True)
-
-    # Generate JSON Narration Timeline
-    json_path = os.path.join(OUT_DIR, "narration_script.json")
-    with open(json_path, "w", encoding="utf-8") as f:
+    # Write timeline artifacts
+    with open(os.path.join(OUT_DIR, "narration_script.json"), "w", encoding="utf-8") as f:
         json.dump(timeline, f, indent=2)
-    print(f"JSON Narration generated: {json_path}", flush=True)
 
-    # Generate VOICEOVER_SCRIPT.md
-    md_path = os.path.join(OUT_DIR, "VOICEOVER_SCRIPT.md")
-    with open(md_path, "w", encoding="utf-8") as f:
-        f.write("# WeaveWed End-to-End Walkthrough — Voiceover & Narration Script\n\n")
-        f.write("> **Total Scenes**: " + str(len(timeline)) + "\n")
-        f.write("> **Resolution**: 1920x1080 Full HD\n")
-        f.write("> **Video File**: `automation_output/weavewed_walkthrough.webm`\n\n---\n\n")
-        for t in timeline:
-            f.write(f"### Scene {t['index']}: {t['tag']}\n")
-            f.write(f"- **Timestamp**: `{format_srt_time(t['start'])}` to `{format_srt_time(t['end'])}` (Duration: {round(t['end'] - t['start'], 1)}s)\n")
-            f.write(f"- **On-Screen Caption HUD**: *\"{t['caption']}\"*\n")
-            f.write(f"- **Voiceover Audio Script**:\n")
-            f.write(f"  > \"{t['narration']}\"\n\n")
-    print(f"Markdown Voiceover script generated: {md_path}", flush=True)
+    srt_lines = []
+    for item in timeline:
+        srt_lines.append(f"{item['index']}")
+        srt_lines.append(f"{format_srt_time(item['start'])} --> {format_srt_time(item['end'])}")
+        srt_lines.append(f"[{item['tag']}] {item['caption']}\n")
+    with open(os.path.join(OUT_DIR, "subtitles.srt"), "w", encoding="utf-8") as f:
+        f.write("\n".join(srt_lines))
 
-    print("=== AUTOMATION RUN COMPLETED SUCCESSFULLY! ===", flush=True)
+    # Identify recorded video
+    raw_files = [os.path.join(RAW_VIDEO_DIR, f) for f in os.listdir(RAW_VIDEO_DIR) if f.endswith(".webm")]
+    if raw_files:
+        src = raw_files[0]
+        dst = os.path.join(OUT_DIR, "weavewed_walkthrough.webm")
+        if os.path.exists(dst):
+            os.remove(dst)
+        shutil.copy(src, dst)
+        print(f"Recorded Full HD video saved to: {dst}", flush=True)
+
+    print("=== UI AUTOMATION WALKTHROUGH RECORDING COMPLETE ===", flush=True)
 
 if __name__ == "__main__":
     asyncio.run(run_automation())

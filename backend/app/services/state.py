@@ -76,7 +76,7 @@ ONBOARD_KEYS = ["partner_name", "how_met"]
 
 
 def director(s: Snapshot) -> dict:
-    """Return the single best next move. Keep goals tiny and human."""
+    """Return the single best next move. Keep goals tiny, human, and strictly sequenced."""
     prof = s.user.get("profile") or {}
     conv = s.conv or {}
     turns = conv.get("turn_count", 0)
@@ -84,14 +84,31 @@ def director(s: Snapshot) -> dict:
     first = (s.user.get("name") or "").split(" ")[0] or "there"
     pname = (s.partner or {}).get("name") or prof.get("partner_name")
     avoid = ["asking more than ONE question in a message",
+             "giving open-ended recommendations or destination lists before event basics & tastes are set",
              "listing many options in speech — show a widget instead",
-             "repeating a question the user already answered (check TASTES and PROFILE first)"]
+             "repeating a question the user already answered (check TASTES, CULTURAL ROOTS and PROFILE first)"]
     nxt: dict = {"stage": "", "goal": "", "detail": {}, "avoid": avoid}
 
+    # 1. Partner Onboarding (Bride joining Groom's existing space)
+    is_joining_partner = s.partner is not None and len(s.my_facts) < 3 and not prof.get("partner_welcomed")
+    if is_joining_partner and turns < 4:
+        sp_title = s.space["title"] if s.space else "celebration"
+        sp_loc = f" in {s.space['city']}" if s.space and s.space.get("city") else ""
+        nxt.update(stage="welcome_partner", goal=f"Warmly welcome {first} to WeaveWed as {pname}'s partner! "
+                   f"Tell {first} excitedly: '{pname} has already started weaving your couple space for {sp_title}{sp_loc}! "
+                   f"Now it is your turn to shape the celebration so it reflects your personal heart and aesthetic.' "
+                   f"1) Immediately save any tastes {first} shared with remember_tastes. "
+                   f"2) Ask about their cultural heritage & traditions ('What cultural roots or wedding traditions are you honoring — e.g. Maharashtrian, Bengali, Punjabi, Hindu, Sikh, interfaith?'). "
+                   f"3) Save it with save_cultural_roots. Do NOT ask 'what are you celebrating or planning' because the event space already exists.")
+        return nxt
+
+    # 2. Initial Welcome for solo user
     if turns < 2 and not prof.get("greeted"):
         nxt.update(stage="welcome", goal=f"Warmly welcome {first}. Introduce yourself in one line and ask, lightly, what "
                    "they're celebrating or planning right now. Do NOT ask for dates, budget or tastes yet.")
         return nxt
+
+    # 3. Rapport (ask partner's name)
     if not pname and turns < 12:
         nxt.update(stage="rapport", goal="Get to know them a little: casually ask their partner's name (then later, how they "
                    "met) and save it with remember_about_us. Keep it playful; if they want to jump into planning, let them.",
@@ -99,19 +116,34 @@ def director(s: Snapshot) -> dict:
         if s.space is None:
             nxt["goal"] += " If they already said what they're planning, create the event space first."
         return nxt
+
+    # 4. Guide mode (create event space)
     if s.space is None:
         nxt.update(stage="guide", goal="Find out what they want to plan next (wedding, engagement, prewedding, honeymoon, "
                    "a trip, or an anniversary/birthday) and create that event space as soon as they say it. Until then, "
                    "only chat, guide and answer questions about the app — no planning or recommendations.")
         return nxt
+
     sp_ = s.space
     if sp_.get("state") == "building":
         nxt.update(stage="building", goal="The plan is being woven in the background. Keep the conversation warm and light — "
                    "ask one small getting-to-know-you question or talk about what excites them. You'll be told when it's ready.")
         return nxt
+
+    # 5. Cultural Roots collection (Mandatory foundation for QLOO Cultural IQ)
+    if not prof.get("heritage") and not prof.get("tradition") and turns < 15:
+        nxt.update(stage="cultural_roots", goal=f"Ask {first} about your cultural roots & wedding traditions "
+                   f"(e.g., Maharashtrian, Bengali, Punjabi, Gujarati, South Indian, Hindu, Sikh, inter-faith, etc.) "
+                   f"so QLOO Cultural IQ can weave authentic rituals, traditional attire and regional cuisine into your {sp_['title']}. "
+                   f"Save the answers immediately with save_cultural_roots.",
+                   detail={"missing_profile": ["heritage", "tradition"]})
+        return nxt
+
     focus = sp.TEMPLATES[sp_["type"]]["taste_focus"]
     uncovered = [c for c in focus if cov.get(c, 0) < 2]
     streak = conv.get("taste_streak", 0)
+
+    # 6. Event basics (city, dates, budget)
     if sp_["missing_fields"]:
         f = sp_["missing_fields"][0]
         meta = sp.FIELD_META[f]
@@ -119,23 +151,41 @@ def director(s: Snapshot) -> dict:
                    f"(field '{f}') in a natural way, then save it with update_event. If several details are still missing "
                    "and they're typing (not talking), you may instead offer the details form (ask_event_details).",
                    detail={"field": f, "remaining": sp_["missing_fields"]})
-        if streak < 1 and uncovered and len(sp_["missing_fields"]) > 2 and turns % 3 == 2:
-            nxt["goal"] += f" (Optional, for a change of pace: one quick taste question about {CATEGORIES[uncovered[0]]['label']}.)"
         return nxt
+
+    # 7. Core tastes collection
     if uncovered and streak < 2 and not (sp_.get("active_plan_version")):
         c = uncovered[0]
         nxt.update(stage="know_tastes", goal=f"Get to know {first}'s taste in {CATEGORIES[c]['label']} — this matters for "
                    f"their {sp_['title']}. Ask it like a friend would, and call show_taste_picker(category='{c}'). One category only.",
                    detail={"category": c, "uncovered": uncovered, "coverage": cov})
         return nxt
+
+    # 8. Partner Gatekeeper & Invitation
     if not s.partner and not prof.get("invite_offered"):
         nxt.update(stage="invite_partner", goal=f"Gently suggest inviting {pname or 'their partner'} so the plan is woven from "
                    "both tastes (call invite_partner if they agree). Mention it once only; don't block planning on it.")
         return nxt
+
+    # 9. Ready to Plan (Enforce Dual Partner Gatekeeper)
     if not sp_.get("active_plan_version"):
-        nxt.update(stage="ready_to_plan", goal=f"You know enough to start. Offer to weave their {sp_['title']} plan now; when they "
-                   "agree call build_plan (it runs in the background — keep chatting while it builds).",
-                   detail={"uncovered": uncovered})
+        if not s.partner and pname:
+            nxt.update(stage="ready_to_plan", goal=f"Event details and {first}'s tastes are ready. But notice {pname} hasn't joined or shared tastes yet. "
+                       f"Tell {first} warmly: 'We have your tastes and event details ready, but {pname} hasn't shared her aesthetic yet! "
+                       f"WeaveWed is built to unite both your worlds into one masterplan. Shall we send {pname} an invite link first? "
+                       f"(Or if you'd like a preliminary solo preview right now, just say the word and I'll weave it!)' "
+                       "If they agree to invite, call invite_partner. Only call build_plan if they explicitly request a solo preview or insist on weaving it right now.",
+                       detail={"uncovered": uncovered, "partner_pending": True})
+        elif s.partner and len(s.partner_facts) < 2:
+            nxt.update(stage="ready_to_plan", goal=f"Event details and {first}'s tastes are set, but {pname} has only shared minimal tastes. "
+                       f"Prompt: 'We're almost ready to weave the masterplan! Would {pname} like to add a couple more favorite artists or styles "
+                       f"so the recommendations are 50/50 balanced? Or shall I weave what we have right now?' "
+                       f"If they say go ahead, call build_plan.",
+                       detail={"partner_facts_count": len(s.partner_facts)})
+        else:
+            nxt.update(stage="ready_to_plan", goal=f"Both partners' tastes and event foundations are locked in! Offer to weave their {sp_['title']} "
+                       "plan now; when they agree call build_plan (it runs in the background — keep chatting while it builds).",
+                       detail={"uncovered": uncovered})
         return nxt
     if sp_.get("state") == "stale":
         nxt.update(stage="refresh", goal="Event details changed since the plan was made. Offer to refresh the plan (build_plan).")

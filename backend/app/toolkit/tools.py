@@ -121,10 +121,37 @@ async def create_event(c, a):
     return {"created": _brief(s), "invalid": errors, "widget": {"kind": "refresh"}}
 
 
+@tool("save_cultural_roots", "profile", """Save cultural roots, heritage, and faith/traditions for the user/couple.
+These power QLOO Cultural Intelligence to weave regional rituals, ceremonies, and traditional aesthetics authentically into plans.""",
+      obj({"heritage": {"type": "string", "description": "e.g. Maharashtrian, Bengali, Punjabi, Gujarati, South Indian, Marwari, Cross-cultural"},
+           "tradition": {"type": "string", "description": "e.g. Hindu, Sikh, Christian, Muslim, Jain, Inter-faith, Secular"},
+           "state": {"type": "string", "description": "home state or city, e.g. Maharashtra, Kolkata, Punjab, Delhi"},
+           "country": {"type": "string", "description": "country, default India"}}, ["heritage"]), mutates=True)
+async def save_cultural_roots(c, a):
+    prof_upd = {}
+    for k in ("heritage", "tradition", "state", "country"):
+        if a.get(k):
+            prof_upd[k] = str(a[k]).strip()[:60]
+    if prof_upd:
+        await db.document(f"users/{c.uid}").set({"profile": prof_upd}, merge=True)
+        if c.user.get("couple_id"):
+            try:
+                await dna_svc.compute(c.user["couple_id"])
+            except Exception as e:
+                log.warning("DNA recompute failed: %s", e)
+    return {"saved": prof_upd, "note": "Cultural roots saved. QLOO cultural intelligence is now tailored to their traditions."}
+
+
 @tool("update_event", "events", "Save details of the ACTIVE event space (one or many fields). Validation errors are returned.",
       obj(EVENT_FIELDS), modes=SPACE, mutates=True)
 async def update_event(c, a):
-    s, errors = await sp.update_space(c.space["id"], c.user["couple_id"], a)
+    target_space = c.space
+    if not target_space:
+        if c.snap.spaces:
+            target_space = c.snap.spaces[0]
+        else:
+            return {"error": "No active event space found. Please create an event first with create_event."}
+    s, errors = await sp.update_space(target_space["id"], c.user["couple_id"], a)
     await state.bump_taste_streak(c.uid, reset=True)
     return {"event": _brief(s), "invalid": errors, "widget": {"kind": "refresh"}}
 
@@ -226,8 +253,11 @@ async def qloo_search(c, a):
 
 
 @tool("qloo_recommend", "qloo", """Ad-hoc taste-based recommendations from QLOO, blended for the couple (or one partner).
-Use for quick questions like 'where should we eat in Goa tonight?' or 'songs for our first dance'. Shows cards in chat.
-For full event plans use build_plan instead.""",
+IMPORTANT RULES:
+- For wedding/trip destinations (e.g. European destination, honeymoon, wedding city): use category="travel" (urn:entity:destination). NEVER use 'place' for destinations!
+- For venues, restaurants, cafes in a specific city: use category="place" with location.
+- For music/songs: use category="music".
+Shows cards in chat. For full event plans use build_plan instead.""",
       obj({"category": {"type": "string", "enum": [k for k, v in CATEGORIES.items() if v["types"]]},
            "location": {"type": "string", "description": "city/area; required for 'place' category"},
            "for_whom": {"type": "string", "enum": ["couple", "me", "partner"]},

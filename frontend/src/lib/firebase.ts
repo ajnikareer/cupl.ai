@@ -29,5 +29,5 @@ if (apiKey && typeof apiKey === "string" && !apiKey.startsWith("your-") && apiKe
   }
 }
 
-export { auth, google };
+export { app, auth, google };
 

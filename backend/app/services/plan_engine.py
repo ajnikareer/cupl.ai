@@ -18,6 +18,8 @@ _locks: dict[str, asyncio.Lock] = {}
 _tasks: set[asyncio.Task] = set()
 _pending: set[str] = set()
 
+_sem = asyncio.Semaphore(2)
+
 ITEM_SCHEMA = {
     "type": "OBJECT",
     "properties": {
@@ -102,10 +104,15 @@ async def _build_section(spec: dict, space: dict, ctx: dict, location: str | Non
             exclude |= disliked_ids(p["facts"])
         try:
             candidates = await qloo.blend(spec["qtype"], partner_sig, location, spec["take"], exclude)
-        except Exception as e:  # noqa
-            sec["error"] = "Taste intelligence is unavailable right now. Try refreshing this section in a minute."
-            log.warning("blend failed %s: %s", spec["key"], e)
-            return sec
+        except Exception as e:
+            try:
+                log.info("qloo.blend retry for %s...", spec["key"])
+                await asyncio.sleep(1.0)
+                candidates = await qloo.blend(spec["qtype"], partner_sig, location, spec["take"], exclude)
+            except Exception as e2:
+                sec["error"] = "Taste intelligence is unavailable right now. Try refreshing this section in a minute."
+                log.warning("blend failed %s: %s", spec["key"], e2)
+                return sec
         if not candidates:
             sec["error"] = "No strong matches found yet. Share a few more tastes and refresh."
             return sec
@@ -128,12 +135,20 @@ async def _build_section(spec: dict, space: dict, ctx: dict, location: str | Non
           "partners' tastes BY NAME (never mention private tastes). est_cost = rough INR estimate or 0 if unknown. "
           "Respect dislikes and confirmed decisions. summary = one warm sentence to the couple."
     )
-    try:
-        out = await gen_json(prompt, ITEM_SCHEMA, model=settings.GEMINI_PLANNER_MODEL, temperature=0.5, thinking=None)
-    except Exception as e:  # noqa
-        log.warning("planner failed %s: %s", spec["key"], e)
-        sec["error"] = "The planner hit a snag on this section. Refresh to try again."
-        return sec
+    out = None
+    for attempt in range(3):
+        try:
+            async with _sem:
+                out = await gen_json(prompt, ITEM_SCHEMA, model=settings.GEMINI_PLANNER_MODEL, temperature=0.5, thinking=None)
+            break
+        except Exception as e:
+            if attempt < 2 and ("429" in str(e) or "RESOURCE_EXHAUSTED" in str(e)):
+                log.info("Rate limited generating %s, retrying in %ds...", spec["key"], 2 * (attempt + 1))
+                await asyncio.sleep(2 * (attempt + 1))
+                continue
+            log.warning("planner failed %s: %s", spec["key"], e)
+            sec["error"] = "The planner hit a snag on this section. Refresh to try again."
+            return sec
     by_id = {c["entity_id"]: c for c in candidates}
     by_name = {c["name"].lower(): c for c in candidates}
     prev_status = {(it.get("entity_id") or it["title"].lower()): it.get("status", "suggested") for it in (prev or {}).get("items", [])}

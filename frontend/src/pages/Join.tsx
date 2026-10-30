@@ -20,8 +20,15 @@ export default function Join() {
       <div className="absolute inset-0 bg-white/60" />
       <div className="card relative max-w-sm space-y-4 p-7 text-center">
         <div className="flex justify-center"><Logo /></div>
-        {!user && !loading ? (<><p className="text-lg">Your partner invited you to plan together 💞</p><Link to="/login" className="btn-primary">Sign in to join</Link></>)
-          : err ? <ErrorBox error={err} /> : <div className="flex justify-center"><Spinner /></div>}
+        {!user && !loading ? (
+          <>
+            <p className="text-lg">Your partner invited you to plan together 💞</p>
+            <div className="space-y-2 pt-2">
+              <Link to="/login?mode=up" className="btn-primary w-full block py-3">Create account to join</Link>
+              <Link to="/login?mode=in" className="text-xs text-brand block hover:underline">Already have an account? Sign in</Link>
+            </div>
+          </>
+        ) : err ? <ErrorBox error={err} /> : <div className="flex justify-center"><Spinner /></div>}
       </div>
     </div>
   );

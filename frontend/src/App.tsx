@@ -15,6 +15,7 @@ import Dna from "./pages/Dna";
 import Me from "./pages/Me";
 import Surprises from "./pages/Surprises";
 import Notifications from "./pages/Notifications";
+import Intelligence from "./pages/Intelligence";
 
 function Protected({ children }: { children: any }) {
   const { user, loading } = useAuth();
@@ -29,6 +30,7 @@ export default function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/join/:code" element={<Join />} />
+      <Route path="/intelligence" element={<Intelligence />} />
       <Route path="/app" element={<Protected><ChatProvider><Layout /></ChatProvider></Protected>}>
         <Route index element={<Home />} />
         <Route path="chat" element={<ChatPage />} />
@@ -39,6 +41,7 @@ export default function App() {
         <Route path="me" element={<Me />} />
         <Route path="surprises" element={<Surprises />} />
         <Route path="notifications" element={<Notifications />} />
+        <Route path="intelligence" element={<Intelligence />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

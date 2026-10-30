@@ -34,7 +34,7 @@ class Settings(BaseSettings):
 
     QLOO_BASE_URL: str = "https://hackathon.api.qloo.com"
     QLOO_API_KEY: str = ""
-    QLOO_TIMEOUT_S: float = 8.0
+    QLOO_TIMEOUT_S: float = 20.0
     QLOO_CACHE_TTL_H: int = 24
     DEFAULT_REGION: str = "India"
 

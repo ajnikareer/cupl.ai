@@ -1,114 +1,138 @@
 [
   {
     "index": 1,
-    "start": 3.5131384000414982,
-    "end": 7.525151400011964,
+    "start": 3.4683250000234693,
+    "end": 7.478716399986297,
     "tag": "WELCOME TO WEAVEWED",
     "caption": "Your AI wedding companion powered by QLOO taste intelligence.",
     "narration": "Welcome to WeaveWed, the AI wedding companion powered by QLOO taste intelligence. Designed to personalize every chapter of love."
   },
   {
     "index": 2,
-    "start": 12.684093500021845,
-    "end": 16.20307460008189,
-    "tag": "GROOM ONBOARDING",
-    "caption": "Narayan signs in as the groom to start planning with a fresh slate.",
-    "narration": "Narayan signs in as the groom for the very first time. His dashboard is completely clean, ready to weave their celebration from scratch."
+    "start": 12.350777099956758,
+    "end": 15.86509139998816,
+    "tag": "AUTHENTIC ONBOARDING",
+    "caption": "Narayan creates an account as the groom to start wedding planning.",
+    "narration": "Narayan creates his account as the groom with a clean slate. No shortcuts, an authentic onboarding flow."
   },
   {
     "index": 3,
-    "start": 18.87842299998738,
-    "end": 22.394783099996857,
+    "start": 20.745777299976908,
+    "end": 24.268827999942005,
     "tag": "WEAVEWED AI CHAT",
     "caption": "Narayan tells WeaveWed AI about their dream royal wedding in Udaipur.",
     "narration": "Narayan tells WeaveWed AI about their vision: a 3-day royal wedding in Udaipur for 250 guests with a 40-lakh budget, lakeside palaces, and soulful Sufi music."
   },
   {
     "index": 4,
-    "start": 34.92160390003119,
-    "end": 38.453545800060965,
-    "tag": "TASTE INTELLIGENCE (QLOO)",
-    "caption": "WeaveWed captures Narayan's music and cuisine tastes \u2014 respecting dislikes.",
-    "narration": "Narayan shares his preferences: loving Arijit Singh and traditional Mughlai dining, while strictly avoiding loud EDM and neon lighting."
+    "start": 38.666015599970706,
+    "end": 42.1768309000181,
+    "tag": "CEREMONIES & TASTE CAPTURE",
+    "caption": "Narayan introduces bride Amruta and specifies ceremonies & music tastes.",
+    "narration": "Narayan introduces his bride Amruta, confirms all five ceremonies, and specifies his love for Arijit Singh and royal Mughlai dining."
   },
   {
     "index": 5,
-    "start": 48.79730610002298,
-    "end": 52.80373809998855,
+    "start": 61.310329900006764,
+    "end": 65.3155650999397,
     "tag": "CULTURAL ROOTS & HERITAGE",
     "caption": "Narayan anchors his roots: Maharashtrian Heritage & Hindu Vedic Traditions.",
     "narration": "In his profile, Narayan selects his cultural roots: Maharashtrian heritage and Hindu wedding traditions from Pune, Maharashtra."
   },
   {
     "index": 6,
-    "start": 55.93774990004022,
-    "end": 59.4691759000998,
-    "tag": "PARTNER INVITATION",
-    "caption": "A wedding is woven for two \u2014 Narayan creates a private invite for his fianc\u00e9e Amruta.",
-    "narration": "A wedding is woven for two. Narayan creates a private invite link for his fianc\u00e9e Amruta and copies it to share."
+    "start": 68.15050460002385,
+    "end": 71.66233710001688,
+    "tag": "PARTNER COLLABORATION",
+    "caption": "Generating a unique invite link so bride Amruta's tastes are woven together.",
+    "narration": "WeaveWed is built for couples. Narayan creates a partner invite link so Amruta can join with her own account and tastes."
   },
   {
     "index": 7,
-    "start": 62.78944339998998,
-    "end": 66.29409900004975,
-    "tag": "PERSPECTIVE SWITCH",
-    "caption": "\ud83d\udcf1 Switching to Amruta's device \u2014 opening Narayan's wedding invite.",
-    "narration": "Switching to Amruta's perspective. She opens the invite link and signs in with her own account."
+    "start": 77.81978149991482,
+    "end": 81.33194910001475,
+    "tag": "BRIDE ONBOARDING",
+    "caption": "Amruta accepts the wedding invitation to co-plan the celebration.",
+    "narration": "Amruta opens the invitation link. She signs in to join Narayan's wedding space and contribute her unique aesthetic."
   },
   {
     "index": 8,
-    "start": 71.95692290004808,
-    "end": 75.46345320006367,
-    "tag": "BRIDE'S AESTHETIC",
-    "caption": "Amruta chats with WeaveWed: indie acoustic music, pastel florals, vegan dining.",
-    "narration": "Amruta chats with WeaveWed AI, sharing her love for Prateek Kuhad, soft pastel floral decor, Sabyasachi lehengas, and vegan catering options."
+    "start": 86.90038060001098,
+    "end": 90.41144880000502,
+    "tag": "BRIDE'S TASTES (QLOO)",
+    "caption": "Amruta shares her aesthetic: Indie acoustic, pastel florals & Sabyasachi.",
+    "narration": "Amruta shares her aesthetic: indie acoustic music like Prateek Kuhad, soft pastel floral decor, Sabyasachi bridal wear, and vegan catering."
   },
   {
     "index": 9,
-    "start": 88.87883230007719,
-    "end": 92.38296270009596,
+    "start": 106.1843499999959,
+    "end": 109.6947248999495,
     "tag": "BRIDE'S CULTURAL HERITAGE",
-    "caption": "Amruta adds her cultural roots: Bengali Heritage & Kolkata traditions.",
-    "narration": "In her profile, Amruta adds her cultural roots: Bengali heritage and traditions from Kolkata."
+    "caption": "Amruta anchors her roots: Bengali Heritage from Kolkata, West Bengal.",
+    "narration": "Amruta selects her cultural roots: Bengali heritage and Kolkata traditions. Now both partners' cultural backgrounds are fully known."
   },
   {
     "index": 10,
-    "start": 97.40631310001481,
-    "end": 102.40974150004331,
-    "tag": "COUPLE TASTE DNA \u00b7 CULTURAL HARMONY",
-    "caption": "QLOO synthesizes both worlds: Bridging Maharashtrian & Bengali Traditions.",
-    "narration": "Opening Couple DNA reveals the power of QLOO taste intelligence: synthesizing their compatibility score, shared loves, and weaving Maharashtrian and Bengali heritages into harmonious ceremony, cuisine, and music fusions."
+    "start": 114.48359479999635,
+    "end": 118.99445769994054,
+    "tag": "COUPLE TASTE DNA & CULTURAL HARMONY",
+    "caption": "QLOO synthesizes their shared vibe & cross-cultural Maharashtrian-Bengali fusion.",
+    "narration": "Under Couple Taste DNA, QLOO synthesizes where their two worlds meet: discovering shared passions, unique individual flavours, and tailored Maharashtrian-Bengali cultural harmony ideas."
   },
   {
     "index": 11,
-    "start": 111.01761079998687,
-    "end": 115.52514979999978,
-    "tag": "TAB 1: PLAN (QLOO MASTERPLAN)",
-    "caption": "Weaving the 3-day royal masterplan from synthesized couple tastes.",
-    "narration": "Under the Plan tab, WeaveWed weaves a complete multi-day itinerary: Lake Pichola venues, ceremony rituals, fusion Sangeet playlists, and royal dining."
+    "start": 125.21682450000662,
+    "end": 129.2269317000173,
+    "tag": "EVENT SPACES & MASTERPLAN",
+    "caption": "Exploring the complete wedding space across all 5 integrated tabs.",
+    "narration": "In Event Spaces, Narayan and Amruta have a comprehensive command center for their Udaipur wedding across Plan, Details, Budget, To-dos, and Memories."
   },
   {
     "index": 12,
-    "start": 117.07267540006433,
-    "end": 121.09944530006032,
-    "tag": "SECRET SURPRISES",
-    "caption": "Narayan plans a secret lakeside surprise \u2014 guaranteed 100% invisible to Amruta.",
-    "narration": "Narayan secretly plans a sunset violin boat ride on Lake Pichola. WeaveWed guarantees zero leaks on Amruta's account."
+    "start": 131.26744610001333,
+    "end": 135.27677230001427,
+    "tag": "THE AI MASTERPLAN",
+    "caption": "AI-curated venues, ceremonies, signature menu & designers with 'Why this?' insights.",
+    "narration": "Every section is woven with QLOO intelligence and transparent reasoning \u2014 from Taj Lake Palace to a curated Mughlai and Vegan Bengali fusion banquet."
   },
   {
     "index": 13,
-    "start": 123.15000870008953,
-    "end": 127.16167330008466,
-    "tag": "GEMINI LIVE VOICE UI",
-    "caption": "Hands-free planning on the go with Gemini 2.5 Live multi-modal voice.",
-    "narration": "For hands-free planning on the go, couples can converse naturally with Gemini 2.5 Live voice."
+    "start": 138.03511739999522,
+    "end": 141.53860189998522,
+    "tag": "EVENT DETAILS",
+    "caption": "Full event parameters: 250 guests, Rs. 40L budget, and confirmed ceremonies.",
+    "narration": "The Details tab maintains live event parameters \u2014 Udaipur, 250 guests, 40 lakhs budget, and confirmed Haldi, Mehendi, Sangeet, and Reception."
   },
   {
     "index": 14,
-    "start": 133.28966280003078,
-    "end": 137.80372770002577,
-    "tag": "WEAVEWED \u00b7 HAPPILY EVER AFTER",
-    "caption": "Two distinct worlds, woven into one unforgettable celebration.",
-    "narration": "Two distinct worlds, woven into one unforgettable celebration. WeaveWed \u2014 not just events, a lifetime of beautiful memories."
+    "start": 143.57095610001124,
+    "end": 147.07973779994063,
+    "tag": "SMART BUDGET ALLOCATION",
+    "caption": "Automated Rs. 40,00,000 allocation across Venues, Catering, Decor & Outfits.",
+    "narration": "The Budget tab dynamically allocates the 40 lakh budget across venue, catering, decor, and fashion according to couple priorities."
+  },
+  {
+    "index": 15,
+    "start": 149.12111900001764,
+    "end": 152.62645390001126,
+    "tag": "COUNTDOWN TIMELINE & TO-DOS",
+    "caption": "Intelligent milestone tracking leading up to the February 2027 celebration.",
+    "narration": "To-dos keep both partners perfectly in sync with timed countdown milestones and collaborative task ownership."
+  },
+  {
+    "index": 16,
+    "start": 154.65394969994668,
+    "end": 158.16110429994296,
+    "tag": "TIME CAPSULE & MEMORIES",
+    "caption": "Capturing photos, voice notes, and milestone moments beyond the wedding day.",
+    "narration": "Memories turns the wedding journey into a lasting heirloom of audio notes, photos, and cherished reflections."
+  },
+  {
+    "index": 17,
+    "start": 164.16319819993805,
+    "end": 168.67998130002525,
+    "tag": "WEAVEWED \u2014 HAPPILY EVER AFTER",
+    "caption": "Taste intelligence meets lifelong celebration. Woven together with QLOO & Gemini.",
+    "narration": "WeaveWed: where taste intelligence meets lifelong love. Two worlds woven into one unforgettable celebration."
   }
 ]

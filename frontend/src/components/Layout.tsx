@@ -35,8 +35,19 @@ export default function Layout() {
             </NavLink>
           ))}
         </nav>
-        <div className="mt-auto overflow-hidden rounded-3xl bg-gradient-to-br from-blush to-[#ecc9d3] p-4 text-sm">
-          {me?.partner ? <>💞 Planning together with <b>{me.partner.name}</b></> : <>Invite your partner — plans get <b>2× more personal</b>.<NavLink to="/app/me" className="mt-2 block font-medium text-brand underline">Invite now</NavLink></>}
+        <div className="mt-auto space-y-2">
+          <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-blush to-[#ecc9d3] p-4 text-sm">
+            {me?.partner ? <>💞 Planning together with <b>{me.partner.name}</b></> : <>Invite your partner — plans get <b>2× more personal</b>.<NavLink to="/app/me" className="mt-2 block font-medium text-brand underline">Invite now</NavLink></>}
+          </div>
+          <a
+            href="/intelligence"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1.5 rounded-2xl border border-brand/25 bg-white/90 py-2.5 px-3 text-xs font-bold text-brand shadow-2xs hover:bg-blush transition"
+            title="Open QLOO Taste Intelligence & LLM Audit Dashboard in a new tab"
+          >
+            <span>⚡ QLOO Intelligence Dashboard ↗</span>
+          </a>
         </div>
       </aside>
 
@@ -47,6 +58,14 @@ export default function Layout() {
             {me?.active_space ? <>Active event: <b className="text-brand">{me.active_space.title}</b></> : "No active event yet — tell WeaveWed what you're planning"}
           </div>
           <div className="flex items-center gap-2">
+            <a
+              href="/intelligence"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:flex items-center gap-1 text-xs font-bold text-brand border border-brand/20 bg-blush/60 px-3 py-1.5 rounded-full hover:bg-blush transition"
+            >
+              <span>⚡ QLOO Telemetry ↗</span>
+            </a>
             <NavLink to="/app/notifications" className="relative rounded-full p-2 hover:bg-blush" aria-label="Notifications">
               <Bell className="h-5 w-5 text-brand" />
               {me?.unread > 0 && <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-[20px] place-items-center rounded-full bg-brand px-1 text-[10px] text-white">{me.unread}</span>}

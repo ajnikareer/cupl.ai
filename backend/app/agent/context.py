@@ -43,6 +43,10 @@ def build_system(s: Snapshot, voice: bool = False) -> str:
     pf = {k: v for k, v in prof.items() if k not in ("greeted", "invite_offered", "partner_hints") and v}
     if pf:
         lines.append(f"PROFILE (already known — don't re-ask): {pf}")
+    if s.partner:
+        p_prof = {k: v for k, v in (s.partner.get("profile") or {}).items() if k in ("heritage", "tradition", "state", "country") and v}
+        if p_prof:
+            lines.append(f"PARTNER'S CULTURAL ROOTS: {p_prof}")
     if prof.get("partner_hints"):
         lines.append(f"WHAT {first.upper()} TOLD YOU ABOUT THE PARTNER: {prof['partner_hints'][-10:]}")
     if s.conv.get("summary"):

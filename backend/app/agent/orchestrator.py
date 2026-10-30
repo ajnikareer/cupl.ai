@@ -21,6 +21,7 @@ FRIENDLY_STATUS = {
     "build_plan": "Starting to weave your plan…", "revise_plan": "Updating your plan…", "get_couple_dna": "Reading your Couple DNA…",
     "create_surprise": "Planning something secret…", "qloo_recommend": "Matching to both your tastes…",
     "create_event": "Creating your event space…", "update_event": "Saving that…",
+    "save_cultural_roots": "Saving your cultural roots…",
 }
 
 
@@ -100,7 +101,7 @@ async def run_turn(uid: str, text: str | None, widget_response: dict | None, emi
                             cfg.thinking_config = None
                             continue
                         if attempt < 2 and not parts and _transient(e):
-                            await asyncio.sleep(0.6 * (attempt + 1))
+                            await asyncio.sleep(1.2 * (2 ** attempt))
                             continue
                         raise
                 if seg.strip():
@@ -112,7 +113,11 @@ async def run_turn(uid: str, text: str | None, widget_response: dict | None, emi
                 responses, dirty = [], False
                 for fc in calls:
                     await emit({"type": "status", "text": FRIENDLY_STATUS.get(fc.name, "Working on it…")})
-                    result = await tc.call(fc.name, dict(fc.args or {}))
+                    try:
+                        result = await tc.call(fc.name, dict(fc.args or {}))
+                    except Exception as tool_err:
+                        log.warning("Tool %s execution error: %s", fc.name, tool_err)
+                        result = {"error": f"Tool error: {tool_err}"}
                     result, widgets = split_widgets(result)
                     for w in widgets:
                         if w.get("kind") == "refresh":
