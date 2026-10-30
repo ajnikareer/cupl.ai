@@ -7,6 +7,7 @@ export type Msg = { id: string; role: "user" | "agent"; text: string; widget?: a
 
 type ChatCtx = {
   messages: Msg[]; busy: boolean; status: string; voice: VoiceState; loaded: boolean; overlay: boolean;
+  coupleMode: boolean; toggleCoupleMode: () => void;
   send: (text: string) => void; submitWidget: (w: any, values: any) => void;
   startVoice: () => void; stopVoice: () => void; setOverlay: (b: boolean) => void; level: (w: "in" | "out") => number;
 };
@@ -22,6 +23,17 @@ export function ChatProvider({ children }: { children: any }) {
   const [loaded, setLoaded] = useState(false);
   const [voice, setVoice] = useState<VoiceState>("off");
   const [overlay, setOverlay] = useState(false);
+  const [coupleMode, setCoupleMode] = useState(false);
+
+  const toggleCoupleMode = useCallback(() => {
+    setCoupleMode((prev) => {
+      const next = !prev;
+      if (vs.current && voice !== "off") {
+        vs.current.sendJson({ type: "couple_mode", enabled: next });
+      }
+      return next;
+    });
+  }, [voice]);
   const vs = useRef<VoiceSession | null>(null);
   const streamId = useRef<string | null>(null);
   const refresh = useCallback(() => { qc.invalidateQueries(); }, [qc]);
@@ -121,6 +133,6 @@ export function ChatProvider({ children }: { children: any }) {
   const level = useCallback((w: "in" | "out") => vs.current?.level(w) || 0, []);
   useEffect(() => () => vs.current?.stop(), []);
 
-  return <Ctx.Provider value={{ messages, busy, status, voice, loaded, overlay, send, submitWidget, startVoice, stopVoice, setOverlay, level }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ messages, busy, status, voice, loaded, overlay, coupleMode, toggleCoupleMode, send, submitWidget, startVoice, stopVoice, setOverlay, level }}>{children}</Ctx.Provider>;
 }
 export const useChat = () => useContext(Ctx);

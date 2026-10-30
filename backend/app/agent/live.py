@@ -190,6 +190,21 @@ async def voice_session(ws: WebSocket):
                             await add_turn(uid, "user", t, channel="voice")
                             await emit({"type": "refresh"})
                             await s.send_client_content(turns=types.Content(role="user", parts=[types.Part(text=t)]), turn_complete=True)
+                        if typ == "couple_mode" and s:
+                            enabled = bool(data.get("enabled", False))
+                            snap = await state.load(uid, with_episodes=False)
+                            pname = (snap.partner or {}).get("name") or "your partner"
+                            uname = (snap.user.get("name") or "You").split(" ")[0]
+                            if enabled:
+                                prompt = (
+                                    f"[COUPLE MODE ACTIVATED] {uname} and {pname} are sitting together right now "
+                                    "in front of the screen. Speak directly to BOTH of them as a couple. Use 'you two', 'both of you', "
+                                    "ask for each partner's perspective, playfully bridge their tastes, and plan together. "
+                                    f"Warmly greet {uname} and {pname} together right now."
+                                )
+                            else:
+                                prompt = f"[INDIVIDUAL MODE] Returning to 1-on-1 mode with {uname}."
+                            await s.send_client_content(turns=types.Content(role="user", parts=[types.Part(text=prompt)]), turn_complete=True)
                 except (WebSocketDisconnect, RuntimeError):
                     pass
                 except Exception:  # noqa

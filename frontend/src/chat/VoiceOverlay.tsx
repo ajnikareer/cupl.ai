@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { MessageSquareText, PhoneOff } from "lucide-react";
+import { Heart, MessageSquareText, PhoneOff, Users } from "lucide-react";
 import { useChat } from "./ChatContext";
 import { Widget } from "./Widgets";
 
@@ -46,7 +46,23 @@ export default function VoiceOverlay() {
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-gradient-to-b from-[#fff5f2] via-blush to-[#ecc9d3]" role="dialog" aria-label="Voice conversation">
       <div className="flex items-center justify-between p-4">
-        <div className="h-serif text-xl text-brand">WeaveTwo</div>
+        <div className="flex items-center gap-3">
+          <div className="h-serif text-xl text-brand">WeaveTwo</div>
+          <button
+            type="button"
+            onClick={toggleCoupleMode}
+            className={clsx(
+              "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold border transition shadow-xs",
+              coupleMode
+                ? "bg-rose-500 text-white border-rose-600 shadow-rose-200"
+                : "bg-white/90 text-ink border-line hover:border-brand/40 hover:text-brand"
+            )}
+            title="Toggle Couple Mode (Sitting Together)"
+          >
+            <Users className="h-3.5 w-3.5" />
+            <span>{coupleMode ? "💑 Couple Mode: ON" : "Couple Mode"}</span>
+          </button>
+        </div>
         <button type="button" onClick={() => setOverlay(false)} className="btn-ghost" aria-label="Show chat"><MessageSquareText className="h-4 w-4" /> Chat</button>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center gap-6 overflow-y-auto px-5 pb-6">
@@ -55,7 +71,23 @@ export default function VoiceOverlay() {
           {voice === "listening" && <span className="ring-pulse absolute -inset-2 rounded-full border-2 border-brand/50" />}
           <img src="/img/avatar.jpg" alt="WeaveTwo" className="relative h-40 w-40 rounded-full border-4 border-white object-cover shadow-soft md:h-48 md:w-48" />
         </div>
-        <div className="h-serif text-lg text-brand">{LABEL[voice] ?? ""}</div>
+        <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-2">
+          <div className="h-serif text-lg text-brand">{LABEL[voice] ?? ""}</div>
+          {coupleMode && (
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 border border-rose-200/90 px-3.5 py-1 text-xs font-semibold text-rose-800 shadow-3xs">
+              <Heart className="h-3.5 w-3.5 text-rose-500 fill-rose-500" />
+              <span>Sitting Together Mode • Speaking with both of you</span>
+            </div>
+          )}
+        </div>
+          {coupleMode && (
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 border border-rose-200/90 px-3.5 py-1 text-xs font-semibold text-rose-800 shadow-3xs">
+              <Heart className="h-3.5 w-3.5 text-rose-500 fill-rose-500" />
+              <span>Sitting Together Mode • Speaking with both of you</span>
+            </div>
+          )}
+        </div>
         <canvas ref={canvas} className="h-14 w-64" aria-hidden />
         <div className="min-h-[72px] max-w-xl text-center">
           {lastAgent && <p className="text-lg leading-relaxed text-ink">{lastAgent.text.slice(-240)}</p>}
