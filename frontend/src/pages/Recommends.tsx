@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import {
   CalendarCheck,
   CalendarPlus,
+  ChevronRight,
   Compass,
   Film,
   Gift,
@@ -17,7 +18,8 @@ import {
   Power,
   RefreshCw,
   Sparkles,
-  Utensils
+  Utensils,
+  X
 } from "lucide-react";
 import clsx from "clsx";
 import { api } from "../lib/api";
@@ -29,6 +31,7 @@ export default function Recommends() {
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isTogglingStatus, setIsTogglingStatus] = useState(false);
+  const [activeModalItem, setActiveModalItem] = useState<any | null>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["recommends"],
@@ -95,7 +98,11 @@ export default function Recommends() {
       await Promise.all([
         qc.invalidateQueries({ queryKey: ["recommends"] }),
         qc.invalidateQueries({ queryKey: ["calendar"] }),
+        qc.invalidateQueries({ queryKey: ["plans"] }),
       ]);
+      if (activeModalItem?.id === rec.id) {
+        setActiveModalItem((prev: any) => prev ? { ...prev, added_to_calendar: !prev.added_to_calendar } : null);
+      }
     } catch (err) {
       console.warn("Failed to toggle calendar item:", err);
     } finally {
@@ -160,7 +167,7 @@ export default function Recommends() {
             onClick={() => handleToggleStatus(isEnabled)}
             disabled={isTogglingStatus}
             className={clsx(
-              "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold border transition shadow-3xs",
+              "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold border transition shadow-3xs",
               isEnabled
                 ? "bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100"
                 : "bg-gray-100 border-gray-300 text-gray-600 hover:bg-gray-200"
@@ -250,7 +257,7 @@ export default function Recommends() {
             </div>
             <div className="flex items-center gap-3">
               <span className="text-[11px] text-mut">
-                Curated mix #{cycle}
+                Mix #{cycle} • 4 Curated Picks
               </span>
               <Link to="/app/dna" className="font-semibold text-brand hover:underline shrink-0 text-xs">
                 View DNA →
@@ -258,9 +265,9 @@ export default function Recommends() {
             </div>
           </div>
 
-          {/* Couple Tab */}
+          {/* Couple Tab: Properly Proportioned Compact Cards */}
           {tab === "couple" && (
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
               {coupleRecs.map((rec: any) => {
                 const isAdded = Boolean(rec.added_to_calendar);
                 const isBusy = togglingId === rec.id;
@@ -268,96 +275,90 @@ export default function Recommends() {
                 return (
                   <div
                     key={rec.id}
-                    className="card p-4 sm:p-5 flex flex-col gap-3 border border-line hover:border-brand/30 transition shadow-2xs group"
+                    onClick={() => setActiveModalItem(rec)}
+                    className="rounded-2xl border border-line/80 bg-white p-4 sm:p-5 flex flex-col justify-between hover:border-brand/40 hover:shadow-md transition-all duration-200 group cursor-pointer shadow-2xs"
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-start gap-3">
-                        <div className="h-9 w-9 shrink-0 rounded-xl bg-blush/70 border border-brand/20 flex items-center justify-center shadow-3xs">
+                    <div>
+                      {/* Card Header: Icon + Overlap Badge */}
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="h-9 w-9 rounded-xl bg-blush/70 border border-brand/15 flex items-center justify-center shrink-0 shadow-3xs">
                           {getCategoryIcon(rec.category)}
                         </div>
-                        <div>
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className="font-semibold text-base text-ink group-hover:text-brand transition">{rec.title}</span>
-                            {rec.affinity && (
-                              <span className="badge border-brand/20 bg-blush text-brand text-[10px] font-bold">
-                                {Math.round(rec.affinity * 100)}% Match
-                              </span>
-                            )}
-                            <span className="badge bg-cream border border-line text-[11px] font-medium text-mut">
-                              {rec.category_label}
-                            </span>
-                            {rec.suggested_date && (
-                              <span className="badge bg-purple-50 text-purple-700 text-[11px] font-medium">
-                                📅 {rec.suggested_date}
-                              </span>
-                            )}
-                          </div>
-                          {rec.subtitle && (
-                            <div className="text-xs font-medium text-brand mt-0.5">{rec.subtitle}</div>
-                          )}
-                        </div>
+                        {rec.affinity && (
+                          <span className="badge bg-emerald-50 text-emerald-800 border-emerald-200/80 text-[10px] font-bold py-0.5 px-2">
+                            {Math.round(rec.affinity * 100)}% Match
+                          </span>
+                        )}
                       </div>
+
+                      {/* Category Label Pill */}
+                      <div className="text-[10px] font-bold tracking-wider uppercase text-brand/85 mt-3 line-clamp-1">
+                        {rec.category_label}
+                      </div>
+
+                      {/* Title & Subtitle */}
+                      <div className="mt-1">
+                        <h4 className="font-serif text-base font-bold text-ink leading-snug group-hover:text-brand transition line-clamp-2 min-h-[2.5rem]">
+                          {rec.title}
+                        </h4>
+                        {rec.subtitle && (
+                          <p className="text-[11px] font-medium text-mut line-clamp-1 mt-0.5">
+                            {rec.subtitle}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Brief text */}
+                      <p className="text-xs text-mut/90 leading-relaxed line-clamp-2 mt-2">
+                        {rec.description}
+                      </p>
+
+                      {/* Date Badge */}
+                      {rec.suggested_date && (
+                        <div className="inline-flex items-center gap-1 rounded-md bg-purple-50 text-purple-700 text-[10px] font-medium px-2 py-0.5 mt-2.5">
+                          <span>📅 {rec.suggested_date}</span>
+                        </div>
+                      )}
                     </div>
 
-                    <p className="text-sm text-mut pl-12 leading-relaxed">{rec.description}</p>
-
-                    {rec.why && (
-                      <div className="ml-12 rounded-xl bg-[#fffaf2] p-2.5 text-xs text-charcoal border border-line/50">
-                        <span className="font-semibold text-brand">Why you two will love it: </span>
-                        {rec.why}
-                      </div>
-                    )}
-
-                    {rec.recipe && (
-                      <div className="ml-12 rounded-xl bg-amber-50/70 p-2.5 text-xs text-amber-950 border border-amber-200">
-                        <span className="font-semibold text-amber-900">Recipe Formula: </span>
-                        {rec.recipe}
-                      </div>
-                    )}
-
-                    <div className="pt-2 border-t border-line/60 flex items-center justify-between gap-2 pl-12">
+                    {/* Footer Actions */}
+                    <div
+                      className="pt-3 mt-3 border-t border-line/60 flex items-center justify-between gap-2"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <button
                         type="button"
                         disabled={isBusy}
                         onClick={() => handleToggleCalendar(rec)}
                         className={clsx(
-                          "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition shadow-3xs",
+                          "flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold transition shadow-3xs",
                           isAdded
                             ? "bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100"
                             : "bg-white text-ink border border-line hover:border-brand hover:text-brand"
                         )}
+                        title={isAdded ? "Remove from calendar" : "Add to calendar"}
                       >
                         {isAdded ? (
                           <>
                             <CalendarCheck className="h-3.5 w-3.5 text-emerald-600" />
-                            <span>On Calendar</span>
+                            <span>Saved</span>
                           </>
                         ) : (
                           <>
                             <CalendarPlus className="h-3.5 w-3.5 text-mut group-hover:text-brand" />
-                            <span>Add to Calendar</span>
+                            <span>Add</span>
                           </>
                         )}
                       </button>
 
-                      <div className="flex items-center gap-3">
-                        {rec.maps_url && (
-                          <a
-                            href={rec.maps_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs text-mut hover:text-brand flex items-center gap-1"
-                          >
-                            <MapPin className="h-3.5 w-3.5" /> View on Map
-                          </a>
-                        )}
-                        <Link
-                          to="/app/chat"
-                          className="text-xs font-medium text-brand hover:underline flex items-center gap-1"
-                        >
-                          <MessageCircleHeart className="h-3.5 w-3.5" /> Plan date with WeaveTwo AI →
-                        </Link>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setActiveModalItem(rec)}
+                        className="text-xs font-semibold text-brand hover:text-brand-dark flex items-center gap-0.5 hover:underline"
+                      >
+                        <span>Details</span>
+                        <ChevronRight className="h-3.5 w-3.5" />
+                      </button>
                     </div>
                   </div>
                 );
@@ -365,7 +366,7 @@ export default function Recommends() {
             </div>
           )}
 
-          {/* Private Tab: Just for You */}
+          {/* Private Tab: Compact Cards */}
           {tab === "private" && (
             <div className="space-y-4">
               <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-4 text-xs flex items-start gap-3">
@@ -379,7 +380,7 @@ export default function Recommends() {
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
                 {privateRecs.map((rec: any) => {
                   const isAdded = Boolean(rec.added_to_calendar);
                   const isBusy = togglingId === rec.id;
@@ -387,70 +388,71 @@ export default function Recommends() {
                   return (
                     <div
                       key={rec.id}
-                      className="card p-5 border border-line hover:border-brand/40 transition flex flex-col justify-between shadow-2xs space-y-3"
+                      onClick={() => setActiveModalItem(rec)}
+                      className="rounded-2xl border border-line/80 bg-white p-4 sm:p-5 flex flex-col justify-between hover:border-brand/40 hover:shadow-md transition-all duration-200 group cursor-pointer shadow-2xs"
                     >
-                      <div className="space-y-2.5">
-                        <div className="flex items-center justify-between">
-                          <span className="flex items-center gap-1.5 text-xs font-semibold text-brand">
-                            <Gift className="h-4 w-4 text-brand" /> {rec.category_label}
+                      <div>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="flex items-center gap-1 text-xs font-semibold text-brand">
+                            <Gift className="h-3.5 w-3.5 text-brand" /> Secret
                           </span>
-                          <span className="badge border-brand/20 bg-blush text-brand text-[10px] font-bold">
-                            Secret Surprise
+                          <span className="badge border-brand/20 bg-blush text-brand text-[10px] font-bold py-0.5 px-2">
+                            {rec.price_bracket || "Surprise"}
                           </span>
                         </div>
 
-                        <div>
-                          <h3 className="h-serif text-lg text-ink font-semibold">{rec.title}</h3>
-                          <p className="text-xs text-mut mt-1 leading-relaxed">{rec.description}</p>
+                        <div className="text-[10px] font-bold tracking-wider uppercase text-mut mt-3 line-clamp-1">
+                          {rec.category_label}
                         </div>
 
-                        {rec.why && (
-                          <div className="rounded-xl bg-cream p-2.5 text-xs text-mut">
-                            <span className="font-semibold text-ink">Why this works: </span>
-                            {rec.why}
-                          </div>
-                        )}
+                        <div className="mt-1">
+                          <h4 className="font-serif text-base font-bold text-ink leading-snug group-hover:text-brand transition line-clamp-2 min-h-[2.5rem]">
+                            {rec.title}
+                          </h4>
+                        </div>
 
-                        {rec.price_bracket && (
-                          <div className="text-xs text-mut">
-                            <span className="font-semibold text-ink">Budget estimate: </span>
-                            {rec.price_bracket}
-                          </div>
-                        )}
+                        <p className="text-xs text-mut/90 leading-relaxed line-clamp-2 mt-2">
+                          {rec.description}
+                        </p>
                       </div>
 
-                      <div className="pt-3 border-t border-line flex items-center justify-between">
+                      <div
+                        className="pt-3 mt-3 border-t border-line/60 flex items-center justify-between gap-2"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <button
                           type="button"
                           disabled={isBusy}
                           onClick={() => handleToggleCalendar(rec)}
                           className={clsx(
-                            "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition shadow-2xs",
+                            "flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition shadow-3xs",
                             isAdded
                               ? "bg-emerald-50 text-emerald-700 border border-emerald-300 hover:bg-emerald-100"
                               : "bg-white text-ink border border-line hover:border-brand hover:text-brand"
                           )}
-                          title={isAdded ? "Remove from your calendar" : "Add private reminder to calendar"}
+                          title={isAdded ? "Remove reminder" : "Add private reminder"}
                         >
                           {isAdded ? (
                             <>
                               <CalendarCheck className="h-3.5 w-3.5 text-emerald-600" />
-                              <span>On Your Calendar</span>
+                              <span>Saved</span>
                             </>
                           ) : (
                             <>
                               <CalendarPlus className="h-3.5 w-3.5 text-mut" />
-                              <span>Add to Calendar</span>
+                              <span>Remind</span>
                             </>
                           )}
                         </button>
 
-                        <Link
-                          to="/app/chat"
-                          className="btn-primary flex items-center gap-1.5 text-xs py-1.5 px-3"
+                        <button
+                          type="button"
+                          onClick={() => setActiveModalItem(rec)}
+                          className="text-xs font-semibold text-brand hover:text-brand-dark flex items-center gap-0.5 hover:underline"
                         >
-                          <Sparkles className="h-3.5 w-3.5" /> Plan with WeaveTwo
-                        </Link>
+                          <span>Details</span>
+                          <ChevronRight className="h-3.5 w-3.5" />
+                        </button>
                       </div>
                     </div>
                   );
@@ -459,6 +461,142 @@ export default function Recommends() {
             </div>
           )}
         </>
+      )}
+
+      {/* Detail Modal Popup */}
+      {activeModalItem && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45 backdrop-blur-xs animate-fade-in"
+          onClick={() => setActiveModalItem(null)}
+        >
+          <div
+            className="rounded-3xl bg-white max-w-lg w-full p-6 shadow-xl border border-line relative space-y-4 max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-3">
+                <div className="h-10 w-10 shrink-0 rounded-2xl bg-blush border border-brand/20 flex items-center justify-center shadow-3xs">
+                  {getCategoryIcon(activeModalItem.category)}
+                </div>
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="badge bg-cream border border-line text-[11px] font-medium text-mut">
+                      {activeModalItem.category_label}
+                    </span>
+                    {activeModalItem.affinity && (
+                      <span className="badge border-brand/20 bg-blush text-brand text-[10px] font-bold">
+                        {Math.round(activeModalItem.affinity * 100)}% Match
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="h-serif text-xl font-bold text-ink mt-1">
+                    {activeModalItem.title}
+                  </h3>
+                  {activeModalItem.subtitle && (
+                    <p className="text-xs font-medium text-brand mt-0.5">
+                      {activeModalItem.subtitle}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setActiveModalItem(null)}
+                className="rounded-full p-1.5 text-mut hover:bg-cream hover:text-ink transition"
+                aria-label="Close modal"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Description */}
+            <p className="text-sm text-mut leading-relaxed">
+              {activeModalItem.description}
+            </p>
+
+            {/* Why You Will Love It (Taste Justification) */}
+            {activeModalItem.why && (
+              <div className="rounded-2xl bg-[#fffaf2] p-3.5 text-xs text-charcoal border border-amber-200/60 space-y-1">
+                <div className="font-semibold text-brand flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5" /> Why you two will love it:
+                </div>
+                <p className="leading-relaxed text-ink/90">{activeModalItem.why}</p>
+              </div>
+            )}
+
+            {/* Recipe Formula if applicable */}
+            {activeModalItem.recipe && (
+              <div className="rounded-2xl bg-amber-50/70 p-3.5 text-xs text-amber-950 border border-amber-200 space-y-1">
+                <div className="font-semibold text-amber-900">🍸 Signature Recipe Formula:</div>
+                <p className="leading-relaxed">{activeModalItem.recipe}</p>
+              </div>
+            )}
+
+            {/* Extra Metadata: Dates / Budget / Cost */}
+            <div className="flex flex-wrap items-center gap-2 text-xs text-mut pt-1">
+              {activeModalItem.suggested_date && (
+                <span className="badge bg-purple-50 text-purple-700 text-xs">
+                  📅 {activeModalItem.suggested_date} {activeModalItem.suggested_time ? `at ${activeModalItem.suggested_time}` : ""}
+                </span>
+              )}
+              {activeModalItem.est_cost && (
+                <span className="badge bg-cream border border-line text-xs">
+                  💰 Est. ₹{activeModalItem.est_cost.toLocaleString()}
+                </span>
+              )}
+              {activeModalItem.price_bracket && (
+                <span className="badge bg-cream border border-line text-xs">
+                  🏷️ {activeModalItem.price_bracket}
+                </span>
+              )}
+              {activeModalItem.maps_url && (
+                <a
+                  href={activeModalItem.maps_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="badge bg-blue-50 text-blue-700 hover:bg-blue-100 flex items-center gap-1 text-xs"
+                >
+                  <MapPin className="h-3 w-3" /> View Location on Map
+                </a>
+              )}
+            </div>
+
+            {/* Modal Actions */}
+            <div className="pt-3 border-t border-line flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => handleToggleCalendar(activeModalItem)}
+                className={clsx(
+                  "flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold transition shadow-3xs",
+                  activeModalItem.added_to_calendar
+                    ? "bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100"
+                    : "bg-white text-ink border border-line hover:border-brand hover:text-brand"
+                )}
+              >
+                {activeModalItem.added_to_calendar ? (
+                  <>
+                    <CalendarCheck className="h-4 w-4 text-emerald-600" />
+                    <span>On Calendar</span>
+                  </>
+                ) : (
+                  <>
+                    <CalendarPlus className="h-4 w-4 text-mut" />
+                    <span>Add to Calendar</span>
+                  </>
+                )}
+              </button>
+
+              <Link
+                to="/app/chat"
+                className="btn-primary flex items-center gap-1.5 text-xs py-2 px-4 shadow-xs"
+              >
+                <MessageCircleHeart className="h-4 w-4" /> Plan with WeaveTwo AI
+              </Link>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

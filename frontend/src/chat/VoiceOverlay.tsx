@@ -47,27 +47,15 @@ export default function VoiceOverlay() {
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-gradient-to-b from-[#fff5f2] via-blush to-[#ecc9d3]" role="dialog" aria-label="Voice conversation">
+      {/* Top Header */}
       <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-3">
-          <div className="h-serif text-xl text-brand">WeaveTwo</div>
-          <button
-            type="button"
-            onClick={toggleCoupleMode}
-            className={clsx(
-              "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold border transition shadow-xs",
-              coupleMode
-                ? "bg-rose-500 text-white border-rose-600 shadow-rose-200"
-                : "bg-white/90 text-ink border-line hover:border-brand/40 hover:text-brand"
-            )}
-            title="Toggle Couple Mode (Sitting Together)"
-          >
-            <Users className="h-3.5 w-3.5" />
-            <span>{coupleMode ? "💑 Couple Mode: ON" : "Couple Mode"}</span>
-          </button>
-        </div>
-        <button type="button" onClick={() => setOverlay(false)} className="btn-ghost" aria-label="Show chat"><MessageSquareText className="h-4 w-4" /> Chat</button>
+        <div className="h-serif text-xl text-brand">WeaveTwo</div>
+        <button type="button" onClick={() => setOverlay(false)} className="btn-ghost" aria-label="Show chat">
+          <MessageSquareText className="h-4 w-4" /> Chat
+        </button>
       </div>
 
+      {/* Main Avatar & Visualizer Body */}
       <div className="flex flex-1 flex-col items-center justify-center gap-6 overflow-y-auto px-5 pb-6">
         <div className="relative">
           <div ref={ring} className="absolute -inset-4 rounded-full bg-brand/10 transition-transform duration-75" />
@@ -78,7 +66,7 @@ export default function VoiceOverlay() {
         <div className="flex flex-col items-center gap-2">
           <div className="h-serif text-lg text-brand">{LABEL[voice] ?? ""}</div>
           {coupleMode && (
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 border border-rose-200/90 px-3.5 py-1 text-xs font-semibold text-rose-800 shadow-3xs">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 border border-rose-200/90 px-3.5 py-1 text-xs font-semibold text-rose-800 shadow-3xs animate-fade-in">
               <Heart className="h-3.5 w-3.5 text-rose-500 fill-rose-500" />
               <span>Sitting Together Mode • Speaking with both of you</span>
             </div>
@@ -95,8 +83,31 @@ export default function VoiceOverlay() {
         {widgetMsg && <div className="w-full max-w-lg"><Widget w={widgetMsg.widget} /></div>}
       </div>
 
-      <div className="flex justify-center pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-        <button type="button" onClick={stopVoice} className="flex h-16 w-16 items-center justify-center rounded-full bg-red-500 text-white shadow-soft" aria-label="End voice"><PhoneOff className="h-7 w-7" /></button>
+      {/* Bottom Controls: Couple Mode Toggle + End Call Button */}
+      <div className="flex items-center justify-center gap-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+        <button
+          type="button"
+          onClick={toggleCoupleMode}
+          className={clsx(
+            "flex h-16 items-center gap-2 rounded-full px-6 text-sm font-semibold border transition shadow-soft",
+            coupleMode
+              ? "bg-rose-500 text-white border-rose-600 shadow-rose-200"
+              : "bg-white text-ink border-line hover:border-brand/40 hover:text-brand"
+          )}
+          title="Toggle Couple Mode (Sitting Together)"
+        >
+          <Users className="h-5 w-5" />
+          <span>{coupleMode ? "💑 Couple Mode: ON" : "Couple Mode"}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={stopVoice}
+          className="flex h-16 w-16 items-center justify-center rounded-full bg-red-500 text-white shadow-soft hover:bg-red-600 transition"
+          aria-label="End voice"
+        >
+          <PhoneOff className="h-7 w-7" />
+        </button>
       </div>
     </div>
   );
