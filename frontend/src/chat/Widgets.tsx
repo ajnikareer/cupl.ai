@@ -219,8 +219,8 @@ function Invite({ w }: { w: any }) {
       <div className="break-all rounded-2xl bg-cream p-2.5 text-xs">{link}</div>
       <div className="mt-3 flex flex-wrap gap-2">
         <button type="button" className="btn-primary" onClick={copy}><Copy className="h-4 w-4" />{copied ? "Copied!" : "Copy link"}</button>
-        {nav.share && <button type="button" className="btn-ghost" onClick={() => nav.share({ title: "Join me on WeaveTwo 💞", url: link }).catch(() => {})}><Share2 className="h-4 w-4" /> Share</button>}
-        <a className="btn-ghost" target="_blank" rel="noreferrer" href={`https://wa.me/?text=${encodeURIComponent("Join me on WeaveTwo 💞 " + link)}`}>WhatsApp</a>
+        {nav.share && <button type="button" className="btn-ghost" onClick={() => nav.share({ title: "Join me on cupl 💞", url: link }).catch(() => {})}><Share2 className="h-4 w-4" /> Share</button>}
+        <a className="btn-ghost" target="_blank" rel="noreferrer" href={`https://wa.me/?text=${encodeURIComponent("Join me on cupl 💞 " + link)}`}>WhatsApp</a>
       </div>
     </Box>
   );

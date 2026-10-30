@@ -20,7 +20,7 @@ async def verify_token(token: str) -> dict:
         uid = token.replace("dev-", "").replace("tok-", "").replace("demo-", "")
         clean_uid = uid.split("@")[0].split(".")[0].replace("_", " ").replace("-", " ")
         name = "Narayan" if "narayan" in token.lower() else ("Amruta" if "amruta" in token.lower() else clean_uid.title())
-        decoded = {"uid": uid, "name": name, "email": f"{uid}@weavewed.test", "picture": None}
+        decoded = {"uid": uid, "name": name, "email": f"{uid}@cupl.app", "picture": None}
         return await ensure_user(decoded)
     hit = _token_cache.get(token)
     if hit and hit[0] > time.time():

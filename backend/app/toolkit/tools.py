@@ -1,4 +1,4 @@
-"""All WeaveWed product tools (published by the WeaveWed MCP server)."""
+"""All cupl product tools (published by the cupl MCP server)."""
 import asyncio
 
 from ..core.llm import gen_json
@@ -24,7 +24,7 @@ EVENT_FIELDS = {
     "guests": {"type": "integer"}, "ceremonies": {"type": "array", "items": S},
     "destination": S, "from_city": S, "travel_style": S, "mood": S, "occasion": S, "priorities": S,
 }
-APP_GUIDE = """WeaveTwo guide:
+APP_GUIDE = """cupl guide:
 - Event Spaces: one per event (Prewedding, Engagement, Wedding, Honeymoon, Trip, Life Beyond). Each has its own plan, budget, to-dos, memories.
 - Partner: invite from the Me page or ask me; they join with their own account so both tastes count.
 - Tastes: tell me what you love or tap my suggestions. Each taste can be shared with your partner or kept private (eye icon on the Me page).
@@ -57,7 +57,7 @@ async def get_next_step(c, a):
             "partner_joined": bool(s.partner), "taste_coverage": tastes.coverage(s.my_facts)}
 
 
-@tool("app_help", "guidance", "How-to answers about using the WeaveWed app (features, privacy, voice, partner invite).",
+@tool("app_help", "guidance", "How-to answers about using the cupl app (features, privacy, voice, partner invite).",
       obj({"topic": S}))
 async def app_help(c, a):
     return {"guide": APP_GUIDE}

@@ -23,7 +23,7 @@ export async function api<T = any>(path: string, opts: { method?: string; body?:
       body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
     });
   } catch {
-    throw new Error("Can't reach WeaveWed right now — check your connection.");
+    throw new Error("Can't reach cupl right now — check your connection.");
   }
   if (!res.ok) {
     let msg = `Something went wrong (${res.status})`;

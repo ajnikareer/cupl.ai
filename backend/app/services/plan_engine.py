@@ -200,7 +200,7 @@ Design 5-6 structured catering courses/stations balancing both partners' cultura
 1. Partner 1 Regional Heritage Live Counter (e.g., Live Mumbai/Pune Wada Pav fondue & chaat)
 2. Partner 2 Regional Heritage Live Counter (e.g., Purani Dilli Kebab skewers / Kolkata Puchka shot bar)
 3. Multi-Generational Main Feast Progression (mild elder-digestible gravies + rich festive curry)
-4. WeaveTwo Couple Special Fusion Dish (marrying both partners' favorite regional flavors)
+4. cupl Signature Fusion Fusion Dish (marrying both partners' favorite regional flavors)
 5. Anti-Waste Starch & Bread Station (-12% calculated buffer with live tandoor roti/naan)
 6. Artisanal Regional Dessert Counter (e.g. Shrikhand Tartlets & Nolen Gur Rosogolla)
 
@@ -290,7 +290,7 @@ For EACH gift item:
 - est_cost: Approximate INR price
 - why: Grounded in partner's private passions and verified brand affinities (never generic gift cards).\n"""
     prompt = (
-        f"You are WeaveTwo, a warm and expert Indian wedding & couple planner. Write the plan section '{spec['title']}'.\n"
+        f"You are cupl, the AI concierge for life together, a warm and expert Indian wedding & couple planner. Write the plan section '{spec['title']}'.\n"
         f"Section brief: {spec['brief']}\n\n{_brief(space, ctx)}\n\n{other}"
         + (f"USER CHANGE REQUEST (highest priority): {instruction}\n\n" if instruction else "")
         + (f"PREVIOUS VERSION OF THIS SECTION: {[i['title'] for i in prev.get('items', [])]}\n\n" if prev and instruction else "")

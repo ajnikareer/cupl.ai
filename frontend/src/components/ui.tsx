@@ -4,19 +4,25 @@ export const Spinner = ({ className = "" }: { className?: string }) => (
   <div className={clsx("h-6 w-6 animate-spin rounded-full border-2 border-blush border-t-brand", className)} />
 );
 
-export const HeartMark = ({ className = "h-9 w-9" }: { className?: string }) => (
-  <svg viewBox="0 0 64 64" className={className} aria-hidden>
-    <path d="M24 46c-10-8-13-13-11-20 2-6 10-8 13-2 3-6 11-4 13 2" fill="none" stroke="#8e2c48" strokeWidth="4" strokeLinecap="round" />
-    <path d="M40 46c10-8 13-13 11-20-2-6-10-8-13-2" fill="none" stroke="#c9973a" strokeWidth="4" strokeLinecap="round" />
+export const CuplMark = ({ className = "h-9 w-9" }: { className?: string }) => (
+  <svg viewBox="0 0 100 100" className={className} aria-hidden>
+    <rect width="100" height="100" rx="28" fill="#731e33" />
+    <circle cx="39" cy="50" r="21" fill="none" stroke="#d4a060" strokeWidth="6.5" />
+    <circle cx="61" cy="50" r="21" fill="none" stroke="#d4a060" strokeWidth="6.5" />
+    <path d="M 39 29 A 21 21 0 0 1 54 36" fill="none" stroke="#d4a060" strokeWidth="6.5" strokeLinecap="round" />
   </svg>
 );
 
+export const HeartMark = CuplMark;
+
 export const Logo = ({ small = false }: { small?: boolean }) => (
-  <div className="flex items-center gap-2">
-    <HeartMark className={small ? "h-8 w-8" : "h-11 w-11"} />
+  <div className="flex items-center gap-2.5">
+    <CuplMark className={small ? "h-8 w-8" : "h-10 w-10 shrink-0 shadow-soft"} />
     <div className="leading-none">
-      <div className={clsx("h-serif text-brand", small ? "text-xl" : "text-[28px]")}>WeaveTwo</div>
-      {!small && <div className="mt-1 text-[11px] italic tracking-wide text-mut">Happily Ever After</div>}
+      <div className={clsx("font-extrabold tracking-tight text-brand lowercase font-sans", small ? "text-xl" : "text-[26px]")}>
+        cupl
+      </div>
+      {!small && <div className="mt-1 text-[10px] font-medium tracking-wide text-mut">Your AI concierge for life together</div>}
     </div>
   </div>
 );
@@ -24,7 +30,7 @@ export const Logo = ({ small = false }: { small?: boolean }) => (
 export const Avatar = ({ size = 40, ring = false, className = "" }: { size?: number; ring?: boolean; className?: string }) => (
   <div className={clsx("relative shrink-0", className)} style={{ width: size, height: size }}>
     {ring && <span className="ring-pulse absolute inset-0 rounded-full border-2 border-brand" />}
-    <img src="/img/avatar.jpg" alt="WeaveTwo AI" className="h-full w-full rounded-full object-cover shadow-sm" />
+    <img src="/img/avatar.jpg" alt="cupl AI" className="h-full w-full rounded-full object-cover shadow-sm" />
   </div>
 );
 

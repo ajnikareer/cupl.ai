@@ -83,7 +83,7 @@ async def compute(couple_id: str) -> dict:
             if c1 or t1:
                 roots_desc.append(f"{names[members[1]]}: {c1 or ''}" + (f" ({t1})" if t1 else ""))
             prompt = (
-                f"You are WeaveWed, an expert in multicultural & Indian wedding traditions.\n"
+                f"You are cupl, an expert in multicultural & Indian wedding traditions.\n"
                 f"The couple is celebrating their wedding. Their cultural roots are:\n" + "\n".join(roots_desc) + "\n"
                 f"Couple tastes: {all_names}\n\n"
                 f"Write a warm, 2-sentence 'cultural harmony' summary celebrating how their two backgrounds blend "

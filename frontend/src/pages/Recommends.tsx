@@ -227,7 +227,7 @@ export default function Recommends() {
           <div>
             <h3 className="h-serif text-xl font-bold text-ink">Taste Recommendations are Paused</h3>
             <p className="text-xs text-mut mt-1.5 leading-relaxed">
-              WeaveTwo will not surface proactive date night ideas, dining matches, or gifting reminders while paused.
+              cupl will not surface proactive date night ideas, dining matches, or gifting reminders while paused.
               Turn ON anytime to resume suggestions tailored to your Couple DNA.
             </p>
           </div>
@@ -375,7 +375,7 @@ export default function Recommends() {
                   <div className="font-bold text-amber-900">100% Private to You</div>
                   <p className="text-amber-800 mt-0.5">
                     These surprise concepts and gifting ideas are generated exclusively for your eyes.
-                    <b> {partnerName}</b>'s WeaveTwo account will never show or hint at these.
+                    <b> {partnerName}</b>'s cupl account will never show or hint at these.
                   </p>
                 </div>
               </div>
@@ -592,7 +592,7 @@ export default function Recommends() {
                 to="/app/chat"
                 className="btn-primary flex items-center gap-1.5 text-xs py-2 px-4 shadow-xs"
               >
-                <MessageCircleHeart className="h-4 w-4" /> Plan with WeaveTwo AI
+                <MessageCircleHeart className="h-4 w-4" /> Plan with cupl AI
               </Link>
             </div>
           </div>

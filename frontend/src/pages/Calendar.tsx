@@ -195,7 +195,7 @@ export default function CalendarPage() {
               {conflicts.map((c: any, i: number) => (
                 <div key={i} className="text-amber-800">
                   ⚠️ <b>{c.event1.title}</b> ({c.event1.dates}) overlaps with <b>{c.event2.title}</b> ({c.event2.dates}) on <b>{c.overlap_dates}</b>.
-                  You can adjust dates in Event Spaces or ask WeaveWed AI.
+                  You can adjust dates in Event Spaces or ask cupl AI.
                 </div>
               ))}
             </div>

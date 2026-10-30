@@ -94,7 +94,7 @@ def director(s: Snapshot) -> dict:
     if is_joining_partner and turns < 4:
         sp_title = s.space["title"] if s.space else "celebration"
         sp_loc = f" in {s.space['city']}" if s.space and s.space.get("city") else ""
-        nxt.update(stage="welcome_partner", goal=f"Warmly welcome {first} to WeaveWed as an individual co-creator with {pname}! "
+        nxt.update(stage="welcome_partner", goal=f"Warmly welcome {first} to cupl as an individual co-creator with {pname}! "
                    f"Treat {first} with genuine excitement: 'Welcome, {first}! I\'m here to make sure your individual aesthetic, favorite music, and style take center stage.' "
                    f"Mention gently that {pname} and {first} are linked with a {sp_title}{sp_loc} in progress, but emphasize that before touching that, you want to get to know {first}'s personal vibe. "
                    f"1) Save any tastes {first} shares with remember_tastes. "
@@ -172,7 +172,7 @@ def director(s: Snapshot) -> dict:
         if not s.partner and pname:
             nxt.update(stage="ready_to_plan", goal=f"Event details and {first}'s tastes are ready. But notice {pname} hasn't joined or shared tastes yet. "
                        f"Tell {first} warmly: 'We have your tastes and event details ready, but {pname} hasn't shared her aesthetic yet! "
-                       f"WeaveWed is built to unite both your worlds into one masterplan. Shall we send {pname} an invite link first? "
+                       f"cupl is built to unite both your worlds into one masterplan. Shall we send {pname} an invite link first? "
                        f"(Or if you'd like a preliminary solo preview right now, just say the word and I'll weave it!)' "
                        "If they agree to invite, call invite_partner. Only call build_plan if they explicitly request a solo preview or insist on weaving it right now.",
                        detail={"uncovered": uncovered, "partner_pending": True})

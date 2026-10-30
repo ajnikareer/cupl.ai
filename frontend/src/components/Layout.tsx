@@ -10,7 +10,7 @@ import { useChat } from "../chat/ChatContext";
 
 const NAV = [
   { to: "/app", label: "Home", short: "Home", icon: Home, end: true },
-  { to: "/app/chat", label: "WeaveTwo AI", short: "Chat", icon: MessageCircleHeart },
+  { to: "/app/chat", label: "cupl AI", short: "Chat", icon: MessageCircleHeart },
   { to: "/app/spaces", label: "Our Events", short: "Events", icon: CalendarHeart },
   { to: "/app/plans", label: "Our Plans", short: "Plans", icon: CalendarCheck },
   { to: "/app/calendar", label: "Calendar", short: "Calendar", icon: CalendarDays },
@@ -77,8 +77,8 @@ export default function Layout() {
       )}
 
       {!onChat && voice === "off" && (
-        <NavLink to="/app/chat" className="fixed bottom-20 right-4 z-30 flex items-center gap-2 rounded-full bg-brand py-1.5 pl-1.5 pr-4 text-sm text-white shadow-soft lg:bottom-6 xl:hidden" aria-label="Talk to WeaveTwo">
-          <Avatar size={34} /> Talk to WeaveTwo
+        <NavLink to="/app/chat" className="fixed bottom-20 right-4 z-30 flex items-center gap-2 rounded-full bg-brand py-1.5 pl-1.5 pr-4 text-sm text-white shadow-soft lg:bottom-6 xl:hidden" aria-label="Talk to cupl">
+          <Avatar size={34} /> Talk to cupl
         </NavLink>
       )}
 

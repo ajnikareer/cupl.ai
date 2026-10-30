@@ -21,7 +21,7 @@ export default function Home() {
           <div className="h-serif text-2xl text-ink md:text-3xl">{greet}{first && `, ${first}`} ☀️</div>
           <p className="mt-1 text-mut">Let's make beautiful things happen today.</p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <button type="button" onClick={startVoice} className="btn-primary px-4 py-2 text-sm"><AudioLines className="h-4 w-4" /> Talk to WeaveWed</button>
+            <button type="button" onClick={startVoice} className="btn-primary px-4 py-2 text-sm"><AudioLines className="h-4 w-4" /> Talk to cupl</button>
             <Link to="/app/spaces/new" className="btn-ghost px-4 py-2 text-sm"><Plus className="h-4 w-4" /> Create Event Space</Link>
           </div>
         </div>
@@ -30,7 +30,7 @@ export default function Home() {
       {me?.next?.goal && (
         <Link to="/app/chat" className="card flex items-center gap-3 p-4 transition hover:-translate-y-0.5">
           <Avatar size={44} />
-          <div className="flex-1 text-sm"><div className="font-medium text-brand">WeaveWed suggests</div><div className="text-mut">{hint(me)}</div></div>
+          <div className="flex-1 text-sm"><div className="font-medium text-brand">cupl suggests</div><div className="text-mut">{hint(me)}</div></div>
           <span className="btn-ghost">Continue</span>
         </Link>
       )}
@@ -46,7 +46,7 @@ export default function Home() {
             <Link to="/app/spaces/new" className="card grid min-h-[220px] place-items-center border-dashed text-brand"><span className="flex flex-col items-center gap-2"><Plus /> Create New Event Space</span></Link>
           </div>
         ) : (
-          <Empty image="/img/wedding.jpg" title="No event spaces yet" text="Create one for your prewedding, engagement, wedding, honeymoon, a trip or any celebration — or just tell WeaveWed what you're planning."
+          <Empty image="/img/wedding.jpg" title="No event spaces yet" text="Create one for your prewedding, engagement, wedding, honeymoon, a trip or any celebration — or just tell cupl what you're planning."
             action={<Link to="/app/spaces/new" className="btn-primary mt-2">Create Event Space</Link>} />
         )}
       </div>

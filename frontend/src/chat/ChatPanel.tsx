@@ -29,7 +29,7 @@ export default function ChatPanel({ docked = false }: { docked?: boolean }) {
       <div className="flex items-center gap-3 border-b border-line px-4 py-3">
         <Avatar size={42} ring={voice !== "off"} />
         <div className="min-w-0 flex-1">
-          <div className="h-serif text-lg leading-tight text-brand">WeaveWed</div>
+          <div className="h-serif text-lg leading-tight text-brand">cupl</div>
           <div className="text-xs text-green-700">● {voice === "off" ? "Online · your planner" : voice === "speaking" ? "Speaking…" : voice === "connecting" ? "Connecting…" : "Listening…"}</div>
         </div>
         {me?.active_space && <span className="badge max-w-[45%] truncate">{me.active_space.title}</span>}
@@ -41,7 +41,7 @@ export default function ChatPanel({ docked = false }: { docked?: boolean }) {
             <Avatar size={30} />
             <div className="rounded-2xl rounded-tl-sm border border-line bg-white p-3.5 text-sm shadow-sm">
               <div className="h-serif text-lg text-brand">Hi {first}! 👋</div>
-              I'm WeaveWed — your planner for every chapter of your love story. Tell me what you're celebrating, or tap <b>Talk</b> and just speak to me.
+              I'm cupl — your AI concierge for life together for every chapter of your love story. Tell me what you're celebrating, or tap <b>Talk</b> and just speak to me.
             </div>
           </div>
         )}
@@ -81,12 +81,12 @@ export default function ChatPanel({ docked = false }: { docked?: boolean }) {
 
       <form onSubmit={submit} className="flex items-center gap-2 border-t border-line p-3">
         <input value={text} onChange={(e) => setText(e.target.value)} className="input flex-1 rounded-full"
-          placeholder={voice !== "off" ? "Talk, or type here…" : "Message WeaveWed…"} aria-label="Message" />
+          placeholder={voice !== "off" ? "Talk, or type here…" : "Message cupl…"} aria-label="Message" />
         {text.trim() ? (
           <button type="submit" disabled={busy && voice === "off"} className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-brand text-white" aria-label="Send"><Send className="h-5 w-5" /></button>
         ) : (
           <button type="button" onClick={() => (voice === "off" ? startVoice() : setOverlay(true))}
-            className="flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-brand px-4 text-sm font-medium text-white" aria-label="Talk to WeaveWed">
+            className="flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-brand px-4 text-sm font-medium text-white" aria-label="Talk to cupl">
             <AudioLines className="h-5 w-5" /> {voice === "off" ? "Talk" : "Live"}
           </button>
         )}

@@ -14,7 +14,7 @@ export default function Dna() {
     <div className="space-y-6">
       <PageTitle title="Couple Taste DNA" sub="Where your two worlds meet — built only from tastes you've chosen to share." right={btn} />
       <ErrorBox error={m.error} />
-      {!d ? <Empty image="/img/engagement.jpg" title="No DNA yet" text="Share some tastes (chat with WeaveWed or the Me page), invite your partner, then hit Refresh." /> : (<>
+      {!d ? <Empty image="/img/engagement.jpg" title="No DNA yet" text="Share some tastes (chat with cupl or the Me page), invite your partner, then hit Refresh." /> : (<>
         <div className="relative overflow-hidden rounded-[2rem]">
           <img src="/img/prewedding.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-white/30" />

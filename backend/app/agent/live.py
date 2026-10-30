@@ -1,4 +1,4 @@
-"""Voice agent: browser <-> FastAPI WebSocket <-> Gemini Live API (native audio), tools via the WeaveWed MCP server.
+"""Voice agent: browser <-> FastAPI WebSocket <-> Gemini Live API (native audio), tools via the cupl MCP server.
 
 Human-like behaviour:
   * native-audio model, chosen voice, affective dialog + proactive audio when supported (auto-fallback if not)
@@ -261,9 +261,12 @@ async def voice_session(ws: WebSocket):
                             await emit({"type": "ready", "mode": snap.mode,
                                         "features": sorted(set(OPTIONAL) - _disabled - drop)})
                             if not greeted:
+                                first_name = (snap.user.get("name") or "there").split(" ")[0]
+                                sp_title = snap.space.get("title") if snap.space else "your Bali trip"
                                 await session.send_client_content(turns=types.Content(role="user", parts=[types.Part(
-                                    text="[SESSION START — system event] The user just opened voice mode. Greet them warmly by "
-                                         "name in one short, smiling sentence, then follow YOUR NEXT MOVE.")]), turn_complete=True)
+                                    text=f"[SESSION START — system event] The user ({first_name}) just opened voice mode. Greet them warmly by "
+                                         f"name in one short, smiling sentence. Briefly mention where we were at last time (e.g. {sp_title}), and "
+                                         f"ask lightly: 'Would you like to continue that where we left off, or plan something new today?' Keep it under two sentences!")]), turn_complete=True)
                                 greeted = True
                             down = asyncio.create_task(downstream(session))
                             closed_wait = asyncio.create_task(vs.closed.wait())

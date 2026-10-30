@@ -54,9 +54,9 @@ export default function Login() {
   return (
     <div className="grid min-h-screen md:grid-cols-2">
       <div className="relative hidden md:block">
-        <img src="/img/prewedding.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <img src="/img/trip.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-brand/70 to-transparent" />
-        <p className="h-script absolute bottom-10 left-10 right-10 text-5xl text-white">Not just events — a lifetime of beautiful memories.</p>
+        <p className="h-script absolute bottom-10 left-10 right-10 text-5xl text-white">cupl — Your AI concierge for life together.</p>
       </div>
       <div className="grid place-items-center bg-gradient-to-br from-[#fff5f2] via-blush to-[#ecc9d3] p-4">
         <div className="card w-full max-w-sm p-6 shadow-soft">

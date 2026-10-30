@@ -1,4 +1,4 @@
-"""The agent's connection to the WeaveWed MCP server (Streamable HTTP), with transparent in-process fallback.
+"""The agent's connection to the cupl MCP server (Streamable HTTP), with transparent in-process fallback.
 
 Tools are discovered from the MCP server (list_tools) and converted to Gemini function declarations.
 Widgets returned by tools are split out for the UI; the model only sees a compact result."""

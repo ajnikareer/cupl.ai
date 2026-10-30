@@ -219,7 +219,7 @@ export default function Plans() {
                     to="/app/chat"
                     className="text-xs font-medium text-brand hover:underline flex items-center gap-1"
                   >
-                    <MessageCircleHeart className="h-3.5 w-3.5" /> Chat with WeaveTwo AI about this plan →
+                    <MessageCircleHeart className="h-3.5 w-3.5" /> Chat with cupl AI about this plan →
                   </Link>
                 </div>
               </div>
@@ -251,3 +251,4 @@ export default function Plans() {
     </div>
   );
 }
+

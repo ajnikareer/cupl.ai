@@ -18,7 +18,7 @@ export function AuthProvider({ children }: { children: any }) {
           .catch((e) => console.warn("Dev join failed:", e))
           .finally(() => localStorage.removeItem("ww_join"));
       }
-      setUser({ uid: devTok.replace("dev-", ""), displayName: devTok.includes("narayan") ? "Narayan" : "Amruta", email: `${devTok}@weavewed.test` });
+      setUser({ uid: devTok.replace("dev-", ""), displayName: devTok.includes("narayan") ? "Narayan" : "Amruta", email: `${devTok}@cupl.app` });
       setLoading(false);
       return;
     }

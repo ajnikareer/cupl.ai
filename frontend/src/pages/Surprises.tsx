@@ -10,8 +10,8 @@ export default function Surprises() {
   if (isLoading) return <Spinner />;
   return (
     <div>
-      <PageTitle title="Surprises 🤫" sub="Only you can see these. Your partner's WeaveWed never mentions them." />
-      {!data?.surprises?.length ? <Empty image="/img/life_beyond.jpg" title="No surprises yet" text="Ask WeaveWed: “Plan a surprise for my partner's birthday”." action={<Link to="/app/chat" className="btn-primary mt-2">Ask WeaveWed</Link>} /> : (
+      <PageTitle title="Surprises 🤫" sub="Only you can see these. Your partner's cupl never mentions them." />
+      {!data?.surprises?.length ? <Empty image="/img/life_beyond.jpg" title="No surprises yet" text="Ask cupl: “Plan a surprise for my partner's birthday”." action={<Link to="/app/chat" className="btn-primary mt-2">Ask cupl</Link>} /> : (
         <div className="space-y-4">{data.surprises.map((s: any) => (
           <div key={s.id} className="card p-6">
             <div className="flex items-start justify-between">

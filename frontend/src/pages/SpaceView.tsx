@@ -72,7 +72,7 @@ function PlanTab({ s }: { s: any }) {
   };
   useEffect(() => { if (!building) qc.invalidateQueries({ queryKey: ["plan", s.id] }); }, [building]);
   if (s.missing_fields?.length)
-    return <div className="card p-6 text-sm">A few details first: <b>{s.missing_fields.join(", ").replace(/_/g, " ")}</b> — add them in the Details tab, or just tell WeaveTwo in chat.</div>;
+    return <div className="card p-6 text-sm">A few details first: <b>{s.missing_fields.join(", ").replace(/_/g, " ")}</b> — add them in the Details tab, or just tell cupl in chat.</div>;
   if (isLoading) return <Spinner />;
   if (!plan && building)
     return (
@@ -87,7 +87,7 @@ function PlanTab({ s }: { s: any }) {
         <img src={IMG[s.type]} alt="" className="h-40 w-full object-cover" />
         <div className="space-y-3 p-8">
           <div className="h-serif text-2xl text-brand">Ready to weave your plan ✨</div>
-          <p className="mx-auto max-w-md text-sm text-mut">Tip: share a few tastes first (chat with WeaveTwo or the Me page) and get your partner in — the plan gets far more personal.</p>
+          <p className="mx-auto max-w-md text-sm text-mut">Tip: share a few tastes first (chat with cupl or the Me page) and get your partner in — the plan gets far more personal.</p>
           {s.build_error && <ErrorBox error="The last attempt hit a snag. Please try again." />}
           <ErrorBox error={err} />
           <button type="button" onClick={() => build()} className="btn-primary px-6"><Sparkles className="h-4 w-4" /> Build our plan</button>
@@ -124,7 +124,7 @@ function PlanTab({ s }: { s: any }) {
           </>)}
         </section>
       ))}
-      <p className="text-xs text-mut">Costs are rough estimates. WeaveTwo recommends — you book directly. Plan v{plan.version}.</p>
+      <p className="text-xs text-mut">Costs are rough estimates. cupl recommends — you book directly. Plan v{plan.version}.</p>
     </div>
   );
 }
@@ -440,7 +440,7 @@ function MemoriesTab({ s }: { s: any }) {
   return (
     <div className="space-y-3">
       <form onSubmit={add} className="card space-y-3 p-5">
-        <textarea className="input min-h-[90px]" value={text} onChange={(e) => setText(e.target.value)} placeholder="What did you love? What would you skip next time? WeaveTwo remembers it for future plans." />
+        <textarea className="input min-h-[90px]" value={text} onChange={(e) => setText(e.target.value)} placeholder="What did you love? What would you skip next time? cupl remembers it for future plans." />
         <div className="flex items-center justify-between">
           <div className="flex gap-1 text-xl">{[1, 2, 3, 4, 5].map((n) => <button type="button" key={n} onClick={() => setRating(n)} className={n <= rating ? "text-gold" : "text-line"} aria-label={`${n} stars`}>★</button>)}</div>
           <button className="btn-primary">Save memory</button>

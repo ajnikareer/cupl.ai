@@ -1,6 +1,6 @@
-"""WeaveWed toolkit registry — the single source of truth for every product capability.
+"""cupl toolkit registry — the single source of truth for every product capability.
 
-Exposed to the agent through the WeaveWed MCP server (app/mcp_server.py) and callable in-process as a fallback.
+Exposed to the agent through the cupl MCP server (app/mcp_server.py) and callable in-process as a fallback.
 Every call goes through execute(): load state -> mode gate -> JSON-schema validation -> handler -> widget ids ->
 director guidance (_next). The gate lives HERE, so no client (text agent, voice agent, external MCP client)
 can plan without an event space or read a partner's private tastes."""

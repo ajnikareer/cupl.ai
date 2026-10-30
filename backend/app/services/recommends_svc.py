@@ -118,7 +118,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "suggested_date": dates["friday"],
                 "suggested_time": "20:30",
                 "streaming": "Prime Video",
-                "action_prompt": "Tell WeaveTwo: 'Stream a cozy romantic movie together tonight'"
+                "action_prompt": "Tell cupl: 'Stream a cozy romantic movie together tonight'"
             },
             {
                 "id": "rec_screen_yjd",
@@ -133,7 +133,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "suggested_date": dates["friday"],
                 "suggested_time": "20:45",
                 "streaming": "Netflix",
-                "action_prompt": "Tell WeaveTwo: 'Help us pick a fun weekend movie with great music'"
+                "action_prompt": "Tell cupl: 'Help us pick a fun weekend movie with great music'"
             },
             {
                 "id": "rec_screen_abouttime",
@@ -148,7 +148,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "suggested_date": dates["friday"],
                 "suggested_time": "20:30",
                 "streaming": "Hotstar",
-                "action_prompt": "Tell WeaveTwo: 'Suggest a heartwarming movie that brings us closer'"
+                "action_prompt": "Tell cupl: 'Suggest a heartwarming movie that brings us closer'"
             }
         ]
 
@@ -168,7 +168,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "suggested_time": "19:30",
                 "maps_url": f"https://www.google.com/maps/search/?api=1&query=Paigah+Palace+{city}".replace(" ", "+"),
                 "est_cost": 3500,
-                "action_prompt": f"Tell WeaveTwo: 'Reserve a serene romantic table at a courtyard in {city}'"
+                "action_prompt": f"Tell cupl: 'Reserve a serene romantic table at a courtyard in {city}'"
             },
             {
                 "id": "rec_dining_olive",
@@ -184,7 +184,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "suggested_time": "18:45",
                 "maps_url": f"https://www.google.com/maps/search/?api=1&query=Olive+Bistro+{city}".replace(" ", "+"),
                 "est_cost": 3200,
-                "action_prompt": f"Tell WeaveTwo: 'Plan a sunset lakeview dinner date for us in {city}'"
+                "action_prompt": f"Tell cupl: 'Plan a sunset lakeview dinner date for us in {city}'"
             },
             {
                 "id": "rec_dining_jewel",
@@ -200,7 +200,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "suggested_time": "20:00",
                 "maps_url": f"https://www.google.com/maps/search/?api=1&query=Jewel+of+Nizam+{city}".replace(" ", "+"),
                 "est_cost": 4200,
-                "action_prompt": f"Tell WeaveTwo: 'Plan an extraordinary royal dining experience in {city}'"
+                "action_prompt": f"Tell cupl: 'Plan an extraordinary royal dining experience in {city}'"
             }
         ]
 
@@ -219,7 +219,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "suggested_date": dates["sunday"],
                 "suggested_time": "17:00",
                 "recipe": "Infused Kashmiri saffron syrup (20ml) + Meyer lemon juice (25ml) + Elderflower tonic (90ml) + crushed ice & star anise garnish.",
-                "action_prompt": "Tell WeaveTwo: 'Give us our full signature cocktail and mocktail recipe cards'"
+                "action_prompt": "Tell cupl: 'Give us our full signature cocktail and mocktail recipe cards'"
             },
             {
                 "id": "rec_special_decor",
@@ -232,7 +232,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "description": f"A curated living room palette harmonizing {first}'s appreciation for royal heritage textures with {pname}'s preference for airy, pastel minimalism. Key elements: low-profile linen sofa, warm teak credenza, and 2700K rice-paper floor lamps.",
                 "why": "Prevents decor friction by scientifically overlapping your tactile aesthetic scores.",
                 "suggested_date": dates["sunday"],
-                "action_prompt": "Tell WeaveTwo: 'Show our complete couple interior design aesthetic guide'"
+                "action_prompt": "Tell cupl: 'Show our complete couple interior design aesthetic guide'"
             },
             {
                 "id": "rec_special_dance",
@@ -245,7 +245,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "description": "Begins with an intimate Prateek Kuhad acoustic guitar slow dance for the two of you, then transitions smoothly at 1:45 into a joyful 124 BPM brass-and-dhol anthem that pulls your friends onto the floor.",
                 "why": "Honors both intimate soulful emotion and exuberant celebration without cliché tropes.",
                 "suggested_date": dates["friday"],
-                "action_prompt": "Tell WeaveTwo: 'Create our custom First Dance edit with transition cues'"
+                "action_prompt": "Tell cupl: 'Create our custom First Dance edit with transition cues'"
             }
         ]
 
@@ -264,7 +264,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "why": "High social proof and aesthetic consensus for early courtship.",
                 "suggested_date": dates["friday"],
                 "streaming": "Netflix / Prime Video",
-                "action_prompt": "Tell WeaveTwo: 'Suggest safe-bet movies for a new dating night'"
+                "action_prompt": "Tell cupl: 'Suggest safe-bet movies for a new dating night'"
             },
             {
                 "id": "rec_screen_spiderverse",
@@ -278,7 +278,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "why": "Captivating art direction that bridges animation lovers and music fans.",
                 "suggested_date": dates["friday"],
                 "streaming": "Netflix",
-                "action_prompt": "Tell WeaveTwo: 'Suggest exciting animated or indie movies for us'"
+                "action_prompt": "Tell cupl: 'Suggest exciting animated or indie movies for us'"
             },
             {
                 "id": "rec_screen_crazyrich",
@@ -292,7 +292,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "why": "Upbeat romantic energy that puts both people in great spirits.",
                 "suggested_date": dates["friday"],
                 "streaming": "Prime Video",
-                "action_prompt": "Tell WeaveTwo: 'Find romantic comedies with incredible food and music'"
+                "action_prompt": "Tell cupl: 'Find romantic comedies with incredible food and music'"
             }
         ]
 
@@ -310,7 +310,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "suggested_date": dates["saturday"],
                 "maps_url": f"https://www.google.com/maps/search/?api=1&query=Dim+Sum+{city}".replace(" ", "+"),
                 "est_cost": 2200,
-                "action_prompt": f"Tell WeaveTwo: 'Find interactive shared-plate food spots in {city}'"
+                "action_prompt": f"Tell cupl: 'Find interactive shared-plate food spots in {city}'"
             },
             {
                 "id": "rec_dining_coffee",
@@ -326,7 +326,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "suggested_time": "11:30",
                 "maps_url": f"https://www.google.com/maps/search/?api=1&query=Roastery+Coffee+House+{city}".replace(" ", "+"),
                 "est_cost": 1200,
-                "action_prompt": f"Tell WeaveTwo: 'Plan a casual daytime coffee date in {city}'"
+                "action_prompt": f"Tell cupl: 'Plan a casual daytime coffee date in {city}'"
             },
             {
                 "id": "rec_dining_tapas",
@@ -341,7 +341,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "suggested_date": dates["saturday"],
                 "suggested_time": "18:00",
                 "est_cost": 1800,
-                "action_prompt": f"Tell WeaveTwo: 'Find fun board game and rooftop cafes in {city}'"
+                "action_prompt": f"Tell cupl: 'Find fun board game and rooftop cafes in {city}'"
             }
         ]
 
@@ -357,7 +357,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "description": "A curated 35-minute road tracklist of soothing acoustic indie and warm soul to set a relaxed, happy mood on the drive.",
                 "why": "Eliminates pre-date anxiety with gentle harmonic frequencies.",
                 "suggested_date": dates["friday"],
-                "action_prompt": "Tell WeaveTwo: 'Build a 30-minute pre-date car playlist for us'"
+                "action_prompt": "Tell cupl: 'Build a 30-minute pre-date car playlist for us'"
             },
             {
                 "id": "rec_special_arcade",
@@ -370,7 +370,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "description": "Nostalgic pinball machines, air hockey, and neon lights for a collaborative, high-laughter date.",
                 "why": "Shared physical play triggers dopamine and effortless bonding.",
                 "suggested_date": dates["saturday"],
-                "action_prompt": f"Tell WeaveTwo: 'Find playful retro game bars in {city}'"
+                "action_prompt": f"Tell cupl: 'Find playful retro game bars in {city}'"
             },
             {
                 "id": "rec_special_flea",
@@ -383,7 +383,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "description": "Handmade ceramic pottery, indie zines, and live indie busking in a breezy open lawn.",
                 "why": "Browsing physical items reveals each other's tastes naturally without interrogation.",
                 "suggested_date": dates["sunday"],
-                "action_prompt": f"Tell WeaveTwo: 'Find weekend indie flea markets in {city}'"
+                "action_prompt": f"Tell cupl: 'Find weekend indie flea markets in {city}'"
             }
         ]
 
@@ -402,7 +402,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "why": "Reignites foundational romantic memories and early relationship warmth.",
                 "suggested_date": dates["friday"],
                 "streaming": "Netflix",
-                "action_prompt": "Tell WeaveTwo: 'Suggest a nostalgia movie night from the year we met'"
+                "action_prompt": "Tell cupl: 'Suggest a nostalgia movie night from the year we met'"
             },
             {
                 "id": "rec_screen_pastlives",
@@ -416,7 +416,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "why": "Celebrates the rarity and depth of choosing each other over a lifetime.",
                 "suggested_date": dates["friday"],
                 "streaming": "Prime Video",
-                "action_prompt": "Tell WeaveTwo: 'Recommend deeply moving cinematic gems for long-term couples'"
+                "action_prompt": "Tell cupl: 'Recommend deeply moving cinematic gems for long-term couples'"
             },
             {
                 "id": "rec_screen_laland",
@@ -430,7 +430,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "why": "Transform an ordinary evening into an at-home cinematic ritual.",
                 "suggested_date": dates["friday"],
                 "streaming": "Prime Video",
-                "action_prompt": "Tell WeaveTwo: 'Plan an ambient home projector date night'"
+                "action_prompt": "Tell cupl: 'Plan an ambient home projector date night'"
             }
         ]
 
@@ -448,7 +448,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "suggested_date": dates["saturday"],
                 "maps_url": f"https://www.google.com/maps/search/?api=1&query=Chefs+Table+{city}".replace(" ", "+"),
                 "est_cost": 4500,
-                "action_prompt": f"Tell WeaveTwo: 'Find an extraordinary secret chef tasting menu in {city}'"
+                "action_prompt": f"Tell cupl: 'Find an extraordinary secret chef tasting menu in {city}'"
             },
             {
                 "id": "rec_dining_charminar",
@@ -464,7 +464,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "suggested_time": "23:00",
                 "maps_url": f"https://www.google.com/maps/search/?api=1&query=Nimrah+Cafe+{city}".replace(" ", "+"),
                 "est_cost": 800,
-                "action_prompt": f"Tell WeaveTwo: 'Plan a late-night street food adventure in {city}'"
+                "action_prompt": f"Tell cupl: 'Plan a late-night street food adventure in {city}'"
             },
             {
                 "id": "rec_dining_micro",
@@ -479,7 +479,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "suggested_date": dates["saturday"],
                 "suggested_time": "19:00",
                 "est_cost": 2800,
-                "action_prompt": f"Tell WeaveTwo: 'Plan a quick 2-hour high-impact date night near home'"
+                "action_prompt": f"Tell cupl: 'Plan a quick 2-hour high-impact date night near home'"
             }
         ]
 
@@ -496,7 +496,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "why": "Recharges couple intimacy without needing to hire a sitter or leave the house.",
                 "suggested_date": dates["friday"],
                 "suggested_time": "22:30",
-                "action_prompt": "Tell WeaveTwo: 'Curate a midnight living room slow-dance playlist'"
+                "action_prompt": "Tell cupl: 'Curate a midnight living room slow-dance playlist'"
             },
             {
                 "id": "rec_special_theatre",
@@ -509,7 +509,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "description": f"Immerse in live acoustic Sufi music or an intimate black-box theatre play in {city}.",
                 "why": "Shared emotional catharsis through performing arts.",
                 "suggested_date": dates["saturday"],
-                "action_prompt": f"Tell WeaveTwo: 'Find live sufi or theatre performances this weekend in {city}'"
+                "action_prompt": f"Tell cupl: 'Find live sufi or theatre performances this weekend in {city}'"
             },
             {
                 "id": "rec_special_cook",
@@ -523,7 +523,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
                 "why": "Builds a sacred recurring ritual you both anticipate throughout the week.",
                 "suggested_date": dates["sunday"],
                 "suggested_time": "10:30",
-                "action_prompt": "Tell WeaveTwo: 'Give us our step-by-step Sunday brunch recipe'"
+                "action_prompt": "Tell cupl: 'Give us our step-by-step Sunday brunch recipe'"
             }
         ]
 
@@ -540,7 +540,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
             "description": "Ancient royal ruins, quiet Tungabhadra riverfront sunsets, and cozy boutique heritage cottages tucked among granite hills.",
             "why": "Fits your shared Couple DNA for picturesque heritage and peaceful downtime.",
             "suggested_date": dates["in_two_weeks"],
-            "action_prompt": "Tell WeaveTwo: 'Help us plan a quick 2-day heritage weekend trip'"
+            "action_prompt": "Tell cupl: 'Help us plan a quick 2-day heritage weekend trip'"
         },
         {
             "id": "rec_escape_ananthagiri",
@@ -553,7 +553,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
             "description": "Dense teak forests, misty morning coffee walks, and a quiet hillside cottage just 90 minutes outside the city.",
             "why": "Zero-stress micro-travel when neither partner wants to deal with airports.",
             "suggested_date": dates["in_two_weeks"],
-            "action_prompt": f"Tell WeaveTwo: 'Plan a serene forest resort weekend near {city}'"
+            "action_prompt": f"Tell cupl: 'Plan a serene forest resort weekend near {city}'"
         },
         {
             "id": "rec_escape_pondy",
@@ -566,7 +566,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
             "description": "Pastel yellow heritage villas, bougainvillea balconies, French bakeries, and long sunset walks along the sea wall.",
             "why": "Charming colonial architecture and romantic oceanside strolls.",
             "suggested_date": dates["in_two_weeks"],
-            "action_prompt": "Tell WeaveTwo: 'Plan a coastal weekend getaway to Pondicherry'"
+            "action_prompt": "Tell cupl: 'Plan a coastal weekend getaway to Pondicherry'"
         }
     ]
 
@@ -585,7 +585,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
             "suggested_date": dates["milestone"],
             "price_bracket": "₹5,000 – ₹15,000",
             "is_private": True,
-            "action_prompt": f"Tell WeaveTwo privately: 'Help me find the perfect heirloom gift for {pname}'"
+            "action_prompt": f"Tell cupl privately: 'Help me find the perfect heirloom gift for {pname}'"
         },
         {
             "id": f"rec_gift_perfume_{pname.lower()}",
@@ -600,7 +600,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
             "suggested_date": dates["milestone"],
             "price_bracket": "₹4,000 – ₹9,000",
             "is_private": True,
-            "action_prompt": f"Tell WeaveTwo privately: 'Help me choose custom luxury fragrances for {pname}'"
+            "action_prompt": f"Tell cupl privately: 'Help me choose custom luxury fragrances for {pname}'"
         },
         {
             "id": f"rec_gift_journal_{pname.lower()}",
@@ -615,7 +615,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
             "suggested_date": dates["milestone"],
             "price_bracket": "₹2,500 – ₹6,000",
             "is_private": True,
-            "action_prompt": f"Tell WeaveTwo privately: 'Help me compose a note for a leather journal for {pname}'"
+            "action_prompt": f"Tell cupl privately: 'Help me compose a note for a leather journal for {pname}'"
         }
     ]
 
@@ -632,7 +632,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
             "why": "Creates an intimate, cinematic memory that melts away all outside stress.",
             "suggested_date": dates["milestone"],
             "is_private": True,
-            "action_prompt": f"Tell WeaveTwo privately: 'Help me arrange a secret rooftop dinner for {pname}'"
+            "action_prompt": f"Tell cupl privately: 'Help me arrange a secret rooftop dinner for {pname}'"
         },
         {
             "id": f"rec_surprise_stargaze_{pname.lower()}",
@@ -646,7 +646,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
             "why": "Pure romance and quiet shared wonder under the open sky.",
             "suggested_date": dates["milestone"],
             "is_private": True,
-            "action_prompt": f"Tell WeaveTwo privately: 'Help me plan a secret stargazing picnic for {pname}'"
+            "action_prompt": f"Tell cupl privately: 'Help me plan a secret stargazing picnic for {pname}'"
         },
         {
             "id": f"rec_surprise_dessert_{pname.lower()}",
@@ -660,7 +660,7 @@ async def get_lifestyle_recommendations(user: dict) -> dict:
             "why": f"Tailored to {pname}'s sweet tooth and love for elegant teatime rituals.",
             "suggested_date": dates["milestone"],
             "is_private": True,
-            "action_prompt": f"Tell WeaveTwo privately: 'Help me book a secret high tea surprise for {pname}'"
+            "action_prompt": f"Tell cupl privately: 'Help me book a secret high tea surprise for {pname}'"
         }
     ]
 

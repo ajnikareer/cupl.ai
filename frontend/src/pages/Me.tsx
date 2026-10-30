@@ -125,7 +125,7 @@ export default function Me() {
       <div className="card space-y-4 p-6">
         <h2 className="h-serif text-xl text-brand">✨ My tastes</h2>
         <AddTaste cats={cats} onAdded={() => qc.invalidateQueries({ queryKey: ["tastes"] })} />
-        {!Object.keys(grouped).length && <p className="text-sm text-mut">No tastes yet — add some here or just chat with WeaveWed.</p>}
+        {!Object.keys(grouped).length && <p className="text-sm text-mut">No tastes yet — add some here or just chat with cupl.</p>}
         {Object.entries(grouped).map(([cat, items]) => (
           <div key={cat}>
             <div className="mb-1.5 text-xs uppercase tracking-wider text-mut">{cats[cat] || cat}</div>
@@ -152,7 +152,7 @@ export default function Me() {
       </div>
 
       <div className="card space-y-3 p-6">
-        <h2 className="h-serif text-xl text-brand">🧠 What WeaveWed remembers</h2>
+        <h2 className="h-serif text-xl text-brand">🧠 What cupl remembers</h2>
         {mem?.summary && <p className="rounded-2xl bg-cream p-3 text-sm italic">{mem.summary}</p>}
         {Object.entries(mem?.profile || {}).filter(([k, v]) => typeof v === "string" && !["greeted", "invite_offered"].includes(k)).map(([k, v]: any) => (
           <div key={k} className="text-sm"><span className="capitalize text-mut">{k.replace(/_/g, " ")}:</span> {v}</div>))}

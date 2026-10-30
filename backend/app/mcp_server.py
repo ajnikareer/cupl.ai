@@ -1,8 +1,8 @@
-"""WeaveWed MCP server — publishes every product capability (QLOO taste intelligence, events, plans, memory,
+"""cupl MCP server — publishes every product capability (QLOO taste intelligence, events, plans, memory,
 companion, conversational UI) over MCP Streamable HTTP at /mcp/.
 
 Auth:
-  * Internal (the WeaveWed agent):  Authorization: Bearer <MCP_INTERNAL_TOKEN>  +  X-WW-UID: <uid>  (+ X-WW-Channel)
+  * Internal (the cupl agent):  Authorization: Bearer <MCP_INTERNAL_TOKEN>  +  X-WW-UID: <uid>  (+ X-WW-Channel)
   * External MCP clients (VS Code, other agents): Authorization: Bearer <Firebase ID token of the user>
 Every call is executed by toolkit.registry.execute (mode gate, validation, privacy) on behalf of that user."""
 import hmac
@@ -18,7 +18,7 @@ from .toolkit import tools as _tools  # noqa: F401  (registers tools)
 from .toolkit.registry import execute, list_specs
 
 log = logging.getLogger("mcp")
-server = Server("weavewed")
+server = Server("cupl")
 
 
 @server.list_tools()

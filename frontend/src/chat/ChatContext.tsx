@@ -6,7 +6,8 @@ import { VoiceSession, VoiceState } from "../lib/voice";
 export type Msg = { id: string; role: "user" | "agent"; text: string; widget?: any; voice?: boolean; open?: boolean; streaming?: boolean };
 
 type ChatCtx = {
-  messages: Msg[]; busy: boolean; status: string; voice: VoiceState; loaded: boolean; overlay: boolean;
+  messages: Msg[]; setMessages: React.Dispatch<React.SetStateAction<Msg[]>>;
+  busy: boolean; status: string; voice: VoiceState; loaded: boolean; overlay: boolean;
   coupleMode: boolean; toggleCoupleMode: () => void;
   send: (text: string) => void; submitWidget: (w: any, values: any) => void;
   startVoice: () => void; stopVoice: () => void; setOverlay: (b: boolean) => void; level: (w: "in" | "out") => number;
@@ -133,6 +134,6 @@ export function ChatProvider({ children }: { children: any }) {
   const level = useCallback((w: "in" | "out") => vs.current?.level(w) || 0, []);
   useEffect(() => () => vs.current?.stop(), []);
 
-  return <Ctx.Provider value={{ messages, busy, status, voice, loaded, overlay, coupleMode, toggleCoupleMode, send, submitWidget, startVoice, stopVoice, setOverlay, level }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ messages, setMessages, busy, status, voice, loaded, overlay, coupleMode, toggleCoupleMode, send, submitWidget, startVoice, stopVoice, setOverlay, level }}>{children}</Ctx.Provider>;
 }
 export const useChat = () => useContext(Ctx);

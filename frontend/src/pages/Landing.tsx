@@ -55,7 +55,7 @@ export default function Landing() {
       <section className="bg-white py-14">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 md:grid-cols-2">
           <div className="card p-5">
-            <div className="flex items-center gap-3 border-b border-line pb-3"><Avatar size={44} /><div><div className="h-serif text-lg text-brand">WeaveWed</div><div className="text-xs text-green-700">● Online</div></div></div>
+            <div className="flex items-center gap-3 border-b border-line pb-3"><Avatar size={44} /><div><div className="h-serif text-lg text-brand">cupl</div><div className="text-xs text-green-700">● Online</div></div></div>
             <div className="space-y-3 pt-4 text-sm">
               <div className="max-w-[85%] rounded-2xl rounded-tl-sm border border-line bg-cream p-3">Udaipur in February? Dreamy 💕 Who could you two listen to all day?</div>
               <div className="flex flex-wrap gap-1.5"><span className="chip chip-on">💞 A.R. Rahman</span><span className="chip">Shreya Ghoshal</span><span className="chip chip-on">Arijit Singh</span><span className="chip border-dashed">+ Add your own</span></div>

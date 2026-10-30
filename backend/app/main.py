@@ -22,11 +22,11 @@ log = logging.getLogger("main")
 @contextlib.asynccontextmanager
 async def lifespan(app):
     async with session_manager.run():
-        log.info("WeaveWed MCP server ready at /mcp/ with %d tools", len(TOOLS))
+        log.info("cupl MCP server ready at /mcp/ with %d tools", len(TOOLS))
         yield
 
 
-app = FastAPI(title="WeaveTwo API", version="2.0.0", lifespan=lifespan)
+app = FastAPI(title="cupl API", version="2.0.0", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=settings.origins, allow_origin_regex=r"https?://.*", allow_credentials=True,
                    allow_methods=["*"], allow_headers=["*"])
 app.include_router(api.router)
