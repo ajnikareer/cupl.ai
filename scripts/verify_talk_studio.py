@@ -18,25 +18,30 @@ async def main():
         )
         page = await ctx.new_page()
 
-        # 1. Set dev token and navigate to Home
+        # 1. Set dev token on root domain then go to /app
         await page.goto(f"{BASE_URL}/login")
-        await page.evaluate("() => { localStorage.setItem('ww_dev_token', 'dev-ajnikarnarayan'); }")
+        await page.evaluate("() => localStorage.setItem('ww_dev_token', 'dev-ajnikarnarayan')")
         await page.goto(f"{BASE_URL}/app")
-        await page.wait_for_timeout(2500)
+
+        # Wait for the user profile & partner to resolve in header
+        await page.wait_for_selector("text=Planning together with", timeout=12000)
+        await page.wait_for_timeout(500)
         snap1 = os.path.join(ARTIFACT_DIR, "cupl_home_live.png")
         await page.screenshot(path=snap1, full_page=False)
         print("Captured cupl_home_live.png")
 
         # 2. Navigate to cupl Suggests
         await page.goto(f"{BASE_URL}/app/recommends")
-        await page.wait_for_timeout(2000)
+        await page.wait_for_selector("text=cupl Suggests", timeout=10000)
+        await page.wait_for_timeout(500)
         snap2 = os.path.join(ARTIFACT_DIR, "cupl_suggests_live.png")
         await page.screenshot(path=snap2, full_page=False)
         print("Captured cupl_suggests_live.png")
 
         # 3. Navigate to Talk Studio
         await page.goto(f"{BASE_URL}/app/chat")
-        await page.wait_for_timeout(2000)
+        await page.wait_for_selector("text=cupl AI Concierge", timeout=10000)
+        await page.wait_for_timeout(500)
         snap3 = os.path.join(ARTIFACT_DIR, "cupl_talk_studio_live.png")
         await page.screenshot(path=snap3, full_page=False)
         print("Captured cupl_talk_studio_live.png")
