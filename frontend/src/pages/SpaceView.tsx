@@ -72,7 +72,7 @@ function PlanTab({ s }: { s: any }) {
   };
   useEffect(() => { if (!building) qc.invalidateQueries({ queryKey: ["plan", s.id] }); }, [building]);
   if (s.missing_fields?.length)
-    return <div className="card p-6 text-sm">A few details first: <b>{s.missing_fields.join(", ").replace(/_/g, " ")}</b> — add them in the Details tab, or just tell WeaveWed in chat.</div>;
+    return <div className="card p-6 text-sm">A few details first: <b>{s.missing_fields.join(", ").replace(/_/g, " ")}</b> — add them in the Details tab, or just tell WeaveTwo in chat.</div>;
   if (isLoading) return <Spinner />;
   if (!plan && building)
     return (
@@ -87,7 +87,7 @@ function PlanTab({ s }: { s: any }) {
         <img src={IMG[s.type]} alt="" className="h-40 w-full object-cover" />
         <div className="space-y-3 p-8">
           <div className="h-serif text-2xl text-brand">Ready to weave your plan ✨</div>
-          <p className="mx-auto max-w-md text-sm text-mut">Tip: share a few tastes first (chat with WeaveWed or the Me page) and get your partner in — the plan gets far more personal.</p>
+          <p className="mx-auto max-w-md text-sm text-mut">Tip: share a few tastes first (chat with WeaveTwo or the Me page) and get your partner in — the plan gets far more personal.</p>
           {s.build_error && <ErrorBox error="The last attempt hit a snag. Please try again." />}
           <ErrorBox error={err} />
           <button type="button" onClick={() => build()} className="btn-primary px-6"><Sparkles className="h-4 w-4" /> Build our plan</button>
@@ -120,143 +120,214 @@ function PlanTab({ s }: { s: any }) {
             <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{[0, 1, 2].map((i) => <div key={i} className="skeleton h-64" />)}</div>
           ) : (<>
             {sec.error && <div className="mb-3 rounded-2xl bg-blush/50 p-3 text-sm">{sec.error}</div>}
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(sec.items || []).map((it: any) => <ItemCard key={it.id} it={it} sid={s.id} type={s.type} />)}</div>
+            <div className="space-y-3">{(sec.items || []).map((it: any) => <ItemRow key={it.id} it={it} sid={s.id} type={s.type} secKey={sec.key} />)}</div>
           </>)}
         </section>
       ))}
-      <p className="text-xs text-mut">Costs are rough estimates. WeaveWed recommends — you book directly. Plan v{plan.version}.</p>
+      <p className="text-xs text-mut">Costs are rough estimates. WeaveTwo recommends — you book directly. Plan v{plan.version}.</p>
     </div>
   );
 }
 
-function ItemCard({ it, sid, type }: { it: any; sid: string; type: string }) {
+function ItemRow({ it, sid, type, secKey }: { it: any; sid: string; type: string; secKey: string }) {
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
-  const m = useMutation({ mutationFn: (status: string) => api(`/api/spaces/${sid}/items/${it.id}`, { method: "PATCH", body: { status } }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["plan", sid] }) });
+  const m = useMutation({
+    mutationFn: (status: string) => api(`/api/spaces/${sid}/items/${it.id}`, { method: "PATCH", body: { status } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["plan", sid] }),
+  });
   const set = (st: string) => m.mutate(it.status === st ? "suggested" : st);
+
+  const getIconInfo = () => {
+    if (it.act || it.tempo_bpm || secKey === "sangeet" || secKey === "music") {
+      return { icon: <Music className="h-4 w-4 text-amber-700" />, bg: "bg-amber-100/70 border-amber-200/50" };
+    }
+    if (it.course_type || it.portion_math || secKey === "menu" || secKey === "food_trail") {
+      return { icon: <Utensils className="h-4 w-4 text-emerald-700" />, bg: "bg-emerald-100/70 border-emerald-200/50" };
+    }
+    if (it.bride_groom_pairing || it.hex_colors || secKey === "outfits" || secKey === "gifts") {
+      return { icon: <Palette className="h-4 w-4 text-purple-700" />, bg: "bg-purple-100/70 border-purple-200/50" };
+    }
+    if (it.lighting_spec || secKey === "ceremonies" || secKey === "decor") {
+      return { icon: <Sparkles className="h-4 w-4 text-rose-700" />, bg: "bg-rose-100/70 border-rose-200/50" };
+    }
+    if (it.capacity_check || secKey === "venue") {
+      return { icon: <Users className="h-4 w-4 text-blue-700" />, bg: "bg-blue-100/70 border-blue-200/50" };
+    }
+    if (secKey === "itinerary" || secKey === "shoot_locations" || secKey === "destinations") {
+      return { icon: <Compass className="h-4 w-4 text-teal-700" />, bg: "bg-teal-100/70 border-teal-200/50" };
+    }
+    return { icon: <Sparkles className="h-4 w-4 text-brand" />, bg: "bg-blush border-brand/20" };
+  };
+
+  const { icon, bg } = getIconInfo();
+
   return (
-    <div className={clsx("card flex flex-col overflow-hidden transition-shadow hover:shadow-md", it.status === "skipped" && "opacity-50")}>
-      {it.act && (
-        <div className="bg-brand/10 border-b border-brand/20 px-4 py-2 text-xs font-semibold text-brand flex items-center justify-between">
-          <span className="flex items-center gap-1.5 truncate">
-            <Music className="h-3.5 w-3.5 shrink-0" />
-            {it.act}
-          </span>
-          {it.tempo_bpm && (
-            <span className="bg-white/90 px-2 py-0.5 rounded-full text-[11px] font-mono text-charcoal shrink-0 border border-brand/10">
-              {it.tempo_bpm}
-            </span>
-          )}
+    <div className={clsx(
+      "card p-4 sm:p-5 flex flex-col gap-3 transition-all border border-line hover:border-brand/30 shadow-2xs",
+      it.status === "skipped" && "opacity-50"
+    )}>
+      {/* Top row: Icon + Title + Badges + Cost */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3">
+          <div className={clsx("h-9 w-9 shrink-0 rounded-xl flex items-center justify-center border shadow-3xs", bg)}>
+            {icon}
+          </div>
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-semibold text-base text-charcoal">{it.title}</span>
+              {typeof it.affinity === "number" && it.affinity > 0 && (
+                <span className="badge bg-gold/15 text-gold-dark font-medium text-[11px] py-0.5">
+                  {Math.round(Math.min(1, it.affinity) * 100)}% QLOO match
+                </span>
+              )}
+              {it.act && (
+                <span className="badge bg-brand/10 text-brand font-medium text-[11px] py-0.5">
+                  {it.act}
+                </span>
+              )}
+              {it.course_type && (
+                <span className="badge bg-emerald-50 text-emerald-800 font-medium text-[11px] py-0.5">
+                  {it.course_type}
+                </span>
+              )}
+              {it.tempo_bpm && (
+                <span className="badge bg-slate-100 text-slate-700 font-mono text-[11px] py-0.5">
+                  ⏱️ {it.tempo_bpm}
+                </span>
+              )}
+              {it.vibe_tag && (
+                <span className="badge bg-[#fff5ea] text-[#b45309] text-[11px] py-0.5">
+                  {it.vibe_tag}
+                </span>
+              )}
+              {it.loved_by_both && (
+                <span className="badge bg-rose-50 text-rose-700 text-[11px] py-0.5">
+                  <Heart className="h-3 w-3 fill-rose-600 inline mr-1" /> Loved by both
+                </span>
+              )}
+              {it.status === "done" && (
+                <span className="badge bg-emerald-100 text-emerald-800 text-[11px] py-0.5 font-bold">
+                  ✓ Confirmed
+                </span>
+              )}
+            </div>
+            {it.heritage_origin && (
+              <div className="text-xs text-purple-700 font-medium mt-0.5">
+                🏛️ {it.heritage_origin}
+              </div>
+            )}
+          </div>
         </div>
-      )}
-      <div className="relative h-40">
-        <img src={it.image || IMG[type]} alt="" className="h-full w-full object-cover" onError={(e: any) => (e.currentTarget.src = IMG[type])} />
-        {it.loved_by_both && <span className="badge absolute left-3 top-3 bg-white/95"><Heart className="h-3 w-3 fill-brand" /> Loved by both</span>}
-        {it.status === "done" && <span className="badge absolute right-3 top-3 bg-white/95"><Check className="h-3 w-3" /> Done</span>}
-        {it.course_type && (
-          <span className="badge absolute left-3 bottom-3 bg-white/95 shadow-sm text-xs font-medium text-brand">
-            <Utensils className="h-3 w-3 text-gold" /> {it.course_type}
+
+        {it.est_cost > 0 && (
+          <span className="badge bg-cream border border-line text-xs font-semibold text-charcoal shrink-0">
+            ~{fmtINR(it.est_cost)}
           </span>
         )}
       </div>
-      <div className="flex flex-1 flex-col p-4">
-        <div className="font-medium text-base text-charcoal">{it.title}</div>
-        
-        {/* Badges row */}
-        <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-          {typeof it.affinity === "number" && it.affinity > 0 && (
-            <span className="badge bg-gold/15 text-gold-dark font-medium">{Math.round(Math.min(1, it.affinity) * 100)}% QLOO match</span>
-          )}
-          {it.vibe_tag && (
-            <span className="badge bg-[#fff5ea] text-[#b45309] font-medium">{it.vibe_tag}</span>
-          )}
-          {it.heritage_origin && (
-            <span className="badge bg-purple-50 text-purple-700 font-medium">🏛️ {it.heritage_origin}</span>
-          )}
-          {it.est_cost > 0 && <span className="badge">~{fmtINR(it.est_cost)}</span>}
+
+      {it.hex_colors && it.hex_colors.length > 0 && (
+        <div className="flex items-center gap-2 pl-12 text-xs">
+          <span className="text-mut font-medium flex items-center gap-1">
+            <Palette className="h-3.5 w-3.5" /> Palette:
+          </span>
+          <div className="flex flex-wrap items-center gap-1.5">
+            {it.hex_colors.map((hex: string, i: number) => (
+              <span key={i} className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-full border border-line bg-surface">
+                <span className="h-3 w-3 rounded-full border border-black/15 shrink-0" style={{ backgroundColor: hex }} />
+                {hex}
+              </span>
+            ))}
+          </div>
         </div>
+      )}
 
-        {/* Color Swatches */}
-        {it.hex_colors && it.hex_colors.length > 0 && (
-          <div className="mt-2.5 flex items-center gap-2">
-            <span className="text-xs text-mut font-medium flex items-center gap-1">
-              <Palette className="h-3.5 w-3.5" /> Palette:
-            </span>
-            <div className="flex flex-wrap items-center gap-1.5">
-              {it.hex_colors.map((hex: string, i: number) => (
-                <span key={i} className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-full border border-line bg-surface">
-                  <span className="h-3 w-3 rounded-full border border-black/15 shrink-0" style={{ backgroundColor: hex }} />
-                  {hex}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <p className="mt-2 text-sm text-mut leading-relaxed">{it.description}</p>
-
-        {/* Special structured callouts */}
-        {it.cue_note && (
-          <div className="mt-2.5 rounded-xl bg-amber-50/70 border border-amber-200/60 p-2.5 text-xs text-amber-950">
-            <span className="font-semibold text-amber-900 block mb-0.5">🎬 Choreography & DJ Cue:</span>
-            {it.cue_note}
-          </div>
-        )}
-
+      <div className="space-y-1.5 pl-12 text-xs">
         {it.portion_math && (
-          <div className="mt-2.5 rounded-xl bg-emerald-50/80 border border-emerald-200/70 p-2.5 text-xs text-emerald-950">
-            <span className="font-semibold text-emerald-900 flex items-center gap-1 mb-0.5">🍃 Anti-Waste Math:</span>
+          <div className="rounded-xl bg-emerald-50/80 border border-emerald-200/70 p-2.5 text-emerald-950 leading-relaxed">
+            <span className="font-semibold text-emerald-900 flex items-center gap-1 mb-0.5">
+              🍃 Anti-Waste Portioning Math:
+            </span>
             {it.portion_math}
           </div>
         )}
 
         {it.bride_groom_pairing && (
-          <div className="mt-2.5 rounded-xl bg-purple-50/70 border border-purple-200/60 p-2.5 text-xs text-purple-950">
+          <div className="rounded-xl bg-purple-50/70 border border-purple-200/60 p-2.5 text-purple-950 leading-relaxed">
             <span className="font-semibold text-purple-900 block mb-0.5">👫 Styling Pair:</span>
             {it.bride_groom_pairing}
           </div>
         )}
 
+        {it.cue_note && (
+          <div className="rounded-xl bg-amber-50/70 border border-amber-200/60 p-2.5 text-amber-950 leading-relaxed">
+            <span className="font-semibold text-amber-900 block mb-0.5">🎬 Choreography & DJ Cue:</span>
+            {it.cue_note}
+          </div>
+        )}
+
         {it.anti_clash_check && (
-          <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/50 self-start">
+          <div className="inline-flex items-center gap-1.5 font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/50">
             <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
             {it.anti_clash_check}
           </div>
         )}
 
         {it.capacity_check && (
-          <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 bg-slate-100 px-2.5 py-1 rounded-full self-start">
+          <div className="inline-flex items-center gap-1.5 font-medium text-slate-700 bg-slate-100 px-2.5 py-1 rounded-full">
             <Users className="h-3.5 w-3.5 text-slate-600 shrink-0" />
             {it.capacity_check}
           </div>
         )}
 
         {it.budget_breakdown && (
-          <div className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full self-start">
+          <div className="inline-flex items-center gap-1.5 font-medium text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full ml-1">
             <Coins className="h-3.5 w-3.5 text-amber-600 shrink-0" />
             {it.budget_breakdown}
           </div>
         )}
 
         {it.lighting_spec && (
-          <div className="mt-2.5 rounded-xl bg-amber-50/70 border border-amber-200/60 p-2.5 text-xs text-amber-950">
+          <div className="rounded-xl bg-amber-50/70 border border-amber-200/60 p-2.5 text-amber-950 leading-relaxed">
             <span className="font-semibold text-amber-900 flex items-center gap-1 mb-0.5">
               <Sparkles className="h-3.5 w-3.5 text-amber-600" /> Lighting & Camera Spec:
             </span>
             {it.lighting_spec}
           </div>
         )}
+      </div>
 
-        {it.why?.length > 0 && <button type="button" onClick={() => setOpen(!open)} className="mt-2.5 self-start text-xs font-medium text-gold hover:underline">💡 Why this fits both of you?</button>}
-        {open && <ul className="mt-1.5 list-disc space-y-1 rounded-xl bg-[#fffaf2] p-2.5 pl-6 text-xs text-charcoal">{it.why.map((w: string, i: number) => <li key={i}>{w}</li>)}</ul>}
-        
-        <div className="mt-4 pt-2 border-t border-line/60 flex items-center gap-1.5">
-          <button type="button" onClick={() => set("liked")} className={clsx("chip", it.status === "liked" && "chip-on")} aria-label="Love it"><Heart className="h-3.5 w-3.5" /></button>
-          <button type="button" onClick={() => set("skipped")} className={clsx("chip", it.status === "skipped" && "chip-on")} aria-label="Skip"><X className="h-3.5 w-3.5" /></button>
-          <button type="button" onClick={() => set("done")} className={clsx("chip", it.status === "done" && "chip-on")} aria-label="Done"><Check className="h-3.5 w-3.5" /></button>
-          {it.maps_url && <a href={it.maps_url} target="_blank" rel="noreferrer" className="ml-auto inline-flex items-center gap-1 text-xs text-brand font-medium hover:underline">Maps <ExternalLink className="h-3 w-3" /></a>}
+      <p className="text-sm text-mut pl-12 leading-relaxed">{it.description}</p>
+
+      {it.why?.length > 0 && (
+        <div className="pl-12">
+          <button type="button" onClick={() => setOpen(!open)} className="text-xs font-medium text-gold hover:underline flex items-center gap-1">
+            💡 {open ? "Hide taste reasoning" : "Why this fits both of you?"}
+          </button>
+          {open && (
+            <ul className="mt-1.5 list-disc space-y-1 rounded-xl bg-[#fffaf2] p-2.5 pl-6 text-xs text-charcoal border border-line/40">
+              {it.why.map((w: string, i: number) => <li key={i}>{w}</li>)}
+            </ul>
+          )}
         </div>
+      )}
+
+      <div className="pt-2 border-t border-line/50 flex items-center gap-2 pl-12">
+        <button type="button" onClick={() => set("liked")} className={clsx("chip text-xs", it.status === "liked" && "chip-on")} title="Love it">
+          <Heart className="h-3.5 w-3.5" /> {it.status === "liked" ? "Loved" : "Love it"}
+        </button>
+        <button type="button" onClick={() => set("skipped")} className={clsx("chip text-xs", it.status === "skipped" && "chip-on")} title="Skip">
+          <X className="h-3.5 w-3.5" /> Skip
+        </button>
+        <button type="button" onClick={() => set("done")} className={clsx("chip text-xs", it.status === "done" && "chip-on")} title="Mark as confirmed">
+          <Check className="h-3.5 w-3.5" /> {it.status === "done" ? "Confirmed" : "Confirm"}
+        </button>
+        {it.maps_url && (
+          <a href={it.maps_url} target="_blank" rel="noreferrer" className="ml-auto inline-flex items-center gap-1 text-xs text-brand font-medium hover:underline">
+            Google Maps <ExternalLink className="h-3 w-3" />
+          </a>
+        )}
       </div>
     </div>
   );
@@ -369,7 +440,7 @@ function MemoriesTab({ s }: { s: any }) {
   return (
     <div className="space-y-3">
       <form onSubmit={add} className="card space-y-3 p-5">
-        <textarea className="input min-h-[90px]" value={text} onChange={(e) => setText(e.target.value)} placeholder="What did you love? What would you skip next time? WeaveWed remembers it for future plans." />
+        <textarea className="input min-h-[90px]" value={text} onChange={(e) => setText(e.target.value)} placeholder="What did you love? What would you skip next time? WeaveTwo remembers it for future plans." />
         <div className="flex items-center justify-between">
           <div className="flex gap-1 text-xl">{[1, 2, 3, 4, 5].map((n) => <button type="button" key={n} onClick={() => setRating(n)} className={n <= rating ? "text-gold" : "text-line"} aria-label={`${n} stars`}>★</button>)}</div>
           <button className="btn-primary">Save memory</button>

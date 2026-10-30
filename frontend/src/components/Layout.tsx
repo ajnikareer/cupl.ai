@@ -10,7 +10,7 @@ import { useChat } from "../chat/ChatContext";
 
 const NAV = [
   { to: "/app", label: "Home", short: "Home", icon: Home, end: true },
-  { to: "/app/chat", label: "WeaveWed AI", short: "Chat", icon: MessageCircleHeart },
+  { to: "/app/chat", label: "WeaveTwo AI", short: "Chat", icon: MessageCircleHeart },
   { to: "/app/spaces", label: "Event Spaces", short: "Events", icon: CalendarHeart },
   { to: "/app/calendar", label: "Calendar", short: "Calendar", icon: CalendarDays },
   { to: "/app/recommends", label: "Recommends", short: "Picks", icon: Sparkles },

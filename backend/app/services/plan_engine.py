@@ -168,6 +168,7 @@ async def _build_section(spec: dict, space: dict, ctx: dict, location: str | Non
     ceremonies = space.get("ceremonies") or ["Haldi", "Mehendi", "Sangeet", "Wedding", "Reception"]
 
     special_rules = ""
+    # Event-specific dynamic intelligence rules
     if spec["key"] in ("sangeet", "music"):
         cand_sample = ", ".join(c["name"] for c in candidates[:8]) if candidates else "blended artists"
         special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR SANGEET & CEREMONY MUSIC BLUEPRINT:
@@ -179,7 +180,7 @@ async def _build_section(spec: dict, space: dict, ctx: dict, location: str | Non
    - 'Act 4: High-Energy Youth & Sibling Dance Floor' (~125-135 BPM peak floor-filler Bollywood/Punjabi beat)
    - 'Act 5: Sacred Pheras & Bridal Entry Ambient' (Royal Shehnai / Sufi sacred ambient)
 3. For EACH item, you MUST populate:
-   - title: Specific Song/Track Title (e.g. 'Tum Ho', 'O Sanam', 'Kasoor', 'Kesariya', 'Subhanallah', 'Gud Naal Ishq Mitha', etc.)
+   - title: Specific Song/Track Title (e.g., 'Tum Ho', 'O Sanam', 'Kasoor', 'Kesariya', 'Subhanallah', 'Gud Naal Ishq Mitha', etc.)
    - candidate_id: The exact entity_id of the QLOO artist
    - artist_name: The QLOO artist's name
    - act: Exact act name (e.g. 'Act 1: Golden Hour Acoustic Sunset Bridge')
@@ -191,7 +192,7 @@ async def _build_section(spec: dict, space: dict, ctx: dict, location: str | Non
         special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR DUAL-HERITAGE ANTI-WASTE CATERING:
 Dynamic Event Metrics:
 - Guest Count: {guests} guests
-- Total Wedding Budget: ₹{budget:,.0f} | F&B Catering Budget: ₹{fb_envelope:,.0f} (~₹{per_plate_target:,.0f}/plate target)
+- Total Budget: ₹{budget:,.0f} | F&B Catering Budget: ₹{fb_envelope:,.0f} (~₹{per_plate_target:,.0f}/plate target)
 - Anti-Waste Baseline: {anti_waste_standard_kg} kg total food weight ({guests} guests x 380g standard portion)
 - Waste Mitigation: -12% carb buffer (saving ~{anti_waste_buffer_kg} kg buffet binning) + staggered 30-min live batch replenishment
 
@@ -199,7 +200,7 @@ Design 5-6 structured catering courses/stations balancing both partners' cultura
 1. Partner 1 Regional Heritage Live Counter (e.g., Live Mumbai/Pune Wada Pav fondue & chaat)
 2. Partner 2 Regional Heritage Live Counter (e.g., Purani Dilli Kebab skewers / Kolkata Puchka shot bar)
 3. Multi-Generational Main Feast Progression (mild elder-digestible gravies + rich festive curry)
-4. WeaveWed Couple Special Fusion Dish (marrying both partners' favorite regional flavors)
+4. WeaveTwo Couple Special Fusion Dish (marrying both partners' favorite regional flavors)
 5. Anti-Waste Starch & Bread Station (-12% calculated buffer with live tandoor roti/naan)
 6. Artisanal Regional Dessert Counter (e.g. Shrikhand Tartlets & Nolen Gur Rosogolla)
 
@@ -213,18 +214,18 @@ For EACH item, you MUST populate:
     elif spec["key"] == "outfits":
         special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR CEREMONY OUTFITS & COLOR HARMONY:
 Choose designer brands strictly from the QLOO brand candidates above.
-For each wedding ceremony ({', '.join(ceremonies[:5])}), provide 4-5 ceremony outfits with exact color pairings and zero-backdrop clash check:
+For each celebration ceremony ({', '.join(ceremonies[:5])}), provide 4-5 ceremony outfits with exact color pairings and zero-backdrop clash check:
 For EACH item, you MUST populate:
 - title: Ceremony Name & Aesthetic Look (e.g. 'Haldi Morning: Sunflower & Raw Ivory Sunburst', 'Sangeet Night: Midnight Indigo & Champagne Glamour', 'Sacred Pheras: Royal Vermillion & Antique Gold')
 - candidate_id: The QLOO designer brand's entity_id
 - bride_groom_pairing: Specific pairing (e.g. 'Bride: Mustard Yellow Raw Silk Lehenga with Gota Patti | Groom: Ivory Chanderi Silk Kurta with Mustard Bandi')
 - hex_colors: Array of 2-3 exact HEX color codes (e.g. ['#E1AD01', '#FFFFF0', '#D4AF37'])
-- anti_clash_check: Zero-backdrop clash statement (e.g. '100% clash-free verified: High contrast against green foliage & marigold mandap backdrop')
+- anti_clash_check: Zero-backdrop clash statement (e.g. '100% clash-free verified: High contrast against green foliage & marigold backdrop')
 - description: Fabrics (Chanderi, Raw Silk, Organza, Velvet), silhouettes, and lighting suitability.
 - why: 2-3 specific reasons tied to partners' fashion tastes and heritage.\n"""
     elif spec["key"] in ("ceremonies", "decor"):
         special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR STAGE & MANDAP DECORATION THEMES:
-Provide 4-5 architectural decor concepts for the wedding ceremonies within the ₹{decor_envelope:,.0f} decor envelope:
+Provide 4-5 architectural decor concepts for the celebration ceremonies within the ₹{decor_envelope:,.0f} decor envelope:
 For EACH item, you MUST populate:
 - title: Ceremony & Theme (e.g. 'Sacred Mandap: 4-Pillar Open Rajwada Stone Canopy', 'Sangeet Stage: Geometric Jali & 2700K Warm Brass Screen')
 - hex_colors: Array of 3 exact HEX color codes for floral & backdrop palette (e.g. ['#FFA500', '#F8F8FF', '#B5A642'])
@@ -235,7 +236,7 @@ For EACH item, you MUST populate:
         special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR VENUE SHORTLIST:
 Dynamic Event Metrics:
 - Guest Count: {guests} guests
-- Total Wedding Budget: ₹{budget:,.0f} | Venue Envelope (32%): ₹{venue_envelope:,.0f}
+- Total Budget: ₹{budget:,.0f} | Venue Envelope: ₹{venue_envelope:,.0f}
 Choose ONLY from the QLOO venue candidates above.
 For EACH item, you MUST populate:
 - title: Venue name
@@ -243,8 +244,53 @@ For EACH item, you MUST populate:
 - capacity_check: State capacity buffer for {guests} guests (e.g. 'Capacity: 450 guests (Comfortably accommodates your {guests} guests with ~25% buffer)')
 - budget_breakdown: Estimated rental vs per-plate cost (e.g. 'Est. Rental: ₹3.5L | F&B Target: ₹1,800/plate within your ₹{venue_envelope:,.0f} venue envelope')
 - why: Specific reasons tied to atmosphere, hospitality, and couple vibe.\n"""
+    elif spec["key"] == "shoot_locations":
+        special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR PHOTOGENIC SHOOT ROUTE:
+Choose ONLY from the QLOO place candidates above in the city.
+For EACH location item:
+- title: Location name
+- candidate_id: The QLOO candidate's entity_id
+- cue_note: Best lighting hour (e.g. 'Golden Hour: 6:15 - 7:30 AM sunrise' or 'Blue Hour: 5:45 - 6:30 PM sunset') + crowd density index
+- why: Ties to couple vibe and photogenic architecture (heritage stone, botanical arches, lake reflections).\n"""
+    elif spec["key"] == "theme":
+        special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR CINEMATIC STORYBOARD CONCEPTS:
+Design 3-4 cinematic shoot concepts inspired by shared films and couple aesthetic:
+For EACH concept item:
+- title: Storyboard Concept Title
+- cue_note: Motion prompts for the couple (e.g. 'Slow walk-and-talk with forehead touch', 'Dynamic twirl under archway with 85mm lens compression')
+- bride_groom_pairing: Outfit style and texture pairing
+- why: Ties to shared movies and romantic style.\n"""
+    elif spec["key"] == "itinerary":
+        special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR ANTI-FATIGUE DAY-WISE ITINERARY:
+Pacing Protocol: Balance active morning exploration with guaranteed unstructured couple downtime in the afternoon to prevent exhaustion!
+For EACH day item:
+- title: Day Number & Theme (e.g. 'Day 1: Arrival, Old Town Stroll & Sunset Unwind')
+- cue_note: Morning exploration (max 3 hours) -> Afternoon spa/downtime -> Evening romantic dinner
+- why: Ties to both partners' travel styles and pacing preferences.\n"""
+    elif spec["key"] == "romantic":
+        special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR UNFORGETTABLE ROMANTIC MOMENTS:
+Design 3-4 private, intimate experiences at the destination:
+For EACH item:
+- title: Romantic Experience Name (e.g. 'Private Sunset Boat Charter with Local Wine & Stargazing')
+- cue_note: Private booking tip and sunset timing
+- why: Ties to couple's romantic love language and aesthetic.\n"""
+    elif spec["key"] == "ideas":
+        special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR MILESTONE SURPRISE BLUEPRINT:
+Design 3-4 step-by-step surprise orchestration plans for the occasion (birthday/anniversary):
+For EACH item:
+- title: Surprise Concept Title (e.g. 'Midnight Courtyard Candlelight & Custom Keepsake Reveal')
+- cue_note: Narrative excuse and timeline coordination
+- why: Grounded in partner's private facts, loves, and shared memories.\n"""
+    elif spec["key"] == "gifts":
+        special_rules = f"""\n\nCRITICAL REQUIREMENTS FOR PRIVATE PASSION & BRAND GIFTS:
+Choose brands strictly from the QLOO brand candidates above.
+For EACH gift item:
+- title: Gift Title & Brand
+- candidate_id: The QLOO brand candidate's entity_id
+- est_cost: Approximate INR price
+- why: Grounded in partner's private passions and verified brand affinities (never generic gift cards).\n"""
     prompt = (
-        f"You are WeaveWed, a warm and expert Indian wedding & couple planner. Write the plan section '{spec['title']}'.\n"
+        f"You are WeaveTwo, a warm and expert Indian wedding & couple planner. Write the plan section '{spec['title']}'.\n"
         f"Section brief: {spec['brief']}\n\n{_brief(space, ctx)}\n\n{other}"
         + (f"USER CHANGE REQUEST (highest priority): {instruction}\n\n" if instruction else "")
         + (f"PREVIOUS VERSION OF THIS SECTION: {[i['title'] for i in prev.get('items', [])]}\n\n" if prev and instruction else "")

@@ -15,7 +15,7 @@ export const Logo = ({ small = false }: { small?: boolean }) => (
   <div className="flex items-center gap-2">
     <HeartMark className={small ? "h-8 w-8" : "h-11 w-11"} />
     <div className="leading-none">
-      <div className={clsx("h-serif text-brand", small ? "text-xl" : "text-[28px]")}>WeaveWed</div>
+      <div className={clsx("h-serif text-brand", small ? "text-xl" : "text-[28px]")}>WeaveTwo</div>
       {!small && <div className="mt-1 text-[11px] italic tracking-wide text-mut">Happily Ever After</div>}
     </div>
   </div>
@@ -24,7 +24,7 @@ export const Logo = ({ small = false }: { small?: boolean }) => (
 export const Avatar = ({ size = 40, ring = false, className = "" }: { size?: number; ring?: boolean; className?: string }) => (
   <div className={clsx("relative shrink-0", className)} style={{ width: size, height: size }}>
     {ring && <span className="ring-pulse absolute inset-0 rounded-full border-2 border-brand" />}
-    <img src="/img/avatar.jpg" alt="WeaveWed planner" className="h-full w-full rounded-full object-cover shadow-sm" />
+    <img src="/img/avatar.jpg" alt="WeaveTwo AI" className="h-full w-full rounded-full object-cover shadow-sm" />
   </div>
 );
 

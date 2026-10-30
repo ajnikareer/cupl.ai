@@ -128,7 +128,7 @@ export default function Recommends() {
             </Link>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="space-y-3">
             {coupleRecs.map((rec: any) => {
               const isAdded = Boolean(rec.added_to_calendar);
               const isBusy = togglingId === rec.id;
@@ -136,68 +136,57 @@ export default function Recommends() {
               return (
                 <div
                   key={rec.id}
-                  className="card overflow-hidden flex flex-col justify-between p-5 border border-line hover:border-brand/30 transition shadow-2xs group"
+                  className="card p-4 sm:p-5 flex flex-col gap-3 border border-line hover:border-brand/30 transition shadow-2xs group"
                 >
-                  <div className="space-y-3">
-                    {/* Category & Affinity Badge */}
-                    <div className="flex items-center justify-between">
-                      <span className="flex items-center gap-1.5 text-xs font-semibold text-mut">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3">
+                      <div className="h-9 w-9 shrink-0 rounded-xl bg-blush/70 border border-brand/20 flex items-center justify-center shadow-3xs">
                         {getCategoryIcon(rec.category)}
-                        {rec.category_label}
-                      </span>
-                      {rec.affinity && (
-                        <span className="badge border-brand/20 bg-blush text-brand text-[10px] font-bold">
-                          {Math.round(rec.affinity * 100)}% Match
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Image if available */}
-                    {rec.image && (
-                      <div className="h-36 w-full overflow-hidden rounded-xl bg-cream">
-                        <img
-                          src={rec.image}
-                          alt=""
-                          className="h-full w-full object-cover group-hover:scale-105 transition duration-300"
-                        />
                       </div>
-                    )}
-
-                    {/* Title & Description */}
-                    <div>
-                      <h3 className="h-serif text-lg text-ink font-semibold group-hover:text-brand transition">
-                        {rec.title}
-                      </h3>
-                      {rec.subtitle && (
-                        <div className="text-xs font-medium text-brand mt-0.5">{rec.subtitle}</div>
-                      )}
-                      <p className="text-xs text-mut mt-2 line-clamp-3 leading-relaxed">
-                        {rec.description}
-                      </p>
-                    </div>
-
-                    {/* Why this fits */}
-                    {rec.why && (
-                      <div className="rounded-xl bg-cream/70 p-2.5 text-[11px] text-mut border border-line/60">
-                        <span className="font-semibold text-ink">Why you two will love it: </span>
-                        {rec.why}
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-semibold text-base text-ink group-hover:text-brand transition">{rec.title}</span>
+                          {rec.affinity && (
+                            <span className="badge border-brand/20 bg-blush text-brand text-[10px] font-bold">
+                              {Math.round(rec.affinity * 100)}% Match
+                            </span>
+                          )}
+                          <span className="badge bg-cream border border-line text-[11px] font-medium text-mut">
+                            {rec.category_label}
+                          </span>
+                          {rec.suggested_date && (
+                            <span className="badge bg-purple-50 text-purple-700 text-[11px] font-medium">
+                              📅 {rec.suggested_date}
+                            </span>
+                          )}
+                        </div>
+                        {rec.subtitle && (
+                          <div className="text-xs font-medium text-brand mt-0.5">{rec.subtitle}</div>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
 
-                  {/* Actions & Calendar Toggle Icon */}
-                  <div className="mt-4 pt-3 border-t border-line/70 flex items-center justify-between gap-2">
+                  <p className="text-sm text-mut pl-12 leading-relaxed">{rec.description}</p>
+
+                  {rec.why && (
+                    <div className="ml-12 rounded-xl bg-[#fffaf2] p-2.5 text-xs text-charcoal border border-line/50">
+                      <span className="font-semibold text-brand">Why you two will love it: </span>
+                      {rec.why}
+                    </div>
+                  )}
+
+                  <div className="pt-2 border-t border-line/60 flex items-center justify-between gap-2 pl-12">
                     <button
                       type="button"
                       disabled={isBusy}
                       onClick={() => handleToggleCalendar(rec)}
                       className={clsx(
-                        "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition shadow-2xs",
+                        "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition shadow-3xs",
                         isAdded
-                          ? "bg-emerald-50 text-emerald-700 border border-emerald-300 hover:bg-emerald-100"
+                          ? "bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100"
                           : "bg-white text-ink border border-line hover:border-brand hover:text-brand"
                       )}
-                      title={isAdded ? "Remove from your calendar" : "Add to your calendar"}
                     >
                       {isAdded ? (
                         <>
@@ -212,31 +201,28 @@ export default function Recommends() {
                       )}
                     </button>
 
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-3">
                       {rec.maps_url && (
                         <a
                           href={rec.maps_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="rounded-full p-2 text-mut hover:text-brand hover:bg-cream transition"
-                          title="Open in Google Maps"
+                          className="text-xs text-mut hover:text-brand flex items-center gap-1"
                         >
-                          <MapPin className="h-4 w-4" />
+                          <MapPin className="h-3.5 w-3.5" /> View on Map
                         </a>
                       )}
                       <Link
                         to="/app/chat"
-                        className="rounded-full p-2 text-mut hover:text-brand hover:bg-cream transition"
-                        title="Discuss in WeaveWed AI Chat"
+                        className="text-xs font-medium text-brand hover:underline flex items-center gap-1"
                       >
-                        <MessageCircleHeart className="h-4 w-4" />
+                        <MessageCircleHeart className="h-3.5 w-3.5" /> Plan date with WeaveTwo AI →
                       </Link>
                     </div>
                   </div>
                 </div>
               );
-            })}
-          </div>
+            })}</div>
         </div>
       )}
 
@@ -249,12 +235,12 @@ export default function Recommends() {
               <div className="font-bold text-amber-900">100% Private to You</div>
               <p className="text-amber-800 mt-0.5">
                 These surprise concepts and gifting ideas are generated exclusively for your eyes.
-                <b> {partnerName}</b>'s WeaveWed account will never show or hint at these.
+                <b> {partnerName}</b>'s WeaveTwo account will never show or hint at these.
               </p>
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-3">
             {privateRecs.map((rec: any) => {
               const isAdded = Boolean(rec.added_to_calendar);
               const isBusy = togglingId === rec.id;
@@ -324,7 +310,7 @@ export default function Recommends() {
                       to="/app/chat"
                       className="btn-primary flex items-center gap-1.5 text-xs py-1.5 px-3"
                     >
-                      <Sparkles className="h-3.5 w-3.5" /> Plan with WeaveWed
+                      <Sparkles className="h-3.5 w-3.5" /> Plan with WeaveTwo
                     </Link>
                   </div>
                 </div>
