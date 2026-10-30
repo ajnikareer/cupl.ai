@@ -20,7 +20,7 @@ export const Logo = ({ small = false }: { small?: boolean }) => (
     <CuplMark className={small ? "h-8 w-8" : "h-10 w-10 shrink-0 shadow-soft"} />
     <div className="leading-none">
       <div className={clsx("font-extrabold tracking-tight text-brand lowercase font-sans", small ? "text-xl" : "text-[26px]")}>
-        cupl
+        cupl.ai
       </div>
       {!small && <div className="mt-1 text-[10.5px] font-medium tracking-wide text-mut whitespace-nowrap">Your AI concierge for life together</div>}
     </div>

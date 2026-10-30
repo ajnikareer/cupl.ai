@@ -523,7 +523,7 @@ export default function ChatPage() {
               <Avatar size={30} />
               <div className="rounded-2xl rounded-tl-sm border border-line bg-white p-3.5 text-sm shadow-sm text-ink leading-relaxed">
                 <div className="h-serif text-base text-brand">Hi {first}! 👋</div>
-                What would you like to plan today? Type below or tap <b>Start Live Talk</b> on the right to speak directly.
+                What would you like to plan today? Type below or tap <b>Ask cupl AI</b> on the right to speak directly.
               </div>
             </div>
           )}
@@ -684,7 +684,7 @@ export default function ChatPage() {
               <p className="text-xs text-mut leading-relaxed max-w-xs mx-auto">
                 {voice !== "off"
                   ? "Speak naturally — listening to both of you."
-                  : "Tap Start Live Talk below. Your companion will ask if you'd like to continue where you left off or plan something fresh."}
+                  : "Tap Ask cupl AI below. Your companion will ask if you'd like to continue where you left off or plan something fresh."}
               </p>
             )}
           </div>
@@ -734,7 +734,7 @@ export default function ChatPage() {
               className="flex h-12 items-center gap-2 rounded-full bg-brand px-6 text-xs font-semibold text-white shadow-soft hover:bg-brand/90 transition"
             >
               <AudioLines className="h-4 w-4" />
-              <span>Start Live Talk</span>
+              <span>Ask cupl AI</span>
             </button>
           )}
         </div>

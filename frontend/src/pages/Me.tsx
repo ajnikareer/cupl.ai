@@ -7,7 +7,6 @@ import { api } from "../lib/api";
 import { auth } from "../lib/firebase";
 import { ErrorBox, PageTitle, Spinner } from "../components/ui";
 
-const STATUSES = ["dating", "engaged", "married", "parents"];
 const HERITAGES = ["Maharashtrian", "Bengali", "Punjabi", "Gujarati", "South Indian", "Marwari", "Malayali", "Cross-cultural"];
 const TRADITIONS = ["Hindu", "Sikh", "Christian", "Muslim", "Jain", "Inter-faith", "Secular"];
 
@@ -17,6 +16,7 @@ export default function Me() {
   const { data: tastes } = useQuery({ queryKey: ["tastes"], queryFn: () => api("/api/tastes") });
   const { data: mem } = useQuery({ queryKey: ["memory"], queryFn: () => api("/api/memory") });
   const [name, setName] = useState("");
+  const [birthDate, setBirthDate] = useState("");
   const [invite, setInvite] = useState<any>(null);
   const [copied, setCopied] = useState(false);
   const [code, setCode] = useState("");
@@ -24,12 +24,13 @@ export default function Me() {
   const [heritageVal, setHeritageVal] = useState("");
   const [traditionVal, setTraditionVal] = useState("");
 
+  useEffect(() => { if (me?.user?.name) setName(me.user.name); }, [me?.user?.name]);
+  useEffect(() => { if (me?.user?.profile?.birth_date) setBirthDate(me.user.profile.birth_date); }, [me?.user?.profile?.birth_date]);
   useEffect(() => { if (me?.user?.profile?.state) setStateVal(me.user.profile.state); }, [me?.user?.profile?.state]);
   useEffect(() => { if (me?.user?.profile?.heritage) setHeritageVal(me.user.profile.heritage); }, [me?.user?.profile?.heritage]);
   useEffect(() => { if (me?.user?.profile?.tradition) setTraditionVal(me.user.profile.tradition); }, [me?.user?.profile?.tradition]);
 
   const [err, setErr] = useState<any>(null);
-  useEffect(() => { if (me?.user?.name) setName(me.user.name); }, [me?.user?.name]);
   if (!me) return <Spinner />;
   const wrap = async (fn: () => Promise<any>) => { setErr(null); try { await fn(); qc.invalidateQueries(); } catch (e) { setErr(e); } };
   const grouped: Record<string, any[]> = {};
@@ -40,17 +41,74 @@ export default function Me() {
     <div className="space-y-6">
       <PageTitle title="My Profile" right={<button type="button" className="btn-ghost" onClick={() => { localStorage.removeItem("ww_dev_token"); try { signOut(auth); } catch {} window.location.href = "/login"; }}>Sign out</button>} />
       <ErrorBox error={err} />
+
+      {/* 1. Personal Details Card (Clean 2-Column: Name & Birth Date) */}
       <div className="card space-y-4 p-6">
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <input className="input" value={name} onChange={(e) => setName(e.target.value)} aria-label="Your name" />
-          <button type="button" className="btn-primary" disabled={!name.trim()} onClick={() => wrap(() => api("/api/me", { method: "PATCH", body: { name } }))}>Save name</button>
+        <div>
+          <h2 className="h-serif text-xl text-brand flex items-center gap-2">
+            <span>👤</span> Personal Details
+          </h2>
+          <p className="text-xs text-mut mt-0.5">Your identity and milestone dates for curated taste intelligence.</p>
         </div>
-        <div><div className="mb-1 text-xs text-mut">Love status</div>
-          <div className="flex flex-wrap gap-1.5">{STATUSES.map((s) => (
-            <button type="button" key={s} onClick={() => wrap(() => api("/api/couple", { method: "PATCH", body: { status: s } }))} className={clsx("chip capitalize", me.couple?.status === s && "chip-on")}>{s}</button>))}</div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          {/* Full Name */}
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold text-brand">Your Name</label>
+            <div className="flex gap-2">
+              <input
+                className="input flex-1"
+                placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && name.trim()) {
+                    wrap(() => api("/api/me", { method: "PATCH", body: { name: name.trim() } }));
+                  }
+                }}
+              />
+              <button
+                type="button"
+                className="btn-primary shrink-0 text-xs px-3.5"
+                disabled={!name.trim()}
+                onClick={() => wrap(() => api("/api/me", { method: "PATCH", body: { name: name.trim() } }))}
+              >
+                Save Name
+              </button>
+            </div>
+          </div>
+
+          {/* Birth Date */}
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold text-brand">
+              🎂 Birth Date <span className="text-[11px] font-normal text-mut">(for age & surprise recommendations)</span>
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="date"
+                className="input flex-1"
+                value={birthDate}
+                onChange={(e) => setBirthDate(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && birthDate) {
+                    wrap(() => api("/api/me", { method: "PATCH", body: { birth_date: birthDate } }));
+                  }
+                }}
+              />
+              <button
+                type="button"
+                className="btn-ghost shrink-0 text-xs px-3.5"
+                disabled={!birthDate}
+                onClick={() => wrap(() => api("/api/me", { method: "PATCH", body: { birth_date: birthDate } }))}
+              >
+                Save Birthday
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
+      {/* 2. Cultural Roots & Heritage */}
       <div className="card space-y-5 p-6">
         <div className="flex items-center justify-between">
           <div>
@@ -174,6 +232,7 @@ export default function Me() {
         </div>
       </div>
 
+      {/* 3. Partner Card */}
       <div className="card space-y-3 p-6">
         <h2 className="h-serif text-xl text-brand">💞 Partner</h2>
         {me.partner ? <p>You're planning together with <b>{me.partner.name}</b>.</p> : (<>
@@ -191,6 +250,7 @@ export default function Me() {
         </>)}
       </div>
 
+      {/* 4. My Tastes */}
       <div className="card space-y-4 p-6">
         <h2 className="h-serif text-xl text-brand">✨ My tastes</h2>
         <AddTaste cats={cats} onAdded={() => qc.invalidateQueries({ queryKey: ["tastes"] })} />
@@ -220,6 +280,7 @@ export default function Me() {
         <p className="text-xs text-mut">👁 Shared tastes are visible to your partner. Private ones still shape your plans but are never shown. Dashed = your partner's guess about you.</p>
       </div>
 
+      {/* 5. Memory */}
       <div className="card space-y-3 p-6">
         <h2 className="h-serif text-xl text-brand">🧠 What cupl remembers</h2>
         {mem?.summary && <p className="rounded-2xl bg-cream p-3 text-sm italic">{mem.summary}</p>}

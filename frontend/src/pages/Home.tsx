@@ -21,8 +21,8 @@ export default function Home() {
           <div className="h-serif text-2xl text-ink md:text-3xl">{greet}{first && `, ${first}`} ☀️</div>
           <p className="mt-1 text-mut">Let's make beautiful things happen today.</p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <button type="button" onClick={startVoice} className="btn-primary px-4 py-2 text-sm"><AudioLines className="h-4 w-4" /> Talk to cupl</button>
-            <Link to="/app/spaces/new" className="btn-ghost px-4 py-2 text-sm"><Plus className="h-4 w-4" /> Create Event Space</Link>
+
+            <Link to="/app/spaces/new" className="btn-primary px-4 py-2 text-sm"><Plus className="h-4 w-4" /> Create Event Space</Link>
           </div>
         </div>
       </div>

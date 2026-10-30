@@ -52,6 +52,7 @@ class ProfileUpdateBody(BaseModel):
     tradition: str | None = None
     state: str | None = None
     country: str | None = None
+    birth_date: str | None = None
 
 
 @router.patch("/me")
@@ -65,7 +66,7 @@ async def update_me(body: ProfileUpdateBody, user=Depends(current_user)):
         upd["name_confirmed"] = True
 
     prof_upd = {}
-    for k in ["heritage", "tradition", "state", "country"]:
+    for k in ["heritage", "tradition", "state", "country", "birth_date"]:
         val = getattr(body, k, None)
         if val is not None:
             prof_upd[k] = val.strip()[:60]

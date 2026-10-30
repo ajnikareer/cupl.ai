@@ -1,5 +1,5 @@
 import { Bell, CalendarCheck, CalendarDays, CalendarHeart, Dna, Home, MessageCircleHeart, Sparkles, UserRound } from "lucide-react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { api } from "../lib/api";
@@ -20,7 +20,8 @@ const NAV = [
 
 export default function Layout() {
   const loc = useLocation();
-  const { voice } = useChat();
+  const navigate = useNavigate();
+  const { voice, startVoice } = useChat();
   const { data: me } = useQuery({ queryKey: ["me"], queryFn: () => api("/api/me"), refetchInterval: 30000 });
   const onChat = loc.pathname === "/app/chat";
   const userName = me?.user?.name?.split(" ")[0] || "";
@@ -90,9 +91,32 @@ export default function Layout() {
       </main>
 
       {!onChat && voice === "off" && (
-        <NavLink to="/app/chat" className="fixed bottom-20 right-4 z-30 flex items-center gap-2 rounded-full bg-brand py-1.5 pl-1.5 pr-4 text-sm text-white shadow-soft lg:bottom-6" aria-label="Talk to cupl">
-          <Avatar size={34} /> Talk to cupl
-        </NavLink>
+        <button
+          type="button"
+          onClick={() => {
+            navigate("/app/chat");
+            startVoice();
+          }}
+          className="fixed bottom-20 right-4 z-30 flex items-center gap-2.5 rounded-full bg-brand py-2 pl-2 pr-5 text-sm font-medium text-white shadow-soft hover:bg-brand/90 transition lg:bottom-6 cursor-pointer"
+          aria-label="Ask cupl AI"
+          title="Start live call with cupl AI"
+        >
+          <Avatar size={34} />
+          <span>Ask cupl AI</span>
+        </button>
+      )}
+
+      {!onChat && voice !== "off" && (
+        <button
+          type="button"
+          onClick={() => navigate("/app/chat")}
+          className="fixed bottom-20 right-4 z-30 flex items-center gap-2.5 rounded-full bg-green-600 py-2 pl-2 pr-5 text-sm font-medium text-white shadow-soft hover:bg-green-700 transition lg:bottom-6 cursor-pointer animate-pulse"
+          aria-label="Return to cupl AI call"
+          title="On Call · Tap to return to cupl AI studio"
+        >
+          <Avatar size={34} ring />
+          <span>On Call · Return to cupl AI</span>
+        </button>
       )}
 
       <nav className="fixed inset-x-0 bottom-0 z-30 flex justify-around border-t border-line bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">

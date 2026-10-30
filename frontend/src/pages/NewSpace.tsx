@@ -62,7 +62,7 @@ export default function NewSpace() {
       <aside className="card hidden h-fit flex-col items-center gap-3 p-6 text-center lg:flex">
         <Avatar size={120} />
         <p className="text-sm">Not sure which to choose? I can help you decide based on your ideas and timeline.</p>
-        <button type="button" onClick={() => nav("/app/chat")} className="btn-primary">Talk to cupl</button>
+        <button type="button" onClick={() => nav("/app/chat")} className="btn-primary">Ask cupl AI</button>
       </aside>
     </div>
   );
