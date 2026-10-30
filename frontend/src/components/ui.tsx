@@ -6,10 +6,26 @@ export const Spinner = ({ className = "" }: { className?: string }) => (
 
 export const CuplMark = ({ className = "h-9 w-9" }: { className?: string }) => (
   <svg viewBox="0 0 100 100" className={className} aria-hidden>
-    <rect width="100" height="100" rx="28" fill="#731e33" />
-    <circle cx="39" cy="50" r="21" fill="none" stroke="#d4a060" strokeWidth="6.5" />
-    <circle cx="61" cy="50" r="21" fill="none" stroke="#d4a060" strokeWidth="6.5" />
-    <path d="M 39 29 A 21 21 0 0 1 54 36" fill="none" stroke="#d4a060" strokeWidth="6.5" strokeLinecap="round" />
+    <defs>
+      <linearGradient id="cuplBurgundy" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#7e1f37" />
+        <stop offset="50%" stopColor="#6c1a30" />
+        <stop offset="100%" stopColor="#501121" />
+      </linearGradient>
+      <linearGradient id="cuplGold" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#b8843e" />
+        <stop offset="35%" stopColor="#d8aa65" />
+        <stop offset="70%" stopColor="#fae4bf" />
+        <stop offset="100%" stopColor="#c9974d" />
+      </linearGradient>
+      <filter id="cuplShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#18040a" floodOpacity="0.5" />
+      </filter>
+    </defs>
+    <rect x="3.5" y="3.5" width="93" height="93" rx="26" fill="url(#cuplBurgundy)" stroke="rgba(250,226,188,0.25)" strokeWidth="0.8" />
+    <circle cx="58.3" cy="50" r="17.2" fill="none" stroke="url(#cuplGold)" strokeWidth="3.8" />
+    <circle cx="41.7" cy="50" r="17.2" fill="none" stroke="url(#cuplGold)" strokeWidth="3.8" filter="url(#cuplShadow)" />
+    <path d="M 51.5 65.2 A 17.2 17.2 0 0 1 41.5 53.0" fill="none" stroke="url(#cuplGold)" strokeWidth="3.8" strokeLinecap="round" filter="url(#cuplShadow)" />
   </svg>
 );
 
