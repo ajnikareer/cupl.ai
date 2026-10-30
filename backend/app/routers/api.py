@@ -491,6 +491,20 @@ async def get_recommends(user=Depends(current_user)):
     return await recommends_svc.get_lifestyle_recommendations(user)
 
 
+class ToggleRecommendsBody(BaseModel):
+    enabled: bool
+
+
+@router.post("/recommends/toggle")
+async def toggle_recommends(body: ToggleRecommendsBody, user=Depends(current_user)):
+    return await recommends_svc.toggle_recommends_enabled(user, body.enabled)
+
+
+@router.post("/recommends/refresh")
+async def refresh_recommends(user=Depends(current_user)):
+    return await recommends_svc.refresh_recommendations(user)
+
+
 @router.get("/notifications")
 async def notifications(user=Depends(current_user)):
     out = []
