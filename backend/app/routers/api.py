@@ -467,6 +467,14 @@ async def get_calendar(user=Depends(current_user)):
     return await calendar_svc.get_couple_calendar(user)
 
 
+@router.get("/plans")
+async def get_plans(user=Depends(current_user)):
+    cal = await calendar_svc.get_couple_calendar(user)
+    items = cal.get("custom_items", [])
+    items.sort(key=lambda x: x.get("date") or "9999-12-31")
+    return {"plans": items}
+
+
 class CalendarItemBody(BaseModel):
     title: str
     category: str = "dining"

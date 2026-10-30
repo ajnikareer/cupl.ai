@@ -9,6 +9,7 @@ import Join from "./pages/Join";
 import Home from "./pages/Home";
 import ChatPage from "./pages/ChatPage";
 import Spaces from "./pages/Spaces";
+import Plans from "./pages/Plans";
 import NewSpace from "./pages/NewSpace";
 import SpaceView from "./pages/SpaceView";
 import Dna from "./pages/Dna";
@@ -39,6 +40,7 @@ export default function App() {
         <Route path="spaces" element={<Spaces />} />
         <Route path="spaces/new" element={<NewSpace />} />
         <Route path="spaces/:id" element={<SpaceView />} />
+        <Route path="plans" element={<Plans />} />
         <Route path="calendar" element={<CalendarPage />} />
         <Route path="recommends" element={<Recommends />} />
         <Route path="dna" element={<Dna />} />

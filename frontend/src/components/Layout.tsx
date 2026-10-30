@@ -1,4 +1,4 @@
-import { Bell, CalendarDays, CalendarHeart, Dna, Gift, Home, MessageCircleHeart, Sparkles, UserRound } from "lucide-react";
+import { Bell, CalendarCheck, CalendarDays, CalendarHeart, Dna, Gift, Home, MessageCircleHeart, Sparkles, UserRound } from "lucide-react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
@@ -11,7 +11,8 @@ import { useChat } from "../chat/ChatContext";
 const NAV = [
   { to: "/app", label: "Home", short: "Home", icon: Home, end: true },
   { to: "/app/chat", label: "WeaveTwo AI", short: "Chat", icon: MessageCircleHeart },
-  { to: "/app/spaces", label: "Our Plans", short: "Plans", icon: CalendarHeart },
+  { to: "/app/spaces", label: "Our Events", short: "Events", icon: CalendarHeart },
+  { to: "/app/plans", label: "Our Plans", short: "Plans", icon: CalendarCheck },
   { to: "/app/calendar", label: "Calendar", short: "Calendar", icon: CalendarDays },
   { to: "/app/recommends", label: "Recommends", short: "Picks", icon: Sparkles },
   { to: "/app/dna", label: "Couple DNA", short: "DNA", icon: Dna },
