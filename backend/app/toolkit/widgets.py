@@ -73,7 +73,7 @@ async def apply(uid: str, wr: dict) -> str:
     if kind == "confirm":
         return f"[{'YES — go ahead' if values else 'NO — cancel that'}] {title}"
 
-        if kind == "plan_proposal":
+    if kind == "plan_proposal":
         sid = wr.get("space_id") or w.get("space_id")
         return f"[Saved to Our Plans] {title}. Plan is confirmed and locked in."
 
