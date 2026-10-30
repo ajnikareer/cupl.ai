@@ -659,7 +659,7 @@ export default function ChatPage() {
               <span className="ring-pulse absolute -inset-2 rounded-full border-2 border-brand/50" />
             )}
             <img
-              src="/img/avatar.jpg"
+              src="/img/avatar.png"
               alt="cupl AI Concierge"
               className={clsx(
                 "relative h-36 w-36 xl:h-44 xl:w-44 rounded-full border-4 border-white object-cover shadow-soft transition-all duration-300",

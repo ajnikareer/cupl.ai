@@ -60,7 +60,7 @@ export default function VoiceOverlay() {
         <div className="relative">
           <div ref={ring} className="absolute -inset-4 rounded-full bg-brand/10 transition-transform duration-75" />
           {voice === "listening" && <span className="ring-pulse absolute -inset-2 rounded-full border-2 border-brand/50" />}
-          <img src="/img/avatar.jpg" alt="cupl" className="relative h-40 w-40 rounded-full border-4 border-white object-cover shadow-soft md:h-48 md:w-48" />
+          <img src="/img/avatar.png" alt="cupl" className="relative h-40 w-40 rounded-full border-4 border-white object-cover shadow-soft md:h-48 md:w-48" />
         </div>
 
         <div className="flex flex-col items-center gap-2">
