@@ -369,7 +369,7 @@ export default function ChatPage() {
       {/* 1. FIXED 15% CHAT HISTORY DRAWER                          */}
       {/* ========================================================= */}
       <aside
-        className="w-[180px] xl:w-[220px] shrink-0 border-r border-line bg-white flex flex-col h-full z-10 select-none"
+        className="w-[15%] min-w-[210px] max-w-[250px] shrink-0 border-r border-line bg-white flex flex-col h-full z-10 select-none"
         aria-label="Chat history"
       >
         {/* Top Header: Chat History Title */}
@@ -440,7 +440,7 @@ export default function ChatPage() {
       {/* ========================================================= */}
       {/* 2. CHAT & LIVE TRANSCRIPT COLUMN (~42.5%)                 */}
       {/* ========================================================= */}
-      <section className="flex flex-1 min-w-0 flex-col border-r border-line bg-white h-full overflow-hidden">
+      <section className="flex flex-1 min-w-[320px] flex-col border-r border-line bg-white h-full overflow-hidden">
         {/* Chat Header Bar */}
         <div className="flex items-center justify-between border-b border-line px-4 py-3 bg-white">
           <div className="flex items-center gap-2.5 min-w-0">
@@ -625,7 +625,7 @@ export default function ChatPage() {
       {/* ========================================================= */}
       {/* 3. CLEAN LIVE TALK & COMPANION STAGE (~42.5%)             */}
       {/* ========================================================= */}
-      <section className="hidden md:flex w-[280px] xl:w-[330px] shrink-0 flex-col bg-gradient-to-b from-[#fff8f6] via-blush/35 to-[#fcecee] h-full overflow-y-auto px-4 py-4 xl:px-5 xl:py-6 justify-between relative">
+      <section className="hidden md:flex flex-1 min-w-[340px] flex-col bg-gradient-to-b from-[#fff8f6] via-blush/35 to-[#fcecee] h-full overflow-y-auto px-5 py-6 justify-between relative">
         {/* Stage Header */}
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
@@ -645,7 +645,7 @@ export default function ChatPage() {
         </div>
 
         {/* Center Companion Avatar + Audio Visualizer (Clean, No Continuous Static Card) */}
-        <div className="flex flex-col items-center justify-center gap-3 xl:gap-5 my-auto py-2">
+        <div className="flex flex-col items-center justify-center gap-6 my-auto py-4">
           {/* Avatar with Reactive Pulsing Glow */}
           <div className="relative">
             <div
@@ -662,7 +662,7 @@ export default function ChatPage() {
               src="/img/avatar.png"
               alt="cupl AI Concierge"
               className={clsx(
-                "relative h-28 w-28 xl:h-36 xl:w-36 rounded-full border-4 border-white object-cover shadow-soft transition-all duration-300",
+                "relative h-36 w-36 xl:h-44 xl:w-44 rounded-full border-4 border-white object-cover shadow-soft transition-all duration-300",
                 voice !== "off" ? "scale-105" : "grayscale-[10%]"
               )}
             />
@@ -706,7 +706,7 @@ export default function ChatPage() {
             type="button"
             onClick={toggleCoupleMode}
             className={clsx(
-              "flex h-10 xl:h-11 items-center gap-1.5 xl:gap-2 rounded-full px-3.5 xl:px-4 text-[11px] xl:text-xs font-semibold border transition shadow-soft",
+              "flex h-12 items-center gap-2 rounded-full px-5 text-xs font-semibold border transition shadow-soft",
               coupleMode
                 ? "bg-rose-500 text-white border-rose-600 shadow-rose-200"
                 : "bg-white text-ink border-line hover:border-brand/40 hover:text-brand"
@@ -731,7 +731,7 @@ export default function ChatPage() {
             <button
               type="button"
               onClick={startVoice}
-              className="flex h-10 xl:h-11 items-center gap-1.5 xl:gap-2 rounded-full bg-brand px-4 xl:px-5 text-[11px] xl:text-xs font-semibold text-white shadow-soft hover:bg-brand/90 transition"
+              className="flex h-12 items-center gap-2 rounded-full bg-brand px-6 text-xs font-semibold text-white shadow-soft hover:bg-brand/90 transition"
             >
               <AudioLines className="h-4 w-4" />
               <span>Ask cupl AI</span>

@@ -21,7 +21,7 @@ export const Logo = ({ small = false, className = "" }: { small?: boolean; class
       alt="cupl.ai — Your AI concierge for life together"
       className={clsx(
         "rounded-xl object-contain shadow-2xs transition",
-        small ? "h-8 max-w-[140px]" : "h-9 xl:h-10 w-auto max-w-[170px] xl:max-w-[200px]"
+        small ? "h-10 md:h-11 w-auto max-w-[190px]" : "w-full max-w-[240px] h-auto max-h-[88px]"
       )}
     />
   </div>
