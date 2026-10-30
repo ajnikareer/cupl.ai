@@ -32,7 +32,7 @@ export default function Me() {
 
   return (
     <div className="space-y-6">
-      <PageTitle title="Me" right={<button type="button" className="btn-ghost" onClick={() => { localStorage.removeItem("ww_dev_token"); try { signOut(auth); } catch {} window.location.href = "/login"; }}>Sign out</button>} />
+      <PageTitle title="My Profile" right={<button type="button" className="btn-ghost" onClick={() => { localStorage.removeItem("ww_dev_token"); try { signOut(auth); } catch {} window.location.href = "/login"; }}>Sign out</button>} />
       <ErrorBox error={err} />
       <div className="card space-y-4 p-6">
         <div className="flex flex-col gap-2 sm:flex-row">

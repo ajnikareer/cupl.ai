@@ -18,21 +18,21 @@ async def main():
         )
         page = await ctx.new_page()
 
-        # 1. Capture Login Screen with cupl branding and trip image
-        print("Navigating to /login...")
+        # 1. Set dev token and navigate to Home
         await page.goto(f"{BASE_URL}/login")
-        await page.wait_for_timeout(2000)
-        snap1 = os.path.join(ARTIFACT_DIR, "cupl_login_screen_live.png")
-        await page.screenshot(path=snap1, full_page=False)
-        print("Captured cupl_login_screen_live.png")
-
-        # 2. Set dev token and navigate to app
         await page.evaluate("() => { localStorage.setItem('ww_dev_token', 'dev-ajnikarnarayan'); }")
         await page.goto(f"{BASE_URL}/app")
-        await page.wait_for_timeout(2000)
-        snap2 = os.path.join(ARTIFACT_DIR, "cupl_home_live.png")
-        await page.screenshot(path=snap2, full_page=False)
+        await page.wait_for_timeout(2500)
+        snap1 = os.path.join(ARTIFACT_DIR, "cupl_home_live.png")
+        await page.screenshot(path=snap1, full_page=False)
         print("Captured cupl_home_live.png")
+
+        # 2. Navigate to cupl Suggests
+        await page.goto(f"{BASE_URL}/app/recommends")
+        await page.wait_for_timeout(2000)
+        snap2 = os.path.join(ARTIFACT_DIR, "cupl_suggests_live.png")
+        await page.screenshot(path=snap2, full_page=False)
+        print("Captured cupl_suggests_live.png")
 
         # 3. Navigate to Talk Studio
         await page.goto(f"{BASE_URL}/app/chat")
@@ -42,7 +42,7 @@ async def main():
         print("Captured cupl_talk_studio_live.png")
 
         await browser.close()
-        print("All cupl rebrand screenshots captured successfully!")
+        print("All verification screenshots captured successfully!")
 
 if __name__ == "__main__":
     asyncio.run(main())

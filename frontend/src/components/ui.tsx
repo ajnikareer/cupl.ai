@@ -22,7 +22,7 @@ export const Logo = ({ small = false }: { small?: boolean }) => (
       <div className={clsx("font-extrabold tracking-tight text-brand lowercase font-sans", small ? "text-xl" : "text-[26px]")}>
         cupl
       </div>
-      {!small && <div className="mt-1 text-[10px] font-medium tracking-wide text-mut">Your AI concierge for life together</div>}
+      {!small && <div className="mt-1 text-[10.5px] font-medium tracking-wide text-mut whitespace-nowrap">Your AI concierge for life together</div>}
     </div>
   </div>
 );
