@@ -1,4 +1,4 @@
-import { Bell, CalendarHeart, Dna, Gift, Home, MessageCircleHeart, UserRound } from "lucide-react";
+import { Bell, CalendarDays, CalendarHeart, Dna, Gift, Home, MessageCircleHeart, Sparkles, UserRound } from "lucide-react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
@@ -12,8 +12,9 @@ const NAV = [
   { to: "/app", label: "Home", short: "Home", icon: Home, end: true },
   { to: "/app/chat", label: "WeaveWed AI", short: "Chat", icon: MessageCircleHeart },
   { to: "/app/spaces", label: "Event Spaces", short: "Events", icon: CalendarHeart },
+  { to: "/app/calendar", label: "Calendar", short: "Calendar", icon: CalendarDays },
+  { to: "/app/recommends", label: "Recommends", short: "Picks", icon: Sparkles },
   { to: "/app/dna", label: "Couple DNA", short: "DNA", icon: Dna },
-  { to: "/app/surprises", label: "Surprises", short: "Surprises", icon: Gift },
   { to: "/app/me", label: "Me", short: "Me", icon: UserRound },
 ];
 
@@ -90,7 +91,7 @@ export default function Layout() {
       )}
 
       <nav className="fixed inset-x-0 bottom-0 z-30 flex justify-around border-t border-line bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
-        {NAV.filter((n) => n.to !== "/app/surprises").map((n) => (
+        {NAV.filter((n) => n.to !== "/app/recommends" && n.to !== "/app/dna").map((n) => (
           <NavLink key={n.to} to={n.to} end={n.end}
             className={({ isActive }) => clsx("flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px]", isActive ? "text-brand" : "text-mut")}>
             <n.icon className="h-5 w-5" /> {n.short}

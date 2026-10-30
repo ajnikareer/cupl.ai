@@ -13,7 +13,7 @@ from ..auth import current_user
 from ..db import db, get_doc, list_col, new_id, now_iso
 from ..services import couple as couple_svc
 from ..services import dna as dna_svc
-from ..services import plan_engine, qloo, state, taste_intel
+from ..services import plan_engine, qloo, state, taste_intel, calendar_svc, recommends_svc
 from ..services import spaces as sp
 from ..services import tastes
 from ..services.memory import list_episodes, recent_turns, save_episode
@@ -436,6 +436,59 @@ async def del_surprise(sid: str, user=Depends(current_user)):
         raise HTTPException(404, "not found")
     await db.document(f"surprises/{sid}").delete()
     return {"ok": True}
+
+
+# ---------------- calendar / lifestyle recommends ----------------
+@router.get("/calendar")
+async def get_calendar(user=Depends(current_user)):
+    return await calendar_svc.get_couple_calendar(user)
+
+
+class CalendarItemBody(BaseModel):
+    title: str
+    category: str = "dining"
+    date: str
+    time: str | None = None
+    description: str | None = None
+    recommendation_id: str | None = None
+    maps_url: str | None = None
+    image: str | None = None
+    is_private: bool = False
+
+
+@router.post("/calendar/items")
+async def add_cal_item(body: CalendarItemBody, user=Depends(current_user)):
+    return await calendar_svc.add_calendar_item(user, body.model_dump())
+
+
+@router.delete("/calendar/items/{item_id}")
+async def del_cal_item(item_id: str, user=Depends(current_user)):
+    ok = await calendar_svc.delete_calendar_item(user, item_id)
+    if not ok:
+        raise HTTPException(404, "item not found")
+    return {"ok": True}
+
+
+class ToggleRecBody(BaseModel):
+    recommendation_id: str
+    title: str
+    category: str = "dining"
+    date: str
+    time: str | None = None
+    description: str | None = None
+    maps_url: str | None = None
+    image: str | None = None
+    is_private: bool = False
+
+
+@router.post("/calendar/toggle-rec")
+async def toggle_rec_calendar(body: ToggleRecBody, user=Depends(current_user)):
+    return await calendar_svc.toggle_recommendation_in_calendar(user, body.recommendation_id, body.model_dump())
+
+
+@router.get("/recommends")
+async def get_recommends(user=Depends(current_user)):
+    return await recommends_svc.get_lifestyle_recommendations(user)
 
 
 @router.get("/notifications")

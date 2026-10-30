@@ -14,6 +14,8 @@ import SpaceView from "./pages/SpaceView";
 import Dna from "./pages/Dna";
 import Me from "./pages/Me";
 import Surprises from "./pages/Surprises";
+import CalendarPage from "./pages/Calendar";
+import Recommends from "./pages/Recommends";
 import Notifications from "./pages/Notifications";
 import Intelligence from "./pages/Intelligence";
 
@@ -37,9 +39,11 @@ export default function App() {
         <Route path="spaces" element={<Spaces />} />
         <Route path="spaces/new" element={<NewSpace />} />
         <Route path="spaces/:id" element={<SpaceView />} />
+        <Route path="calendar" element={<CalendarPage />} />
+        <Route path="recommends" element={<Recommends />} />
         <Route path="dna" element={<Dna />} />
         <Route path="me" element={<Me />} />
-        <Route path="surprises" element={<Surprises />} />
+        <Route path="surprises" element={<Navigate to="/app/recommends" replace />} />
         <Route path="notifications" element={<Notifications />} />
         <Route path="intelligence" element={<Intelligence />} />
       </Route>
