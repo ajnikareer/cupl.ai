@@ -21,7 +21,13 @@ export default function Me() {
   const [copied, setCopied] = useState(false);
   const [code, setCode] = useState("");
   const [stateVal, setStateVal] = useState("");
+  const [heritageVal, setHeritageVal] = useState("");
+  const [traditionVal, setTraditionVal] = useState("");
+
   useEffect(() => { if (me?.user?.profile?.state) setStateVal(me.user.profile.state); }, [me?.user?.profile?.state]);
+  useEffect(() => { if (me?.user?.profile?.heritage) setHeritageVal(me.user.profile.heritage); }, [me?.user?.profile?.heritage]);
+  useEffect(() => { if (me?.user?.profile?.tradition) setTraditionVal(me.user.profile.tradition); }, [me?.user?.profile?.tradition]);
+
   const [err, setErr] = useState<any>(null);
   useEffect(() => { if (me?.user?.name) setName(me.user.name); }, [me?.user?.name]);
   if (!me) return <Spinner />;
@@ -45,7 +51,7 @@ export default function Me() {
         </div>
       </div>
 
-      <div className="card space-y-4 p-6">
+      <div className="card space-y-5 p-6">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="h-serif text-xl text-brand flex items-center gap-2">
@@ -58,13 +64,40 @@ export default function Me() {
 
         <div>
           <div className="mb-1.5 text-xs font-medium text-brand">Heritage / Community</div>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <input
+              className="input flex-1"
+              placeholder="Type or search heritage / community (e.g. Maharashtrian, Bengali, Punjabi, Marwari...)"
+              value={heritageVal}
+              onChange={(e) => setHeritageVal(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && heritageVal.trim()) {
+                  wrap(() => api("/api/me", { method: "PATCH", body: { heritage: heritageVal.trim() } }));
+                }
+              }}
+            />
+            <button
+              type="button"
+              className="btn-ghost"
+              disabled={!heritageVal.trim()}
+              onClick={() => wrap(() => api("/api/me", { method: "PATCH", body: { heritage: heritageVal.trim() } }))}
+            >
+              Save Heritage
+            </button>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-1.5">
             {HERITAGES.map((h) => (
               <button
                 type="button"
                 key={h}
-                onClick={() => wrap(() => api("/api/me", { method: "PATCH", body: { heritage: h } }))}
-                className={clsx("chip", me.user?.profile?.heritage === h && "chip-on")}
+                onClick={() => {
+                  setHeritageVal(h);
+                  wrap(() => api("/api/me", { method: "PATCH", body: { heritage: h } }));
+                }}
+                className={clsx(
+                  "chip",
+                  (heritageVal.toLowerCase() === h.toLowerCase() || me.user?.profile?.heritage === h) && "chip-on"
+                )}
               >
                 {h}
               </button>
@@ -74,13 +107,40 @@ export default function Me() {
 
         <div>
           <div className="mb-1.5 text-xs font-medium text-brand">Wedding Tradition / Faith</div>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <input
+              className="input flex-1"
+              placeholder="Type or search tradition / faith (e.g. Hindu, Sikh, Christian, Inter-faith...)"
+              value={traditionVal}
+              onChange={(e) => setTraditionVal(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && traditionVal.trim()) {
+                  wrap(() => api("/api/me", { method: "PATCH", body: { tradition: traditionVal.trim() } }));
+                }
+              }}
+            />
+            <button
+              type="button"
+              className="btn-ghost"
+              disabled={!traditionVal.trim()}
+              onClick={() => wrap(() => api("/api/me", { method: "PATCH", body: { tradition: traditionVal.trim() } }))}
+            >
+              Save Tradition
+            </button>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-1.5">
             {TRADITIONS.map((t) => (
               <button
                 type="button"
                 key={t}
-                onClick={() => wrap(() => api("/api/me", { method: "PATCH", body: { tradition: t } }))}
-                className={clsx("chip", me.user?.profile?.tradition === t && "chip-on")}
+                onClick={() => {
+                  setTraditionVal(t);
+                  wrap(() => api("/api/me", { method: "PATCH", body: { tradition: t } }));
+                }}
+                className={clsx(
+                  "chip",
+                  (traditionVal.toLowerCase() === t.toLowerCase() || me.user?.profile?.tradition === t) && "chip-on"
+                )}
               >
                 {t}
               </button>
@@ -88,20 +148,29 @@ export default function Me() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 sm:flex-row pt-1">
-          <input
-            className="input flex-1"
-            placeholder="Home state or city (e.g. Maharashtra, Kolkata, Punjab, New York)"
-            value={stateVal}
-            onChange={(e) => setStateVal(e.target.value)}
-          />
-          <button
-            type="button"
-            className="btn-ghost"
-            onClick={() => wrap(() => api("/api/me", { method: "PATCH", body: { state: stateVal.trim() } }))}
-          >
-            Save Region
-          </button>
+        <div>
+          <div className="mb-1.5 text-xs font-medium text-brand">Region / Home State or City</div>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <input
+              className="input flex-1"
+              placeholder="Home state or city (e.g. Maharashtra, Kolkata, Punjab, New York)"
+              value={stateVal}
+              onChange={(e) => setStateVal(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && stateVal.trim()) {
+                  wrap(() => api("/api/me", { method: "PATCH", body: { state: stateVal.trim() } }));
+                }
+              }}
+            />
+            <button
+              type="button"
+              className="btn-ghost"
+              disabled={!stateVal.trim()}
+              onClick={() => wrap(() => api("/api/me", { method: "PATCH", body: { state: stateVal.trim() } }))}
+            >
+              Save Region
+            </button>
+          </div>
         </div>
       </div>
 

@@ -364,7 +364,7 @@ export default function ChatPage() {
   ].filter((g) => g.items.length > 0);
 
   return (
-    <div className="flex h-[calc(100dvh-57px)] w-full overflow-hidden bg-cream/40">
+    <div className="flex h-full w-full overflow-hidden bg-cream/40">
       {/* ========================================================= */}
       {/* 1. FIXED 15% CHAT HISTORY DRAWER                          */}
       {/* ========================================================= */}

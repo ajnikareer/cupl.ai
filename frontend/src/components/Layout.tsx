@@ -1,10 +1,9 @@
-import { Bell, CalendarCheck, CalendarDays, CalendarHeart, Dna, Gift, Home, MessageCircleHeart, Sparkles, UserRound } from "lucide-react";
+import { Bell, CalendarCheck, CalendarDays, CalendarHeart, Dna, Home, MessageCircleHeart, Sparkles, UserRound } from "lucide-react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { api } from "../lib/api";
 import { Avatar, Logo } from "./ui";
-import ChatPanel from "../chat/ChatPanel";
 import VoiceOverlay from "../chat/VoiceOverlay";
 import { useChat } from "../chat/ChatContext";
 
@@ -24,7 +23,6 @@ export default function Layout() {
   const { voice } = useChat();
   const { data: me } = useQuery({ queryKey: ["me"], queryFn: () => api("/api/me"), refetchInterval: 30000 });
   const onChat = loc.pathname === "/app/chat";
-  const isHome = loc.pathname === "/app" || loc.pathname === "/app/";
   const userName = me?.user?.name?.split(" ")[0] || "";
   const partnerName = me?.partner?.name?.split(" ")[0] || "";
 
@@ -54,8 +52,8 @@ export default function Layout() {
         </div>
       </aside>
 
-      <main className="min-w-0 flex-1 pb-20 lg:pb-0">
-        <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-line bg-cream/85 px-4 py-3 backdrop-blur lg:px-8">
+      <main className={clsx("min-w-0 flex-1", onChat ? "h-screen flex flex-col overflow-hidden" : "pb-20 lg:pb-0")}>
+        <header className="sticky top-0 z-20 shrink-0 flex items-center justify-between gap-3 border-b border-line bg-cream/85 px-4 py-3 backdrop-blur lg:px-8">
           <div className="lg:hidden"><Logo small /></div>
           <div className="hidden lg:block text-xs font-semibold text-mut">✨ Couple Taste Intelligence AI</div>
           <div className="flex items-center gap-3">
@@ -86,19 +84,13 @@ export default function Layout() {
             </div>
           </div>
         </header>
-        <div className={clsx(onChat ? "" : isHome ? "mx-auto max-w-6xl p-4 lg:p-8" : "mx-auto max-w-5xl p-4 lg:p-6")}>
+        <div className={clsx(onChat ? "flex-1 min-h-0 overflow-hidden" : "mx-auto max-w-6xl p-4 lg:p-8")}>
           <Outlet />
         </div>
       </main>
 
-      {!onChat && !isHome && (
-        <section className="sticky top-0 hidden h-screen w-[340px] shrink-0 border-l border-line bg-white xl:block">
-          <ChatPanel docked />
-        </section>
-      )}
-
       {!onChat && voice === "off" && (
-        <NavLink to="/app/chat" className="fixed bottom-20 right-4 z-30 flex items-center gap-2 rounded-full bg-brand py-1.5 pl-1.5 pr-4 text-sm text-white shadow-soft lg:bottom-6 xl:hidden" aria-label="Talk to cupl">
+        <NavLink to="/app/chat" className="fixed bottom-20 right-4 z-30 flex items-center gap-2 rounded-full bg-brand py-1.5 pl-1.5 pr-4 text-sm text-white shadow-soft lg:bottom-6" aria-label="Talk to cupl">
           <Avatar size={34} /> Talk to cupl
         </NavLink>
       )}

@@ -18,33 +18,33 @@ async def main():
         )
         page = await ctx.new_page()
 
-        # 1. Set dev token on root domain then go to /app
+        # 1. Login with dev token
         await page.goto(f"{BASE_URL}/login")
         await page.evaluate("() => localStorage.setItem('ww_dev_token', 'dev-ajnikarnarayan')")
-        await page.goto(f"{BASE_URL}/app")
 
-        # Wait for the user profile & partner to resolve in header
-        await page.wait_for_selector("text=Planning together with", timeout=12000)
-        await page.wait_for_timeout(500)
-        snap1 = os.path.join(ARTIFACT_DIR, "cupl_home_live.png")
-        await page.screenshot(path=snap1, full_page=False)
-        print("Captured cupl_home_live.png")
-
-        # 2. Navigate to cupl Suggests
+        # 2. Verify cupl Suggests (full-width, NO right side chat!)
         await page.goto(f"{BASE_URL}/app/recommends")
-        await page.wait_for_selector("text=cupl Suggests", timeout=10000)
-        await page.wait_for_timeout(500)
-        snap2 = os.path.join(ARTIFACT_DIR, "cupl_suggests_live.png")
-        await page.screenshot(path=snap2, full_page=False)
-        print("Captured cupl_suggests_live.png")
+        await page.wait_for_selector("text=cupl Suggests", timeout=12000)
+        await page.wait_for_timeout(1000)
+        snap1 = os.path.join(ARTIFACT_DIR, "cupl_suggests_wide_live.png")
+        await page.screenshot(path=snap1, full_page=False)
+        print("Captured cupl_suggests_wide_live.png")
 
-        # 3. Navigate to Talk Studio
+        # 3. Verify cupl AI Studio (perfectly fitted, no window scrollbar)
         await page.goto(f"{BASE_URL}/app/chat")
-        await page.wait_for_selector("text=cupl AI Concierge", timeout=10000)
-        await page.wait_for_timeout(500)
-        snap3 = os.path.join(ARTIFACT_DIR, "cupl_talk_studio_live.png")
+        await page.wait_for_selector("text=Chat History", timeout=12000)
+        await page.wait_for_timeout(1000)
+        snap2 = os.path.join(ARTIFACT_DIR, "cupl_talk_studio_fitted_live.png")
+        await page.screenshot(path=snap2, full_page=False)
+        print("Captured cupl_talk_studio_fitted_live.png")
+
+        # 4. Verify My Profile (Heritage and Tradition search boxes)
+        await page.goto(f"{BASE_URL}/app/me")
+        await page.wait_for_selector("text=Cultural Roots & Heritage", timeout=12000)
+        await page.wait_for_timeout(1000)
+        snap3 = os.path.join(ARTIFACT_DIR, "cupl_profile_searchboxes_live.png")
         await page.screenshot(path=snap3, full_page=False)
-        print("Captured cupl_talk_studio_live.png")
+        print("Captured cupl_profile_searchboxes_live.png")
 
         await browser.close()
         print("All verification screenshots captured successfully!")
