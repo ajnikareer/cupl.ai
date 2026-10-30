@@ -18,7 +18,10 @@ export function AuthProvider({ children }: { children: any }) {
           .catch((e) => console.warn("Dev join failed:", e))
           .finally(() => localStorage.removeItem("ww_join"));
       }
-      setUser({ uid: devTok.replace("dev-", ""), displayName: devTok.includes("narayan") ? "Narayan" : "Amruta", email: `${devTok}@cupl.app` });
+      const uid = devTok.replace("dev-", "");
+      const isAmruta = uid.endsWith("_2") || uid.includes("amruta") || uid.includes("vyawahare");
+      const name = isAmruta ? "Amruta" : "Narayan";
+      setUser({ uid, displayName: name, email: `${devTok}@cupl.app` });
       setLoading(false);
       return;
     }

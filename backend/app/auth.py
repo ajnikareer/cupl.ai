@@ -18,8 +18,16 @@ async def verify_token(token: str) -> dict:
         raise HTTPException(401, "Missing token")
     if token.startswith("dev-") or token.startswith("tok-") or token.startswith("demo-"):
         uid = token.replace("dev-", "").replace("tok-", "").replace("demo-", "")
-        clean_uid = uid.split("@")[0].split(".")[0].replace("_", " ").replace("-", " ")
-        name = "Narayan" if "narayan" in token.lower() else ("Amruta" if "amruta" in token.lower() else clean_uid.title())
+        existing = await get_doc(f"users/{uid}")
+        if existing and existing.get("name"):
+            name = existing["name"]
+        elif "narayan" in token.lower() or uid.endswith("_1"):
+            name = "Narayan"
+        elif "amruta" in token.lower() or uid.endswith("_2"):
+            name = "Amruta"
+        else:
+            clean_uid = uid.split("@")[0].split(".")[0].replace("_", " ").replace("-", " ")
+            name = clean_uid.title()
         decoded = {"uid": uid, "name": name, "email": f"{uid}@cupl.app", "picture": None}
         return await ensure_user(decoded)
     hit = _token_cache.get(token)
@@ -40,6 +48,8 @@ async def ensure_user(decoded: dict) -> dict:
     uid = decoded["uid"]
     user = await get_doc(f"users/{uid}")
     if user:
+        if user.get("name"):
+            return user
         if decoded.get("name") and not user.get("name_confirmed") and not user.get("name_from_provider"):
             await db.document(f"users/{uid}").update({"name": decoded["name"], "name_from_provider": True})
             user["name"] = decoded["name"]
