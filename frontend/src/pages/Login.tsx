@@ -82,13 +82,14 @@ export default function Login() {
             <button
               type="button"
               onClick={() => {
-                localStorage.setItem("ww_dev_token", "dev-cupl_star_1");
+                localStorage.removeItem("ww_chat_history");
+                localStorage.setItem("ww_dev_token", "dev-groom_narayan");
                 window.location.href = "/app";
               }}
               className="w-full py-2.5 px-3 rounded-xl border border-brand/20 bg-brand/5 hover:bg-brand/10 text-brand text-xs font-semibold flex items-center justify-center gap-2 transition shadow-sm"
             >
               <span>✨</span>
-              <span>1-Click Demo: Explore as Narayan</span>
+              <span>1-Click Groom Demo (Narayan)</span>
             </button>
             <button
               type="button"

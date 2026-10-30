@@ -99,6 +99,8 @@ function getIconInfo(it: any, secKey?: string) {
 
 function PlanTab({ s }: { s: any }) {
   const qc = useQueryClient();
+  const nav = useNavigate();
+  const { data: me } = useQuery({ queryKey: ["me"], queryFn: () => api("/api/me") });
   const building = s.state === "building";
   const { data: plan, isLoading } = useQuery({ queryKey: ["plan", s.id], queryFn: () => api(`/api/spaces/${s.id}/plan`),
     refetchInterval: building ? 2500 : false });
@@ -142,14 +144,34 @@ function PlanTab({ s }: { s: any }) {
     );
   if (!plan)
     return (
-      <div className="card overflow-hidden text-center">
-        <img src={IMG[s.type]} alt="" className="h-40 w-full object-cover" />
-        <div className="space-y-3 p-8">
-          <div className="h-serif text-2xl text-brand">Ready to weave your plan ✨</div>
-          <p className="mx-auto max-w-md text-sm text-mut">Tip: share a few tastes first (chat with cupl or the Me page) and get your partner in — the plan gets far more personal.</p>
-          {s.build_error && <ErrorBox error="The last attempt hit a snag. Please try again." />}
-          <ErrorBox error={err} />
-          <button type="button" onClick={() => build()} className="btn-primary px-6"><Sparkles className="h-4 w-4" /> Build our plan</button>
+      <div className="card overflow-hidden text-center max-w-2xl mx-auto shadow-soft border border-border">
+        <div className="relative h-44 w-full overflow-hidden">
+          <img src={IMG[s.type] || "/img/wedding.jpg"} alt="" className="h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+          <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand text-white text-xs font-semibold shadow-sm">
+            <span>🔒</span> Couple Gatekeeper Active
+          </div>
+          <div className="absolute bottom-4 left-4 right-4 text-left text-white">
+            <h1 className="h-serif text-2xl font-bold">{s.title}</h1>
+            <p className="text-xs text-white/90">{s.city} • {s.guests || 400} guests • ₹{((s.budget || 2500000) / 100000).toFixed(0)}L budget</p>
+          </div>
+        </div>
+        <div className="space-y-4 p-8">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blush text-brand text-xs font-semibold">
+            <span>🌸</span> Awaiting Bride's Tastes & Aesthetic
+          </div>
+          <h2 className="h-serif text-2xl text-brand font-bold">Groom's Tastes Locked In ✨</h2>
+          <p className="mx-auto max-w-lg text-sm text-mut leading-relaxed">
+            {me?.user?.name ? `${me.user.name.split(" ")[0]}, your` : "Your"} cultural roots, favorite music, and venue scale are saved! To weave an authentic dual-heritage masterplan, your bride needs to be onboarded so her aesthetic, favorite music, and bridal traditions are harmonized with yours.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            <button type="button" onClick={() => nav("/app/chat")} className="btn-primary w-full sm:w-auto px-6 py-2.5 flex items-center justify-center gap-2 shadow-sm">
+              <span>💌</span> Invite Bride in Chat
+            </button>
+            <button type="button" onClick={() => build()} className="btn-ghost text-xs text-mut hover:text-brand underline">
+              Weave solo preview anyway
+            </button>
+          </div>
         </div>
       </div>
     );

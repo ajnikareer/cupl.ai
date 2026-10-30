@@ -25,98 +25,13 @@ interface ChatThread {
   messages: Msg[];
 }
 
-const DEFAULT_THREADS: ChatThread[] = [
-  {
-    id: "thread_bali",
-    title: "Bali honeymoon planning",
-    timestamp: Date.now() - 1000 * 60 * 20, // Today, 20 mins ago
-    messages: [
-      {
-        id: "m_bali_1",
-        role: "agent",
-        text: "Hi Narayan! Welcome back. We're putting together your Bali honeymoon for Nov 15–22. Would you like to check Ubud bamboo villa stays or Seminyak sunset spots first?",
-      },
-      {
-        id: "m_bali_2",
-        role: "user",
-        text: "Show me some sunset dinner and acoustic spots in Seminyak.",
-        voice: true,
-      },
-      {
-        id: "m_bali_3",
-        role: "agent",
-        text: "Seminyak is renowned for beachfront acoustic lounges! Anjuna Beach Lounge & Jimbaran Bay candlelit tables match both Amruta's romantic aesthetic and your love for live acoustic sets.",
-      },
-    ],
-  },
-  {
-    id: "thread_sangeet",
-    title: "Sangeet playlist ideas",
-    timestamp: Date.now() - 1000 * 60 * 60 * 24, // Yesterday
-    messages: [
-      {
-        id: "m_sangeet_1",
-        role: "user",
-        text: "We need a playlist curve for our Sangeet night.",
-      },
-      {
-        id: "m_sangeet_2",
-        role: "agent",
-        text: "I've drafted a curve transitioning from nostalgic 90s Bollywood melodies during dinner to high-energy dance anthems for the couple performance!",
-      },
-      {
-        id: "m_sangeet_3",
-        role: "user",
-        text: "Add some acoustic retro songs for our couple entry.",
-      },
-      {
-        id: "m_sangeet_4",
-        role: "agent",
-        text: "Perfect! Added acoustic renditions of 'Tum Se Hi' and 'Raabta' for an intimate, cinematic entry.",
-      },
-    ],
-  },
-  {
-    id: "thread_friday",
-    title: "Friday movie & dinner date",
-    timestamp: Date.now() - 1000 * 60 * 60 * 48, // 2 days ago
-    messages: [
-      {
-        id: "m_friday_1",
-        role: "user",
-        text: "Suggest a movie and dinner plan for this Friday.",
-      },
-      {
-        id: "m_friday_2",
-        role: "agent",
-        text: "How about re-watching 'Yeh Jawaani Hai Deewani' paired with Italian wood-fired pizza and gelato from Olive Bistro? 95% taste match for both of you!",
-      },
-    ],
-  },
-  {
-    id: "thread_decor",
-    title: "Living room decor palette",
-    timestamp: Date.now() - 1000 * 60 * 60 * 24 * 5, // 5 days ago
-    messages: [
-      {
-        id: "m_decor_1",
-        role: "user",
-        text: "Help us balance warm wood with modern minimal home decor.",
-      },
-      {
-        id: "m_decor_2",
-        role: "agent",
-        text: "A warm teak credenza paired with neutral cream linen upholstery and subtle brass accents brings warmth without cluttering Amruta's minimalist vision.",
-      },
-    ],
-  },
-];
+const DEFAULT_THREADS: ChatThread[] = [];
 
 const QUICK_PROMPTS = [
   "Plan a surprise date 🤫",
   "Suggest a movie for tonight 🎬",
   "Compare our taste DNA 🧬",
-  "Check flight dates for Bali ✈️",
+  "Plan our celebration ✨",
 ];
 
 const VOICE_LABEL: Record<string, string> = {
@@ -145,19 +60,10 @@ export default function ChatPage() {
 
   const { data: me } = useQuery({ queryKey: ["me"], queryFn: () => api("/api/me") });
 
-  const [threads, setThreads] = useState<ChatThread[]>(() => {
-    try {
-      const saved = localStorage.getItem("ww_chat_history");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch {}
-    return DEFAULT_THREADS;
-  });
+  const [threads, setThreads] = useState<ChatThread[]>(() => []);
 
-  const [activeThreadId, setActiveThreadId] = useState<string>("thread_bali");
-  const [showContinuity, setShowContinuity] = useState(true);
+  const [activeThreadId, setActiveThreadId] = useState<string>("current");
+  const [showContinuity, setShowContinuity] = useState(false);
   const [text, setText] = useState("");
 
   const end = useRef<HTMLDivElement>(null);
@@ -519,11 +425,16 @@ export default function ChatPage() {
 
           {/* Initial Greeting if chat is empty */}
           {messages.length === 0 && (
-            <div className="rise flex gap-2">
-              <Avatar size={30} />
-              <div className="rounded-2xl rounded-tl-sm border border-line bg-white p-3.5 text-sm shadow-sm text-ink leading-relaxed">
-                <div className="h-serif text-base text-brand">Hi {first}! 👋</div>
-                What would you like to plan today? Type below or tap <b>Ask cupl AI</b> on the right to speak directly.
+            <div className="rise flex gap-3">
+              <Avatar size={34} />
+              <div className="rounded-2xl rounded-tl-sm border border-line bg-white p-4 text-sm shadow-sm text-ink leading-relaxed max-w-lg">
+                <div className="h-serif text-base text-brand font-bold mb-1">Hello {first}! Welcome to cupl AI 💕</div>
+                <p className="text-mut text-xs leading-relaxed mb-2.5">
+                  I am your AI concierge for life together, powered by Qloo Cultural Taste Intelligence. I can assist you with milestone <b>Events</b>, everyday <b>Plans</b>, and weekly <b>Recommendations</b>.
+                </p>
+                <p className="text-ink text-xs font-medium">
+                  Would you like a quick tour of how I can assist you, or is there an upcoming celebration on your mind?
+                </p>
               </div>
             </div>
           )}
