@@ -61,11 +61,6 @@ export default function Login() {
       <div className="grid place-items-center bg-gradient-to-br from-[#fff5f2] via-blush to-[#ecc9d3] p-4">
         <div className="card w-full max-w-sm p-6 shadow-soft">
           <div className="mb-6 flex justify-center"><Logo /></div>
-          <button type="button" disabled={busy} onClick={() => go(() => signInWithPopup(auth, google))} className="btn-ghost w-full py-3">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="" className="h-4 w-4" /> Continue with Google
-          </button>
-          
-          <div className="my-4 text-center text-xs text-mut">or</div>
           <form onSubmit={emailAuth} className="space-y-3">
             {mode === "up" && <input className="input" placeholder="Your first name" value={name} onChange={(e) => setName(e.target.value)} required />}
             <input className="input" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />

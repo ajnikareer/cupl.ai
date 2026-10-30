@@ -133,6 +133,29 @@ async def create_space(body: SpaceBody, user=Depends(current_user)):
     return {**s, "invalid": errors}
 
 
+
+class SaveProposalBody(BaseModel):
+    title: str
+    type: str = "trip"
+    city: str | None = None
+    start_date: str | None = None
+    end_date: str | None = None
+    budget: float | None = None
+    highlights: list[str] = []
+    space_id: str | None = None
+
+
+@router.post("/spaces/save-proposal")
+async def save_proposal(body: SaveProposalBody, user=Depends(current_user)):
+    if body.space_id:
+        s = await sp.get_space(body.space_id, user["couple_id"])
+        if s:
+            await db.document(f"spaces/{s['id']}").set({"confirmed": True}, merge=True)
+            return {"ok": True, "space": s}
+    s, err = await sp.create_space(user, body.type, body.model_dump())
+    return {"ok": True, "space": s}
+
+
 @router.get("/spaces/{sid}")
 async def get_space(sid: str, user=Depends(current_user)):
     s = await sp.get_space(sid, user["couple_id"])

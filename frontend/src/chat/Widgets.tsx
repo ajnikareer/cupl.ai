@@ -25,6 +25,7 @@ export function Widget({ w }: { w: any }) {
     case "invite": return <Invite w={w} />;
     case "recs": return <Recs w={w} />;
     case "plan_progress": return <PlanProgress w={w} />;
+    case "plan_proposal": return <PlanProposal w={w} />;
     case "dna": return <DnaW w={w} />;
     case "surprise": return (
       <Box title={w.title} sub="Only you can see this 🤫">
@@ -218,8 +219,8 @@ function Invite({ w }: { w: any }) {
       <div className="break-all rounded-2xl bg-cream p-2.5 text-xs">{link}</div>
       <div className="mt-3 flex flex-wrap gap-2">
         <button type="button" className="btn-primary" onClick={copy}><Copy className="h-4 w-4" />{copied ? "Copied!" : "Copy link"}</button>
-        {nav.share && <button type="button" className="btn-ghost" onClick={() => nav.share({ title: "Join me on WeaveWed 💞", url: link }).catch(() => {})}><Share2 className="h-4 w-4" /> Share</button>}
-        <a className="btn-ghost" target="_blank" rel="noreferrer" href={`https://wa.me/?text=${encodeURIComponent("Join me on WeaveWed 💞 " + link)}`}>WhatsApp</a>
+        {nav.share && <button type="button" className="btn-ghost" onClick={() => nav.share({ title: "Join me on WeaveTwo 💞", url: link }).catch(() => {})}><Share2 className="h-4 w-4" /> Share</button>}
+        <a className="btn-ghost" target="_blank" rel="noreferrer" href={`https://wa.me/?text=${encodeURIComponent("Join me on WeaveTwo 💞 " + link)}`}>WhatsApp</a>
       </div>
     </Box>
   );
@@ -271,5 +272,115 @@ function DnaW({ w }: { w: any }) {
         : <div className="text-xs text-mut">No shared loves yet — once both of you add tastes, they'll show here.</div>}
       <Link to="/app/dna" className="mt-3 inline-block text-sm font-medium text-brand underline">Open Couple DNA</Link>
     </Box>
+  );
+}
+
+
+function PlanProposal({ w }: { w: any }) {
+  const { submitWidget } = useChat();
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(!!w.done);
+  const [spaceId, setSpaceId] = useState(w.space_id || null);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const res: any = await api("/api/spaces/save-proposal", {
+        method: "POST",
+        body: {
+          title: w.title,
+          type: w.plan_type || "trip",
+          city: w.city || "",
+          start_date: w.start_date || null,
+          end_date: w.end_date || null,
+          budget: w.budget_val || null,
+          highlights: w.highlights || [],
+          space_id: w.space_id || null,
+        },
+      });
+      setSaved(true);
+      const sid = res?.space?.id || spaceId;
+      if (sid) setSpaceId(sid);
+      submitWidget(w.id, { saved: true, space_id: sid, title: w.title });
+    } catch (err) {
+      console.warn("Failed to save plan proposal:", err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className={clsx(
+      "rounded-3xl border bg-white p-5 shadow-soft transition space-y-4 max-w-lg mx-auto",
+      saved ? "border-emerald-300 bg-emerald-50/20" : "border-brand/25"
+    )}>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="badge bg-blush text-brand text-[10px] font-bold">
+              {w.match_score ? `${Math.round(w.match_score * 100)}% Taste Match` : "QLOO Taste Overlap"}
+            </span>
+            <span className="text-[11px] font-semibold text-mut uppercase tracking-wider">
+              Tentative Plan
+            </span>
+          </div>
+          <h3 className="h-serif text-xl font-bold text-ink mt-1">{w.title}</h3>
+          {(w.dates || w.city) && (
+            <div className="flex flex-wrap items-center gap-2 text-xs text-mut mt-0.5">
+              {w.city && <span>📍 {w.city}</span>}
+              {w.dates && <span>📅 {w.dates}</span>}
+              {w.budget && <span>💰 {w.budget}</span>}
+            </div>
+          )}
+        </div>
+        {saved && (
+          <span className="badge bg-emerald-100 text-emerald-800 border-emerald-200">
+            <Check className="h-3 w-3" /> Saved to Our Plans
+          </span>
+        )}
+      </div>
+
+      {w.highlights && w.highlights.length > 0 && (
+        <div className="space-y-1.5 rounded-2xl bg-cream/80 p-3 text-xs text-ink border border-line/60">
+          <div className="font-semibold text-brand text-[11px] mb-1">Curated Plan Highlights:</div>
+          {w.highlights.map((h: string, idx: number) => (
+            <div key={idx} className="flex items-start gap-1.5 leading-relaxed">
+              <span className="text-brand shrink-0">•</span>
+              <span>{h}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="pt-2 border-t border-line/60 flex items-center justify-between gap-3">
+        {saved ? (
+          <div className="flex items-center justify-between w-full">
+            <span className="text-xs font-semibold text-emerald-800 flex items-center gap-1.5">
+              <Check className="h-4 w-4 text-emerald-600" /> Plan saved in Our Plans
+            </span>
+            <Link
+              to={spaceId ? `/app/spaces/${spaceId}` : "/app/spaces"}
+              className="text-xs font-semibold text-brand hover:underline"
+            >
+              Open Plan Details →
+            </Link>
+          </div>
+        ) : (
+          <>
+            <span className="text-xs text-mut">
+              Happy with this draft? Save it to review anytime.
+            </span>
+            <button
+              type="button"
+              disabled={saving}
+              onClick={handleSave}
+              className="btn-primary flex items-center gap-1.5 text-xs px-4 py-2 shadow-xs"
+            >
+              <Check className="h-3.5 w-3.5" /> {saving ? "Saving..." : "Save to Our Plans"}
+            </button>
+          </>
+        )}
+      </div>
+    </div>
   );
 }

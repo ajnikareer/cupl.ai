@@ -11,7 +11,7 @@ import { useChat } from "../chat/ChatContext";
 const NAV = [
   { to: "/app", label: "Home", short: "Home", icon: Home, end: true },
   { to: "/app/chat", label: "WeaveTwo AI", short: "Chat", icon: MessageCircleHeart },
-  { to: "/app/spaces", label: "Event Spaces", short: "Events", icon: CalendarHeart },
+  { to: "/app/spaces", label: "Our Plans", short: "Plans", icon: CalendarHeart },
   { to: "/app/calendar", label: "Calendar", short: "Calendar", icon: CalendarDays },
   { to: "/app/recommends", label: "Recommends", short: "Picks", icon: Sparkles },
   { to: "/app/dna", label: "Couple DNA", short: "DNA", icon: Dna },
@@ -55,18 +55,9 @@ export default function Layout() {
       <main className="min-w-0 flex-1 pb-20 lg:pb-0">
         <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-line bg-cream/85 px-4 py-3 backdrop-blur lg:px-8">
           <div className="lg:hidden"><Logo small /></div>
-          <div className="hidden truncate text-sm text-mut lg:block">
-            {me?.active_space ? <>Active event: <b className="text-brand">{me.active_space.title}</b></> : "No active event yet — tell WeaveWed what you're planning"}
-          </div>
+          <div className="hidden lg:block text-xs font-semibold text-mut">✨ Couple Taste Intelligence OS</div>
           <div className="flex items-center gap-2">
-            <a
-              href="/intelligence"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-1 text-xs font-bold text-brand border border-brand/20 bg-blush/60 px-3 py-1.5 rounded-full hover:bg-blush transition"
-            >
-              <span>⚡ QLOO Telemetry ↗</span>
-            </a>
+            
             <NavLink to="/app/notifications" className="relative rounded-full p-2 hover:bg-blush" aria-label="Notifications">
               <Bell className="h-5 w-5 text-brand" />
               {me?.unread > 0 && <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-[20px] place-items-center rounded-full bg-brand px-1 text-[10px] text-white">{me.unread}</span>}
@@ -85,8 +76,8 @@ export default function Layout() {
       )}
 
       {!onChat && voice === "off" && (
-        <NavLink to="/app/chat" className="fixed bottom-20 right-4 z-30 flex items-center gap-2 rounded-full bg-brand py-1.5 pl-1.5 pr-4 text-sm text-white shadow-soft lg:bottom-6 xl:hidden" aria-label="Talk to WeaveWed">
-          <Avatar size={34} /> Talk to WeaveWed
+        <NavLink to="/app/chat" className="fixed bottom-20 right-4 z-30 flex items-center gap-2 rounded-full bg-brand py-1.5 pl-1.5 pr-4 text-sm text-white shadow-soft lg:bottom-6 xl:hidden" aria-label="Talk to WeaveTwo">
+          <Avatar size={34} /> Talk to WeaveTwo
         </NavLink>
       )}
 

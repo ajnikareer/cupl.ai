@@ -42,18 +42,18 @@ export default function VoiceOverlay() {
   if (!overlay) return null;
   const lastAgent = [...messages].reverse().find((m) => m.role === "agent" && m.text && !m.widget);
   const lastUser = [...messages].reverse().find((m) => m.role === "user" && m.voice);
-  const widgetMsg = [...messages].reverse().find((m) => m.widget && !m.widget.done && ["taste_picker", "choices", "confirm", "disambiguation", "space_form", "invite"].includes(m.widget.kind));
+  const widgetMsg = [...messages].reverse().find((m) => m.widget && !m.widget.done && ["taste_picker", "choices", "confirm", "disambiguation", "space_form", "invite", "plan_proposal"].includes(m.widget.kind));
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-gradient-to-b from-[#fff5f2] via-blush to-[#ecc9d3]" role="dialog" aria-label="Voice conversation">
       <div className="flex items-center justify-between p-4">
-        <div className="h-serif text-xl text-brand">WeaveWed</div>
+        <div className="h-serif text-xl text-brand">WeaveTwo</div>
         <button type="button" onClick={() => setOverlay(false)} className="btn-ghost" aria-label="Show chat"><MessageSquareText className="h-4 w-4" /> Chat</button>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center gap-6 overflow-y-auto px-5 pb-6">
         <div className="relative">
           <div ref={ring} className="absolute -inset-4 rounded-full bg-brand/10 transition-transform duration-75" />
           {voice === "listening" && <span className="ring-pulse absolute -inset-2 rounded-full border-2 border-brand/50" />}
-          <img src="/img/avatar.jpg" alt="WeaveWed" className="relative h-40 w-40 rounded-full border-4 border-white object-cover shadow-soft md:h-48 md:w-48" />
+          <img src="/img/avatar.jpg" alt="WeaveTwo" className="relative h-40 w-40 rounded-full border-4 border-white object-cover shadow-soft md:h-48 md:w-48" />
         </div>
         <div className="h-serif text-lg text-brand">{LABEL[voice] ?? ""}</div>
         <canvas ref={canvas} className="h-14 w-64" aria-hidden />

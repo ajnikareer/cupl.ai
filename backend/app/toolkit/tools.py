@@ -24,7 +24,7 @@ EVENT_FIELDS = {
     "guests": {"type": "integer"}, "ceremonies": {"type": "array", "items": S},
     "destination": S, "from_city": S, "travel_style": S, "mood": S, "occasion": S, "priorities": S,
 }
-APP_GUIDE = """WeaveWed guide:
+APP_GUIDE = """WeaveTwo guide:
 - Event Spaces: one per event (Prewedding, Engagement, Wedding, Honeymoon, Trip, Life Beyond). Each has its own plan, budget, to-dos, memories.
 - Partner: invite from the Me page or ask me; they join with their own account so both tastes count.
 - Tastes: tell me what you love or tap my suggestions. Each taste can be shared with your partner or kept private (eye icon on the Me page).
@@ -119,6 +119,36 @@ async def create_event(c, a):
     stype = a.pop("type")
     s, errors = await sp.create_space(c.user, stype, a)
     return {"created": _brief(s), "invalid": errors, "widget": {"kind": "refresh"}}
+
+@tool("propose_plan", "events", """Propose a tentative plan or trip to the couple with a live brief card and a Save button on their screen.
+Use this during conversations when the couple discusses a trip, celebration, birthday, or weekend escape, showing the tentative plan right on their screen so they can approve and save it to Our Plans.""",
+      obj({"title": S, "type": {"type": "string", "enum": TYPES}, "city": S, "start_date": S, "end_date": S,
+           "budget": S, "highlights": {"type": "array", "items": S}, "match_score": N}, ["title", "type", "highlights"]), mutates=True)
+async def propose_plan(c, a):
+    stype = a.get("type", "trip")
+    s, errors = await sp.create_space(c.user, stype, {
+        "title": a["title"],
+        "city": a.get("city"),
+        "start_date": a.get("start_date"),
+        "end_date": a.get("end_date"),
+    })
+    dates_str = f"{a.get('start_date', '')} to {a.get('end_date', '')}".strip(" to")
+    return {
+        "proposed": a["title"],
+        "space_id": s["id"],
+        "widget": {
+            "kind": "plan_proposal",
+            "title": a["title"],
+            "plan_type": stype,
+            "city": a.get("city", ""),
+            "dates": dates_str,
+            "budget": a.get("budget", ""),
+            "highlights": a.get("highlights", []),
+            "match_score": a.get("match_score", 0.95),
+            "space_id": s["id"],
+        }
+    }
+
 
 
 @tool("save_cultural_roots", "profile", """Save cultural roots, heritage, and faith/traditions for the user/couple.
